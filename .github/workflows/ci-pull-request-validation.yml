@@ -1,0 +1,37 @@
+name: Antibytes CI - Pull-Request Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited, reopened]
+    branches:
+      - main
+      - release/*
+      - feature/*
+      - bugfix/*
+  workflow_dispatch:
+
+jobs:
+  pull-request-validation:
+
+    runs-on: macos-latest
+
+    concurrency:
+      group: validation-${{ github.head_ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt' # See 'Supported distributions' for available options
+          java-version: '11'
+      - name: Cleanup
+        run: ./gradlew clean
+      - name: Version
+        run: ./gradlew versionInfo
+      - name: Build
+        run: ./gradlew build
+

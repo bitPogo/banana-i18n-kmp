@@ -20,7 +20,9 @@ endif::[]
 The following description of the grammar is unofficial and users should not rely on it, since it is owned by the Wikimedia Foundation.
 Please note ε means empty or ε-transitions.
 generic grammar:
-```
+
+[source]
+----
 <message>                       := <ruleOrText> <message> | <ruleOrText> | ε
 <ruleOrText>                    := <text> | <rule>
 <text>                          := <includeSpaceClose> <text> | <includeSpaceClose>
@@ -54,24 +56,26 @@ letter          := [A-Za-z]
 escaped         := '\' [\u0021-\u002F \u003A-\u0040 \u005B-\u0060 \u007B-\u007E]
 nonascii        := [{::TITLECASE_LETTER::}{::MODIFIER_LETTER::}{::OTHER_LETTER::}]+
 literal         := .
-```
+----
 Please note, that `<generic>` will replaced by the following rules, if the specific requirement matches.
 
 == Shared rules
-`<argument>`, `<rule>`, `<simpleRule>`, `<option>`, `<nestedRuleOrText>`, `<nestedText>`, `<exclusiveText>`, `<space>` and `<mandatorySpace>` are shared rules. That means each of those rules can be used in a parser component. ( see PluralRule for example )
+`<argument>`, `<rule>`, `<simpleRule>`, `<option>`, `<nestedRuleOrText>`, `<nestedText>`, `<exclusiveText>`, `<space>` and `<mandatorySpace>` are shared rules. That means each of those rules can be used in a parser component. (see PluralRule for example)
 Also note, that rule ids will be normalized, which means, that rules names are case insensitive.
 
 == Build-Ins
 === Common Plugin Rules
 CommonPluginRules are rules shared upon plugins and buildins, but not by the core rules. The following syntax describes those common rules:
-```
+
+[source]
+----
 <number>            := <sign> double | <sign> integer
 <sign>              := '+' | '-' | ε
 <specialNumber>     := <sign> nonascii <specialExponent> | <sign> '.' nonascii <specialExponent> | <sign> nonascii '.' nonascii <specialExponent>
 <specialSign>       := + | - | ε
 <specialExponent>   := [Ee] <specialSign> nonascii | ε
 <repeatArgument>    := '=' '=' <space>
-```
+----
 `<number>`, `<specialNumber>` and `<repeatArgument>` are exposed for usage.
 
 === Bidi
@@ -79,7 +83,9 @@ Bidi will triggered, if the parser reads `bidi` as `<ruleId>`. It also requires 
 
 === Choice
 Syntax
-```
+
+[source]
+----
 <choiceRule>            := ':' <space> <choiceArgument> <space> <lowerBoundChoice> <space> <choices>
 <choiceArgument>        := <number> | <rule> | <specialNumbers>
 <lowerBoundChoice>      := '|' <space> <lowerBound> <space> <nestedRuleOrText>
@@ -88,50 +94,61 @@ Syntax
 <selector>              := <lowerBound> | <boundary>
 <lowerBound>            := <number> <space> '~' | <rule> <space> '~'
 <boundary>              := <number> <space> '<' | <rule> <space> '<'
-```
+----
 The syntax will apply, if the parser reads `choice` as `<ruleId>`.
 
 === Plural
 Syntax
-```
+
+[source]
+----
 <pluralrule>        := ':' <space> <pluralArgument> <space> <pluralSelectors>
 <pluralArgument>    := <number> | <rule> | <specialNumbers>
 <pluralSelectors>   := '|' <space> <selector> <space> <repeatArgument> <nestedRuleOrText> <space> <pluralSelectors>
                     | '|' <space> <selector> <space> <repeatArgument> <nestedRuleOrText>
 <selector>          := <number> <space> '=' | '%' <keyword> <space> '=' | ε
 <keyword>           := [Zz][Ee][Rr][Oo] | [Oo][Nn][Ee] | [Tt][Ww][Oo] | [Ff][Ee][Ww] | [Mm][Aa][Nn][Yy] | [Oo][Tt][Hh][Ee][Rr]
-```
+----
+
 The syntax will apply, if the parser reads `plural` as `<ruleId>`. Possible keywords are `zero`, `one`, `two`, `few`, `many` and `other`, which can be written case insensitive.
-Please see link:https://developer.android.com/reference/android/icu/text/PluralRules.html[PluralRules] for more information
+Please see link:https://developer.android.com/reference/android/icu/text/PluralRules.html[PluralRules] for more information.
 Also note: it always uses the last given matching selector.
 
 === Number
-is a family of plugins, which has a common base as well as their specific implementation.
+A family of plugins, which have a common base as well as their specific implementation.
 
 ==== Generic
-```
+
+[source]
+----
 <genericNumber>     := ':' <space> <numberArgument>
 <numberArgument>    := <number> | <rule> | <specialNumbers>
-```
+----
 ==== Number
 Syntax
-```
+
+[source]
+----
 <number>    := <genericNumber>
-```
+----
 The syntax will apply, if the parser reads `number` as `<ruleId>`.
 
 ==== Fraction
 Syntax:
-```
+
+[source]
+----
 <fraction>    := <genericNumber>
-```
+----
 The syntax will apply, if the parser reads `fraction` as `<ruleId>`.
 
 ==== Integer
 Syntax:
-```
+
+[source]
+----
 <integer>   := <genericNumber>
-```
+----
 The syntax will apply, if the parser reads `integer` as `<ruleId>`.
 
 === Gender
@@ -139,23 +156,26 @@ Gender will triggered, if the parser reads `gender` as `<ruleId>`. It also requi
 
 === Selection
 Syntax
-```
+
+[source]
+----
 <selectionRule>         := ':' <space> <selectArgument> <space> <selectionOptions>
 <selectionParameter>    := <argument>
-<selectionOptions>      := '|' <space> <selector> <space> <repeatArgument> <nestedRuleOrText> <space> <selectionOptions>
-                        | '|' <space> <selector> <space> <repeatArgument> <nestedRuleOrText>
+<selectionOptions>      := '|' <space> <selector> <space> <repeatArgument> <nestedRuleOrText> <space> <selectionOptions> | '|' <space> <selector> <space> <repeatArgument> <nestedRuleOrText>
 <selector>              := <rule> <space> '=' | <nestedText*> <space> '='
-```
+----
 The syntax will apply, if the parser reads `select` as `<ruleId>`.
 Please note `<nestedText*>` means, that the `<nestedText>` rule applies except, if the given token is a `=`. Also, it always uses the last given matching selector.
 
 === Pick
 Syntax
-```
+
+[source]
+----
 <pickRule>          := ':' <space> <pickArgument> <space> <pickOption>
 <pickArgument>      := integer | <rule>
 <pickOption>        := <option> <space> <pickOption> | <option>
-```
+----
 The syntax will apply, if the parser reads `pick` as `<ruleId>`.
 
 === Capitalize
@@ -163,29 +183,35 @@ Capitalize will triggered, if the parser reads `capitalize` as `<ruleId>`. It al
 
 == Plugins
 === Currency
-```
+
+[source]
+----
 <currencyRule>      := ':' <space> <currencyArgument> <space> <target>
 <currencyArgument>  := <number> | <rule> | <specialNumbers>
 <target>            := '|' <space> <rule> | '|' <space> ascii
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `currency` as `<ruleId>`.
 
 === Grammar
-```
+
+[source]
+----
 <grammarRule>       := ':' <space> <grammarArgument> <space> <option>
 <grammarArgument>   :=  [::keyword::] | <rule>
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `grammar` as `<ruleId>`.
 Possible keywords are: `nominative`, `genitive`, `dative`, `accusative`, `ablative`, `instrumental`, `locative`, `vocative`, `inessive`, `illative`, `partitive`, `elative`, `prefix`, `superessive`, `allative`, `equative`, `comitative`, `rol`, `ba`, `k`, `ainmlae`, `orodnik`, `lokatiw`, `lokativ`, `mestnik`, `prefixed` and `תחילית`.
 `[::keyword::]` refers to those keywords and they can be written in a case insensitive manor.
 
 === Measurement
-```
+
+[source]
+----
 <measurementRule>       := ':' <space> <measurementArgument> <space> <unit> <perUnit>
 <measurementArgument>   := <number> | <rule> | <specialNumbers>
 <unit>                  := '|' <space> [::keyword::] | '|' <space> <rule>
 <perUnit>               := <space> '|' [::keyword::] | '|' <space> <rule> | ε
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `measurement` as `<ruleId>`.
 Possible keywords are: `acre`, `acre_foot`, `ampere`, `arc_minute`, `arc_second`, `astronomical_unit`, `bit`, `bushel`, `byte`, `calorie`, `carat`, `celsius`, `centiliter`, `centimeter`, `cubic_centimeter`, `cubic_foot`, `cubic_inch`, `cubic_kilometer`, `cubic_meter`, `cubic_mile`, `cubic_yard`, `cup`, `day`, `deciliter`, `decimeter`, `degree`, `fahrenheit`, `fathom`, `fluid_ounce`, `foodcalorie`, `foot`, `furlong`, `gallon`, `gigabit`, `gigabyte`, `gigahertz`, `gigawatt`, `gram`, `g_force`, `hectare`, `hectoliter`, `hectopascal`, `hertz`, `horsepower`, `hour`, `inch`, `inch_hg`, `joule`, `karat`, `kelvin`, `kilobit`, `kilobyte`, `kilocalorie`, `kilogram`, `kilohertz`, `kilojoule`, `kilometer`, `kilometer_per_hour`, `kilowatt`, `kilowatt_hour`, `light_year`, `liter`, `liter_per_kilometer`, `lux`, `megabit`, `megabyte`, `megahertz`, `megaliter`, `megawatt`, `meter`, `meter_per_second`, `meter_per_second_squared`, `metric_ton`, `microgram`, `micrometer`, `microsecond`, `mile`, `mile_per_gallon`, `mile_per_hour`, `milliampere`, `millibar`, `milligram`, `milliliter`, `millimeter`, `millimeter_of_mercury`, `millisecond`, `milliwatt`, `minute`, `month`, `nanometer`, `nanosecond`, `nautical_mile`, `ohm`, `ounce`, `ounce_troy`, `parsec`, `picometer`, `pint`, `pound`, `pound_per_square_inch`, `quart`, `radian`, `second`, `square_centimeter`, `square_foot`, `square_inch`, `square_kilometer`, `square_meter`, `square_mile`, `square_yard`, `stone`, `tablespoon`, `teaspoon`, `terabit`, `terabyte`, `ton`, `volt`, `watt`, `week`, `yard` and `year`.
 `[::keyword::]` refers to those keywords and they can be written in a case insensitive manor.
@@ -195,55 +221,73 @@ Time is a family of Plugins, which has common base as well as their specific Imp
 
 ==== Generic
 `<dateVariable>`, which is defined as:
-```
+
+[source]
+----
 <dateVariable>  := <rule> | <sign> integer
-```
+----
 The difference between `<simpleRule>` and `<dateVariable>` is not in the syntax, it is in the semantic meaning.
 The 2nd shared time rule is `<calendar>`, which is defined as:
-```
+
+[source]
+----
 <calendar>  := '|' <space> [::keywordCalendar::] | '|' <space> <rule>  | ε
-```
+----
 Possible calendars are `buddhist`, `chinese`, `coptic`, `ethiopian`, `gregorian`, `hebrew`, `indian`, `islamic`, `japanese` and `taiwanese`.
 `[::keywordCalendar::]` refers to those keywords and they can be written in a case insensitive manor.
 The 3rd shared time rule is `<timezone>`, which is defined as:
-```
+
+[source]
+----
 <timezone>  := '|' '!' <space> <sign> integer | '!' <space> <rule> | ε
 <sign>      := '+' | '-' | ε
-```
+----
 At least `<genericTime>` rule:
-```
+
+[source]
+----
 <genericTime>       := ':' <space> <dateVariable> <space> <calendar> <space> <timezone>
-```
+----
 ==== Date
-```
+
+[source]
+----
 <dateRule>          := <genericTime>
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `date` as `<ruleId>`.
 
 ==== Time
-```
+
+[source]
+----
 <timeRule>          := <genericTime>
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `time` as `<ruleId>`.
 
 ==== FullTime
-```
+
+[source]
+----
 <dateTimeRule>      := <genericTime>
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `fulltime` as `<ruleId>`.
 
 ==== CustomTime
-```
+
+[source]
+----
 <customTimeRule>    := ':' <space> <dateVariable> <space> <option> <space> <calendar> <space> <timezone>
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `customtime` as `<ruleId>`.
 
 === Relative Time
-```
+
+[source]
+----
 <relativeTime>      := ':' <space> <quantity> <space> <unit>
 <quantity>          :=  <number> | <rule> | <specialNumbers> | [::keywordDirection::]
 <unit>              := '|' <space> [::keywordRelativeUnit::] | '|' <space> <rule>
-```
+----
 The syntax will apply, if the rule set is hooked up the parser reads `relativeTime` as `<ruleId>`.
 Possible keywords for direction are: `last`, `next`, `none` and `this`.
 Possible keywords for unit are: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `now`, `second`, `minute`, `hour`, `day`, `week`, `month`, `quarter` and `year`.
