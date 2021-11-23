@@ -9,28 +9,29 @@ danger(args) {
 
     onGitHub {
         val branchName = pullRequest.head.label.substringAfter(":")
-        val isFeatureBranch =
-            "(?:feature\\/(?:add|change|remove|fix|bump|security)-[a-z0-9-.]*)"
-                .toRegex()
-                .matches(branchName)
-        val isReleaseBranch =
-            "(?:release\\/(?:\\d{1,3}\\.\\d{1,3}(?:\\.\\d{1,3})?)(?:\\/prepare-\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})?)"
-                .toRegex()
-                .matches(branchName)
-        val isDependabotBranch =
-            "dependabot/(.*)"
-                .toRegex()
-                .matches(branchName)
-        val isFeatureTitle =
-            "(?:(?:\\[[A-Z]{2,8}-\\d{1,6}\\]\\s)?(?:Add|Change|Remove|Fix|Bump|Security)\\s.*)"
-                .toRegex()
-                .matches(pullRequest.title)
+        val isCoreBranch = "(?:core\\/(?:add|change|remove|fix|bump|security)-[a-z0-9-.]*)"
+            .toRegex()
+            .matches(branchName)
+        val isPluginBranch = "(?:plugin\\/(?:add|change|remove|fix|bump|security)-[a-z0-9-.]*)"
+            .toRegex()
+            .matches(branchName)
+        val isReleaseBranch = "(?:release\\/(?:\\d{1,3}\\.\\d{1,3}(?:\\.\\d{1,3})?)(?:\\/prepare-\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})?)"
+            .toRegex()
+            .matches(branchName)
+        val isDependabotBranch = "dependabot/(.*)"
+            .toRegex()
+            .matches(branchName)
+        val isBugfixBranch = "bugfix/(.*)"
+            .toRegex()
+            .matches(branchName)
+        val isFeatureTitle = "(?:(?:\\[[A-Z]{2,8}-\\d{1,6}\\]\\s)?(?:Add|Change|Remove|Fix|Bump|Security)\\s.*)"
+            .toRegex()
+            .matches(pullRequest.title)
         val isReleaseTitle = "(?:(?:Prepare )?Release \\d{1,3}\\.\\d{1,3}\\.\\d{1,3})"
             .toRegex()
             .matches(pullRequest.title)
 
-
-        if (!isFeatureBranch && !isReleaseBranch && !isDependabotBranch) {
+        if (!isCoreBranch && isPluginBranch && !isBugfixBranch && !isReleaseBranch && !isDependabotBranch) {
             fail(
                 "Branch name is not following our pattern:\n" +
                     "\nrelease/1.2(.3)(/prepare-1.2.3)\n" +
@@ -40,11 +41,11 @@ danger(args) {
             )
         }
 
-        if (isFeatureBranch) {
+        if (isCoreBranch || isPluginBranch) {
             if (!isFeatureTitle) {
                 fail(
                     "Title is not following our pattern:\n" +
-                        "\nAdd|Change|Remove|Fix|Bump|Security {Feature title}"
+                        "\nAdd|Change|Remove|Fix|Bump|Security {Core or Plugin title}"
                 )
             }
         }
@@ -66,8 +67,9 @@ danger(args) {
             warn("Set a milestone please")
         }
 
-        if (pullRequest.body.length < 10) {
-            warn("Please include a description of your PR changes")
+        when {
+            pullRequest.body == null -> warn("Please include a description of your PR changes")
+            else -> {/* do nothing*/}
         }
 
         // Changelog

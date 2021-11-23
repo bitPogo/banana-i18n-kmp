@@ -10,6 +10,10 @@ jobs:
 
     runs-on: macos-latest
 
+    env:
+      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.PACKAGE_REGISTRY_UPLOAD_USERNAME }}
+      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.PACKAGE_REGISTRY_UPLOAD_TOKEN }}
+
     steps:
       - name: Display runner context
         run: hostname -s
@@ -22,7 +26,7 @@ jobs:
           java-version: '11'
       - name: Cleanup
         run: ./gradlew clean
-      - name: Version
-        run: ./gradlew versionInfo
-      - name: Build project
+      - name: Build
         run: ./gradlew build
+      - name: Publish to Release Repository
+        run: ./gradlew publishRelease

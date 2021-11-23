@@ -6,7 +6,8 @@ on:
     branches:
       - main
       - release/*
-      - feature/*
+      - core/*
+      - plugin/*
       - bugfix/*
 
 jobs:

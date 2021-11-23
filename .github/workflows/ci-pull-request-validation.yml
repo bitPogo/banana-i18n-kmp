@@ -6,7 +6,8 @@ on:
     branches:
       - main
       - release/*
-      - feature/*
+      - core/*
+      - plugin/*
       - bugfix/*
   workflow_dispatch:
 
@@ -19,6 +20,10 @@ jobs:
       group: validation-${{ github.head_ref }}
       cancel-in-progress: true
 
+    env:
+      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.PACKAGE_REGISTRY_UPLOAD_USERNAME }}
+      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.PACKAGE_REGISTRY_UPLOAD_TOKEN }}
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,8 +35,8 @@ jobs:
           java-version: '11'
       - name: Cleanup
         run: ./gradlew clean
-      - name: Version
-        run: ./gradlew versionInfo
       - name: Build
         run: ./gradlew build
+      - name: Publish to Development Repository
+        run: ./gradlew publishDevelopment
 
