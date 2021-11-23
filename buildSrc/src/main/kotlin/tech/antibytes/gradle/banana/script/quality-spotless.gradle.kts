@@ -1,5 +1,4 @@
 package tech.antibytes.gradle.banana.script
-
 /**
  * Quality check to keep the code spotless using [Spotless](https://github.com/diffplug/spotless)
  *
@@ -10,8 +9,8 @@ package tech.antibytes.gradle.banana.script
  * You need to add following dependencies to the buildSrc/build.gradle.kts
  *
  * dependencies {
- *     implementation("com.diffplug.spotless:spotless-plugin-gradle:5.10.2")
- *     implementation("com.pinterest:ktlint:0.41.0") or higher
+ *     implementation("com.diffplug.spotless:spotless-plugin-gradle:5.14.3"")
+ *     implementation("com.pinterest:ktlint:0.42.3") or higher
  * }
  *
  * and ensure that the gradlePluginPortal is available
@@ -30,7 +29,7 @@ plugins {
     id("com.diffplug.spotless")
 }
 
-val ktlintVersion = "0.41.0"
+val ktlintVersion = "0.42.1"
 
 spotless {
     kotlin {

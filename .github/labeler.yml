@@ -6,6 +6,7 @@ scripts:
 
 dependencies:
   - buildSrc/**/*
+  - gradlePlugin/banana-dependency/**/*
 
 documentation:
   - docs/**/*
@@ -17,8 +18,11 @@ documentation:
   - readmeOSS.adoc
 
 # Library
-library:
-  - banana/**/*
+banana-i18n-kmp:
+  - banana-i18n/**/*
+
+# jflex-plugin:
+  # - gradlePlugin/jflex/**/*
 
 # Sample Apps
 sample-android:

@@ -5,7 +5,7 @@ pluginManagement {
     }
 }
 
-includeBuild("gradle/plugin/banana-dependency")
+includeBuild("gradlePlugin/banana-dependency")
 
 plugins {
     id("com.gradle.enterprise") version("3.7")

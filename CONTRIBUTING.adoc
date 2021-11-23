@@ -84,4 +84,3 @@ Your contribution has to meet these criteria:
 * [ ] Cross platform testing done for all supported platforms
 * [ ] Documentation updated (if necessary)
 * [ ] Changelog updated (if necessary)
-

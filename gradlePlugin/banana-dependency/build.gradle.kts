@@ -8,7 +8,9 @@ group = "tech.antibytes.gradle.banana.dependency"
 version = "1.0.0-SNAPSHOT"
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
+    google()
 }
 
 gradlePlugin {
