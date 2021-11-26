@@ -1,4 +1,7 @@
 package tech.antibytes.gradle.banana.script
+
+import tech.antibytes.gradle.dependency.Version
+
 /**
  * Quality check to keep the code spotless using [Spotless](https://github.com/diffplug/spotless)
  *
@@ -29,13 +32,11 @@ plugins {
     id("com.diffplug.spotless")
 }
 
-val ktlintVersion = "0.42.1"
-
 spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("buildSrc/build/", "**/buildSrc/build/")
-        ktlint(ktlintVersion).userData(
+        ktlint(Version.gradle.ktLint).userData(
             mapOf(
                 "disabled_rules" to "no-wildcard-imports",
                 "ij_kotlin_imports_layout" to "*"
@@ -47,7 +48,7 @@ spotless {
     }
     kotlinGradle {
         target("*.gradle.kts")
-        ktlint(ktlintVersion)
+        ktlint(Version.gradle.ktLint)
         trimTrailingWhitespace()
         indentWithSpaces()
         endWithNewline()

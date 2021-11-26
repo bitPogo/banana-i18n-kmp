@@ -15,12 +15,9 @@ repositories {
 }
 
 dependencies {
-    implementation(Dependency.gradle.kotlin)
-    implementation(Dependency.gradle.android)
-    implementation(Dependency.gradle.owasp)
     implementation(Dependency.gradle.dependency)
     implementation(Dependency.gradle.publishing)
     implementation(Dependency.gradle.coverage)
-    implementation(Dependency.gradle.ktlint)
     implementation(Dependency.gradle.spotless)
+    implementation(Dependency.gradle.projectConfig)
 }

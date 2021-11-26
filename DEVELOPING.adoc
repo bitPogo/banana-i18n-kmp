@@ -99,10 +99,10 @@ Every change has to branch of from `main` and use this branch naming convention:
 
 Examples:
 
-- `feature/add-awesome-hashing-algorithm`
-- `feature/remove-not-so-awesome-algorithm`
-- `feature/fix-algorithm-corner-case`
-- `feature/bump-lib-to-1.3.0`
+- `core/add-awesome-hashing-algorithm`
+- `core/remove-not-so-awesome-algorithm`
+- `plugin/fix-algorithm-corner-case`
+- `plugin/bump-lib-to-1.3.0`
 
 == Release
 
