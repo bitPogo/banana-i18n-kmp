@@ -4,6 +4,7 @@
  * Use of this source code is governed by LGPL v2.1
  */
 
+import tech.antibytes.gradle.banana.config.BananaPublishingConfiguration
 import tech.antibytes.gradle.banana.dependency.addCustomRepositories
 
 plugins {
@@ -14,6 +15,13 @@ plugins {
     id("tech.antibytes.gradle.banana.script.quality-spotless")
 
     id("org.owasp.dependencycheck")
+
+    id("tech.antibytes.gradle.publishing")
+}
+
+antiBytesPublishing {
+    versioning = BananaPublishingConfiguration.versioning
+    repositoryConfiguration = BananaPublishingConfiguration.repositories
 }
 
 allprojects {

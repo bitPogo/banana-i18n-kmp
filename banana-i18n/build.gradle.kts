@@ -1,6 +1,5 @@
 import tech.antibytes.gradle.dependency.Dependency
-import tech.antibytes.gradle.banana.config.BananaCore
-import tech.antibytes.gradle.publishing.api.PackageConfiguration
+import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -8,27 +7,21 @@ plugins {
     // Android
     id("com.android.library")
 
+    id("tech.antibytes.gradle.configuration")
     id("tech.antibytes.gradle.publishing")
     id("tech.antibytes.gradle.coverage")
 }
 
-group = BananaCore.group
+group = BananaCoreConfiguration.group
 
 antiBytesPublishing{
-    packageConfiguration = PackageConfiguration(
-        pom = BananaCore.publishing.pom,
-        developers = listOf(BananaCore.publishing.developer),
-        license = BananaCore.publishing.license,
-        scm = BananaCore.publishing.sourceControl
-    )
-    versioning = BananaCore.publishing.versioning
-    registryConfiguration = BananaCore.publishing.registries
+    packageConfiguration = BananaCoreConfiguration.publishing.packageConfiguration
+    repositoryConfiguration = BananaCoreConfiguration.publishing.repositories
+    versioning = BananaCoreConfiguration.publishing.versioning
 }
 
 kotlin {
-    android {
-        publishLibraryVariants("release")
-    }
+    android()
 
     jvm()
 
@@ -67,46 +60,6 @@ kotlin {
                 implementation(Dependency.multiplatform.test.jvm)
                 implementation(Dependency.multiplatform.test.junit)
             }
-        }
-    }
-}
-
-android {
-    compileSdk = BananaCore.android.compileSdkVersion
-
-    defaultConfig {
-        minSdk = BananaCore.android.minSdkVersion
-        targetSdk = BananaCore.android.targetSdkVersion
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments.putAll(
-            mapOf("clearPackageData" to "true")
-        )
-    }
-
-    buildTypes {
-        getByName("debug") {
-            matchingFallbacks.add("release")
-        }
-    }
-
-    resourcePrefix(BananaCore.android.resourcePrefix)
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    sourceSets {
-        getByName("main") {
-            manifest.srcFile("src/androidMain/AndroidManifest.xml")
-            java.setSrcDirs(setOf("src/androidMain/kotlin"))
-            res.setSrcDirs(setOf("src/androidMain/res"))
-        }
-
-        getByName("test") {
-            java.setSrcDirs(setOf("src/androidTest/kotlin"))
-            res.setSrcDirs(setOf("src/androidTest/res"))
         }
     }
 }
