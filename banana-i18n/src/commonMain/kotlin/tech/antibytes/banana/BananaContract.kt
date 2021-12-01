@@ -6,8 +6,6 @@
 
 package tech.antibytes.banana
 
-object Sample {
-    fun doSomething() {
-        1 + 2
-    }
+internal interface BananaContract {
+    interface Tokenizer
 }

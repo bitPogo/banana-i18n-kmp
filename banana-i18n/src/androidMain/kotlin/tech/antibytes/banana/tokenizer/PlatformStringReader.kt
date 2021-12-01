@@ -4,8 +4,6 @@
  * Use of this source code is governed by LGPL v2.1
  */
 
-package tech.antibytes.gradle.banana.dependency
+package tech.antibytes.banana.tokenizer
 
-object Dependency {
-    val gradle = GradlePlugin
-}
+internal actual typealias PlatformStringReader = StringReader
