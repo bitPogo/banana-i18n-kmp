@@ -9,7 +9,7 @@ package tech.antibytes.banana.tokenizer
 internal interface TokenizerContract {
     interface Reader {
         @Throws(Exception::class)
-        fun read(charBuffer: CharArray, offset: Int, length: Int): Int
+        fun read(buffer: CharArray, offset: Int, limit: Int): Int
 
         @Throws(Exception::class)
         fun read(): Int

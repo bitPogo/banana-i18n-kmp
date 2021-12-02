@@ -6,7 +6,7 @@
 
 package tech.antibytes.banana.tokenizer
 
-import tech.antibytes.test.utils.mustBe
+import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
 class CharacterJvmSpec {

@@ -5,12 +5,12 @@
  */
 package tech.antibytes.banana.tokenizer
 
-import tech.antibytes.test.utils.fulfils
+import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
 
 class BananaTokenizerSpec {
     @Test
-    fun `It fulfils Character`() {
+    fun `It fulfils Tokenizer`() {
         Character fulfils TokenizerContract.Character::class
     }
 }

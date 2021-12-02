@@ -6,8 +6,8 @@
 
 package tech.antibytes.banana.tokenizer
 
-import tech.antibytes.test.utils.fulfils
-import tech.antibytes.test.utils.mustBe
+import tech.antibytes.util.test.fulfils
+import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 

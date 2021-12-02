@@ -6,12 +6,10 @@
 
 package tech.antibytes.banana.tokenizer
 
-internal expect class PlatformStringReader
-
 internal expect class StringReader(
-    reader: PlatformStringReader
+    value: String
 ) : TokenizerContract.Reader {
-    override fun read(charBuffer: CharArray, offset: Int, length: Int): Int
+    override fun read(buffer: CharArray, offset: Int, limit: Int): Int
 
     override fun read(): Int
 

@@ -121,7 +121,6 @@ tasks.create("postProcessTokenizen") {
             "            offset = " to "val offset = 0\n" +
             "            ",
         "].toInt()" to "].code",
-        "Illegal token \"\\\${yytext()}\" detected." to "Illegal token \"\${yytext()}\" detected.",
         "when (zzCh) {" to "when (zzCh.toChar()) {",
         "System.arraycopy(zzBuffer, 0, newBuffer, 0, zzBuffer.size)" to "zzBuffer.copyInto(destination = newBuffer)",
         "System.arraycopy(\n" +

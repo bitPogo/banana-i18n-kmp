@@ -7,17 +7,19 @@
 package tech.antibytes.banana.tokenizer
 
 internal actual class StringReader actual constructor(
-    reader: PlatformStringReader
+    value: String
 ) : TokenizerContract.Reader {
-    actual override fun read(charBuffer: CharArray, offset: Int, length: Int): Int {
-        TODO("Not yet implemented")
+    private val reader = value.reader()
+
+    actual override fun read(buffer: CharArray, offset: Int, limit: Int): Int {
+        return reader.read(buffer, offset, limit)
     }
 
     actual override fun read(): Int {
-        TODO("Not yet implemented")
+        return reader.read()
     }
 
     actual override fun close() {
-        TODO("Not yet implemented")
+        return reader.close()
     }
 }
