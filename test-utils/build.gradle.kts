@@ -24,8 +24,6 @@ kotlin {
 
     jvm()
 
-    ios()
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -37,7 +35,7 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
-                implementation(Dependency.multiplatform.test.)
+                implementation(Dependency.multiplatform.test.fixture)
             }
         }
 
@@ -48,6 +46,7 @@ kotlin {
 
                 implementation(Dependency.multiplatform.test.jvm)
                 implementation(Dependency.multiplatform.test.junit)
+                implementation(Dependency.androidTest.robolectric)
             }
         }
         val androidTest by getting {
@@ -70,5 +69,11 @@ kotlin {
                 dependsOn(commonTest)
             }
         }
+    }
+}
+
+tasks.withType(Test::class) {
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR")
     }
 }

@@ -33,8 +33,6 @@ kotlin {
 
     jvm()
 
-    ios()
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -45,6 +43,7 @@ kotlin {
             dependencies {
                 implementation(Dependency.multiplatform.test.common)
                 implementation(Dependency.multiplatform.test.annotations)
+                implementation(project(":test-utils"))
             }
         }
 

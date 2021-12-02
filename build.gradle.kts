@@ -36,3 +36,9 @@ tasks.named<Wrapper>("wrapper") {
     gradleVersion = "7.3"
     distributionType = Wrapper.DistributionType.ALL
 }
+buildscript {
+    val agp_version by extra("7.0.3")
+    dependencies {
+        classpath("com.android.tools.build:gradle:$agp_version")
+    }
+}

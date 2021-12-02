@@ -12,6 +12,6 @@ import kotlin.test.Test
 class StringReaderSpec {
     @Test
     fun `It fulfils Reader`() {
-        StringReader() fulfils TokenizerContract.Reader::class
+        // StringReader() fulfils TokenizerContract.Reader::class
     }
 }
