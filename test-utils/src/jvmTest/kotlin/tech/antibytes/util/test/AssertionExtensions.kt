@@ -28,4 +28,3 @@ inline infix fun <reified T : Any> Any.sameAs(value: T) {
         expected = value
     )
 }
-

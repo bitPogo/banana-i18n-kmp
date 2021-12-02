@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.tokenizer
 
-import tech.antibytes.test.utils.fulfils
 import kotlin.test.Test
 
 class StringReaderSpec {

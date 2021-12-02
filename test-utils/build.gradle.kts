@@ -34,6 +34,8 @@ kotlin {
             }
         }
         val commonTest by getting {
+            kotlin.srcDir("${projectDir.absolutePath.trimEnd('/')}/src-gen/commonTest/kotlin")
+
             dependencies {
                 implementation(Dependency.multiplatform.test.fixture)
             }
@@ -72,7 +74,32 @@ kotlin {
     }
 }
 
+val templatesPath = "${projectDir}/src/commonTest/resources/template"
+val configPath = "${projectDir}/src-gen/commonTest/kotlin/tech/antibytes/util/test/config"
+
+val provideTestConfig: Task by tasks.creating {
+    doFirst {
+        val templates = File(templatesPath)
+        val configs = File(configPath)
+
+        val config = File(templates, "TestConfig.tmpl")
+            .readText()
+            .replace("PROJECT_DIR", projectDir.toPath().toAbsolutePath().toString())
+
+        if (!configs.exists()) {
+            if(!configs.mkdir()) {
+                System.err.println("Creation of the configuration directory failed!")
+            }
+        }
+        File(configPath, "TestConfig.kt").writeText(config)
+    }
+}
+
 tasks.withType(Test::class) {
+    if (this.name.contains("Test")) {
+        this.dependsOn(provideTestConfig)
+    }
+
     testLogging {
         events("PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR")
     }

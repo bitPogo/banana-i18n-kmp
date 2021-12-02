@@ -6,11 +6,9 @@
 
 package tech.antibytes.banana.tokenizer
 
-import java.io.StringReader
-
 internal actual class StringReader actual constructor(
     reader: PlatformStringReader
-): TokenizerContract.Reader {
+) : TokenizerContract.Reader {
     actual override fun read(charBuffer: CharArray, offset: Int, length: Int): Int {
         TODO("Not yet implemented")
     }

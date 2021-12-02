@@ -10,7 +10,7 @@ internal expect class PlatformStringReader
 
 internal expect class StringReader(
     reader: PlatformStringReader
-): TokenizerContract.Reader {
+) : TokenizerContract.Reader {
     override fun read(charBuffer: CharArray, offset: Int, length: Int): Int
 
     override fun read(): Int
