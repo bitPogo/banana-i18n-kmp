@@ -21,8 +21,9 @@ documentation:
 banana-i18n-kmp:
   - banana-i18n/**/*
 
-# jflex-plugin:
-  # - gradlePlugin/jflex/**/*
+# Components
+tokenizer:
+  - banana-i18n/flex/*
 
 # Sample Apps
 sample-android:

@@ -63,10 +63,10 @@
   description: Message library changes
   color: 000080
 
-# JFlex Plugin
-- name: jflex-plugin
-  description: JFlex Plugin changes
-  color: 000080
+# Components
+- name: tokenizer
+  description: The core Tokenizer of Banana-i18n-kmp
+  color: f21d32
 
 # Sample Apps
 - name: sample-android
