@@ -7,8 +7,8 @@ package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
-import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Token
+import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaRuntimeError
 import tech.antibytes.mock.tokenizer.MockReader
 import tech.antibytes.util.test.fulfils
@@ -474,5 +474,19 @@ class BananaTokenizerSpec {
         tokens[27] mustBe Token(type = TokenTypes.ASCII_STRING, value = "developer", start = 85, end = 94)
         tokens[28] mustBe Token(type = TokenTypes.LITERAL, value = ".", start = 0, end = 1)
         tokens[29] mustBe EOF
+    }
+
+    @Test
+    fun `Given setReader is called with a Reader, it replaces the current Reader`() {
+        // Given
+        val reader = MockReader()
+
+        val tokenizer = BananaTokenizer.getInstance(reader)
+
+        // When
+        tokenizer.setReader(StringReader(""))
+
+        // Then
+        tokenizer.next() mustBe EOF
     }
 }

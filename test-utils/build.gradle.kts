@@ -99,8 +99,4 @@ tasks.withType(Test::class) {
     if (this.name.contains("Test")) {
         this.dependsOn(provideTestConfig)
     }
-
-    testLogging {
-        events("PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR")
-    }
 }

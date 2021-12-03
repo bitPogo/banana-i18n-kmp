@@ -33,7 +33,7 @@ internal interface BananaContract {
     )
 
     interface Tokenizer {
-        fun setInputStream(stream: String)
+        fun setReader(reader: TokenizerContract.Reader)
         fun next(): Token
     }
 

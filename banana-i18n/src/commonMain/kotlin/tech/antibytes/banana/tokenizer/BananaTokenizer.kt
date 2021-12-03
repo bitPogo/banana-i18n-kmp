@@ -12,8 +12,8 @@ import tech.antibytes.banana.BananaContract.Token
 internal class BananaTokenizer private constructor(
     reader: TokenizerContract.Reader
 ) : BananaContract.Tokenizer, BananaFlexTokenizer(reader) {
-    override fun setInputStream(stream: String) {
-        TODO("Not yet implemented")
+    override fun setReader(reader: TokenizerContract.Reader) {
+        yyreset(reader)
     }
 
     override fun next(): Token {

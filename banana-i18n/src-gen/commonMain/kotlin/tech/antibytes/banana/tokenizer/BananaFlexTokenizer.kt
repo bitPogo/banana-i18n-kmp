@@ -66,7 +66,7 @@ internal abstract class BananaFlexTokenizer(`in`: TokenizerContract.Reader) {
     private var zzEOFDone = false
 
     /* user code: */
-    private var pushBackOffset = 0 //jflex does not update zzStartRead on push back
+    private var pushBackOffset = 0 // jflex does not update zzStartRead on push back
     private fun createToken(tokenType: BananaContract.TokenTypes): BananaContract.Token {
         return BananaContract.Token(
             tokenType,
@@ -151,7 +151,7 @@ internal abstract class BananaFlexTokenizer(`in`: TokenizerContract.Reader) {
                 if (numRead == requested) { // We requested too few chars to encode a full Unicode character
                     --zzEndRead
                     zzFinalHighSurrogate = 1
-                } else {                    // There is room in the buffer for at least one more char
+                } else { // There is room in the buffer for at least one more char
                     val c: Int = zzReader.read() // Expecting to read a paired low surrogate char
                     if (c == -1) {
                         return true
@@ -916,7 +916,7 @@ internal abstract class BananaFlexTokenizer(`in`: TokenizerContract.Reader) {
     /**
      * Creates a new scanner
      *
-     * @param   in  the TokenizerContract.Reader to read input from.
+     * @param in  the TokenizerContract.Reader to read input from.
      */
     init {
         zzReader = `in`
