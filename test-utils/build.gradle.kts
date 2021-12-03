@@ -6,6 +6,7 @@
 
 import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -95,7 +96,7 @@ val provideTestConfig: Task by tasks.creating {
     }
 }
 
-tasks.withType(Test::class) {
+tasks.withType(KotlinCompile::class.java) {
     if (this.name.contains("Test")) {
         this.dependsOn(provideTestConfig)
     }

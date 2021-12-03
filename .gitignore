@@ -23,6 +23,7 @@ captures/
 .DS_Store
 
 # generated
+**/src-gen/commonTest/kotlin/**/config/TestConfig.kt
 
 # Editors
 *.suo
