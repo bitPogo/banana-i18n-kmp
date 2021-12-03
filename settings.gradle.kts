@@ -24,7 +24,7 @@ include(
 
 buildCache {
     local {
-        isEnabled = true
+        isEnabled = false
         directory = File(rootDir, "build-cache")
         removeUnusedEntriesAfterDays = 30
     }

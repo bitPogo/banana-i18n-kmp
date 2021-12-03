@@ -6,6 +6,42 @@
 
 package tech.antibytes.banana
 
+import tech.antibytes.banana.tokenizer.TokenizerContract
+
 internal interface BananaContract {
-    interface Tokenizer
+    enum class TokenTypes {
+        RULE_OPENING,
+        RULE_CLOSURE,
+        DOUBLE,
+        INTEGER,
+        ESCAPED,
+        DELIMITER,
+        ASCII_STRING,
+        NON_ASCII_STRING,
+        LITERAL,
+        WHITESPACE,
+        VARIABLE,
+        TEXT,
+        EOF
+    }
+
+    data class Token(
+        val type: TokenTypes,
+        val value: String,
+        val start: Int,
+        val end: Int
+    )
+
+    interface Tokenizer {
+        fun setInputStream(stream: String)
+        fun next(): Token
+    }
+
+    interface TokenizerFactory {
+        fun getInstance(reader: TokenizerContract.Reader): Tokenizer
+    }
+
+    companion object {
+        val EOF = Token(TokenTypes.EOF, "", -1, -1)
+    }
 }

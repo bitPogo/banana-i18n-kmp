@@ -9,6 +9,7 @@ package tech.antibytes.util.test
 import com.appmattus.kotlinfixture.kotlinFixture
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class AssertionExtensionsSpec {
     private val fixture = kotlinFixture()
@@ -55,7 +56,7 @@ class AssertionExtensionsSpec {
     }
 
     @Test
-    fun `Given mustBe is called it runs if the lefthand is the very same as righthand`() {
+    fun `Given sameAs is called it runs if the lefthand is the very same as righthand`() {
         val string: String = fixture()
 
         string sameAs string

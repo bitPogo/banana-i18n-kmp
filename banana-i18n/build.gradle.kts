@@ -36,6 +36,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                kotlin.srcDirs("${projectDir.absolutePath.trimEnd('/')}/src-gen/commonMain/kotlin")
+
                 implementation(Dependency.multiplatform.kotlin.common)
             }
         }
@@ -43,6 +45,7 @@ kotlin {
             dependencies {
                 implementation(Dependency.multiplatform.test.common)
                 implementation(Dependency.multiplatform.test.annotations)
+                implementation(Dependency.multiplatform.test.fixture)
                 implementation(project(":test-utils"))
             }
         }
@@ -77,7 +80,7 @@ kotlin {
     }
 }
 
-val tokenizerPath = "${projectDir.absolutePath}/src/commonMain/kotlin/tech/antibytes/banana/tokenizer"
+val tokenizerPath = "${projectDir.absolutePath}/src-gen/commonMain/kotlin/tech/antibytes/banana/tokenizer"
 
 tasks.withType(JFlexTask::class.java) {
     flexFile.set(
@@ -91,21 +94,22 @@ tasks.withType(JFlexTask::class.java) {
     )
 }
 
-tasks.create("postProcessTokenizen") {
-    val replacements = mapOf(
-        "import java.io.IOException\n" +
-            "import java.io.Reader\n" +
-            "import java.lang.ArrayIndexOutOfBoundsException\n" +
-            "import java.lang.Character\n" +
-            "import java.lang.Error\n" +
-            "import java.lang.System" to "package tech.antibytes.banana.tokenizer\n" +
-            "\n" +
+tasks.create("postProcessTokenizer") {
+    val replacements = listOf(
+        "import tech.antibytes.banana.BananaContract\n" +
             "import tech.antibytes.banana.BananaRuntimeError\n" +
-            "import tech.antibytes.banana.tokenizer.TokenizerContract.Reader",
+            "import java.io.IOException\n" +
+            "import java.io.Reader\n" +
+            "import java.lang.Character\n" +
+            "import java.lang.Error" to "import tech.antibytes.banana.BananaRuntimeError\n" +
+            "import tech.antibytes.banana.BananaContract",
         "IOException" to "Exception",
         "ArrayIndexOutOfBoundsException" to "Exception",
-        "java.io.Reader" to "Reader",
-        "private var zzReader: Reader" to "private var zzReader: Reader = `in`",
+        "java.io.Reader" to "TokenizerContract.Reader",
+        ": Reader" to ": TokenizerContract.Reader",
+        "java.io.Exception" to "Exception",
+        "Yytoken" to "BananaContract.Token",
+        "private var zzReader: Reader" to "private var zzReader: TokenizerContract.Reader = `in`",
         "\n" +
             "    /* user code: */ /**\n" +
             "     * Creates a new scanner\n" +
@@ -131,12 +135,20 @@ tasks.create("postProcessTokenizen") {
             "                destination = zzBuffer,\n" +
             "                destinationOffset = 0,\n" +
             "                startIndex = zzStartRead,\n" +
-            "                endIndex = zzEndRead - zzStartRead\n" +
-            "            )"
+            "                endIndex = zzEndRead\n" +
+            "            )",
+        "packed.length()" to "packed.length",
+        "packed.charAt(i++)" to "packed[i++].code",
+        ").also\n" +
+            "            run { pushBackOffset = 0 }" to ").also { pushBackOffset = 0 }",
+        "return\n" +
+            "        if (tokenValue.length == 3) {" to "return if (tokenValue.length == 3) {"
     )
 
+
+
     doLast {
-        val transpiledKotlinFile = File("$tokenizerPath/BananaTokenizer.kt")
+        val transpiledKotlinFile = File("$tokenizerPath/BananaFlexTokenizer.kt")
         var fileContent = transpiledKotlinFile.readText()
 
         replacements.forEach { (old, new) ->
