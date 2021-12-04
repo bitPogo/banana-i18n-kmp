@@ -7,6 +7,7 @@
 import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
 import tech.antibytes.gradle.jflex.JFlexTask
+import tech.antibytes.gradle.jflex.PostConverterTask
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -90,71 +91,61 @@ tasks.withType(JFlexTask::class.java) {
         File(tokenizerPath)
     )
     customSkeletonFile.set(
-        File("${projectDir.absolutePath}/flex/FlexSkeleton.skel")
+        File("${projectDir.absolutePath}/flex/KotlinCompatipleSkeleton.skel")
     )
 }
 
-tasks.create("postProcessTokenizer") {
-    val replacements = listOf(
-        "import tech.antibytes.banana.BananaContract\n" +
-            "import tech.antibytes.banana.BananaRuntimeError\n" +
-            "import java.io.IOException\n" +
-            "import java.io.Reader\n" +
-            "import java.lang.Character\n" +
-            "import java.lang.Error" to "import tech.antibytes.banana.BananaRuntimeError\n" +
-            "import tech.antibytes.banana.BananaContract",
-        "IOException" to "Exception",
-        "ArrayIndexOutOfBoundsException" to "Exception",
-        "java.io.Reader" to "TokenizerContract.Reader",
-        ": Reader" to ": TokenizerContract.Reader",
-        "java.io.Exception" to "Exception",
-        "Yytoken" to "BananaContract.Token",
-        "private var zzReader: Reader" to "private var zzReader: TokenizerContract.Reader = `in`",
-        "\n" +
-            "    /* user code: */ /**\n" +
-            "     * Creates a new scanner\n" +
-            "     *\n" +
-            "     * @param   in  the Reader to read input from.\n" +
-            "     */\n" +
-            "    init {\n" +
-            "        zzReader = `in`\n" +
-            "    }" to "",
-        "val message: String\n" +
-            "            message =" to "val message =",
-        "var offset = 0\n" +
-            "            offset = " to "val offset = 0\n" +
-            "            ",
-        "].toInt()" to "].code",
-        "when (zzCh) {" to "when (zzCh.toChar()) {",
-        "System.arraycopy(zzBuffer, 0, newBuffer, 0, zzBuffer.size)" to "zzBuffer.copyInto(destination = newBuffer)",
-        "System.arraycopy(\n" +
-            "                zzBuffer, zzStartRead,\n" +
-            "                zzBuffer, 0,\n" +
-            "                zzEndRead - zzStartRead\n" +
-            "            )" to "zzBuffer.copyInto(\n" +
-            "                destination = zzBuffer,\n" +
-            "                destinationOffset = 0,\n" +
-            "                startIndex = zzStartRead,\n" +
-            "                endIndex = zzEndRead\n" +
-            "            )",
-        "packed.length()" to "packed.length",
-        "packed.charAt(i++)" to "packed[i++].code",
-        ").also\n" +
-            "            run { pushBackOffset = 0 }" to ").also { pushBackOffset = 0 }",
-        "return\n" +
-            "        if (tokenValue.length == 3) {" to "return if (tokenValue.length == 3) {"
+tasks.named("postProcessJFlex", PostConverterTask::class.java) {
+    targetFile.set(File("$tokenizerPath/BananaFlexTokenizer.kt"))
+
+    replaceWithString.set(
+        listOf(
+            "import tech.antibytes.banana.BananaContract\n" +
+                "import tech.antibytes.banana.tokenizer.BananaFlexTokenizer\n" +
+                "import tech.antibytes.banana.BananaRuntimeError\n" +
+                "import java.io.IOException\n" +
+                "import java.io.Reader\n" +
+                "import java.lang.Character\n" +
+                "import java.lang.Error"
+            to "import tech.antibytes.banana.BananaRuntimeError\n" +
+                "import tech.antibytes.banana.BananaContract",
+            "IOException" to "Exception",
+            "ArrayIndexOutOfBoundsException" to "Exception",
+            "java.io.Reader" to "TokenizerContract.Reader",
+            "Yytoken" to "BananaContract.Token",
+            "private var zzReader: Reader" to "private var zzReader: TokenizerContract.Reader",
+            "fun yyreset(reader: Reader?) {" to "fun yyreset(reader: TokenizerContract.Reader) {",
+            "].toInt()" to "].code",
+            "when (zzCh) {" to "when (zzCh.toChar()) {",
+            "packed.length()" to "packed.length",
+            "packed.charAt(i++)" to "packed[i++].code",
+            "return String(zzBuffer, zzStartRead, zzMarkedPos-zzStartRead)" to
+                "return zzBuffer.concatToString(zzStartRead, zzStartRead + (zzMarkedPos - zzStartRead))",
+            "Character.isHighSurrogate(zzBuffer[zzEndRead - 1])" to "zzBuffer[zzEndRead - 1].isHighSurrogate()",
+            "System.arraycopy(zzBuffer, 0, newBuffer, 0, zzBuffer.size)" to "zzBuffer.copyInto(destination = newBuffer)",
+            "    fun" to "    protected fun",
+            "String(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead)" to "zzBuffer.concatToString(zzStartRead, zzMarkedPos)",
+            "zzReader!!" to "zzReader",
+            "TokenizerContract.Reader?" to "TokenizerContract.Reader"
+        )
     )
 
+    replaceWithRegEx.set(
+        listOf(
+            "val message: String[ \t\n]+message =".toRegex() to "val message =",
+            "var offset = 0([ \t\n]+)offset = ".toRegex() to "val offset = 0$1",
+            "System.arraycopy\\(([ \t\n]+)zzBuffer, zzStartRead,[ \t\n]+zzBuffer, 0,[ \t\n]+zzEndRead - zzStartRead\n([ \t\n]+)\\)".toRegex()
+            to "zzBuffer.copyInto($1destination = zzBuffer,$1destinationOffset = 0,$1startIndex = zzStartRead,$1endIndex = zzEndRead$2)",
+            "\\).also[ \t\n]+run \\{ pushBackOffset = 0 \\}".toRegex() to ").also { pushBackOffset = 0 }",
+            "return[ \t\n]+if \\(tokenValue.length == 3\\) \\{".toRegex() to "return if (tokenValue.length == 3) {",
+            "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer("
+        )
+    )
 
-
-    doLast {
-        val transpiledKotlinFile = File("$tokenizerPath/BananaFlexTokenizer.kt")
-        var fileContent = transpiledKotlinFile.readText()
-
-        replacements.forEach { (old, new) ->
-            fileContent = fileContent.replace(old, new)
-        }
-
-        transpiledKotlinFile.writeText(fileContent)
-    }
+    deleteWithString.set(
+        listOf(
+            "java.io."
+        )
+    )
 }
+

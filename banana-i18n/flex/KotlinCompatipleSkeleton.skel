@@ -1,3 +1,4 @@
+
   /** This character denotes the end of file. */
   public static final int YYEOF = -1;
 
@@ -26,7 +27,7 @@
 
 --- isFinal list
   /** Input device. */
-  private Reader zzReader;
+  private java.io.Reader zzReader;
 
   /** Current state of the DFA. */
   private int zzState;
@@ -114,7 +115,7 @@
     }
     if (numRead > 0) {
       zzEndRead += numRead;
-      if (zzBuffer[zzEndRead - 1].isHighSurrogate()) {
+      if (Character.isHighSurrogate(zzBuffer[zzEndRead - 1])) {
         if (numRead == requested) { // We requested too few chars to encode a full Unicode character
           --zzEndRead;
           zzFinalHighSurrogate = 1;
@@ -144,7 +145,10 @@
   public final void yyclose() throws java.io.IOException {
     zzAtEOF = true; // indicate end of file
     zzEndRead = zzStartRead; // invalidate buffer
-    zzReader.close();
+
+    if (zzReader != null) {
+      zzReader.close();
+    }
   }
 
 
@@ -223,7 +227,7 @@
    * @return the matched text.
    */
   public final String yytext() {
-    return zzBuffer.concatToString(zzStartRead, zzStartRead + (zzMarkedPos - zzStartRead))
+    return new String(zzBuffer, zzStartRead, zzMarkedPos-zzStartRead);
   }
 
 
@@ -333,7 +337,6 @@
 --- line count update
           }
       }
-
 
       // store back cached position
       zzMarkedPos = zzMarkedPosL;

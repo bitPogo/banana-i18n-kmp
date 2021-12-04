@@ -14,20 +14,11 @@ object Version {
         /**
          * [AnitBytes GradlePlugins](https://github.com/bitPogo/gradle-plugins)
          */
-        const val antibytes = "790b67f"
+        const val antibytes = "e7343d1"
 
         /**
          * [Spotless](https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless)
          */
         const val spotless = "5.14.3"
-    }
-
-    val tokenizer = Tokenizer
-
-    object Tokenizer {
-        /**
-         * [JFlex](https://jflex.de/)
-         */
-        const val jflex = "1.8.2"
     }
 }
