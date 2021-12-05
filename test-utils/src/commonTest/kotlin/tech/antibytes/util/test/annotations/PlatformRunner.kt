@@ -4,10 +4,9 @@
  * Use of this source code is governed by LGPL v2.1
  */
 
-package tech.antibytes.banana
+package tech.antibytes.util.test.annotations
 
-object Sample {
-    fun doSomething() {
-        1 + 2
-    }
+expect object PlatformRunner {
+    fun androidOnly(): String
+    fun jvmOnly(): String
 }

@@ -8,8 +8,4 @@ package tech.antibytes.gradle.banana.dependency
 
 object Dependency {
     val gradle = GradlePlugin
-
-    object Tokenizer {
-        val jflex = "de.jflex:${Version.tokenizer.jflex}"
-    }
 }

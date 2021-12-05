@@ -17,11 +17,14 @@ plugins {
     id("com.gradle.enterprise") version("3.7")
 }
 
-include("banana-i18n")
+include(
+    ":banana-i18n",
+    ":test-utils"
+)
 
 buildCache {
     local {
-        isEnabled = true
+        isEnabled = false
         directory = File(rootDir, "build-cache")
         removeUnusedEntriesAfterDays = 30
     }
