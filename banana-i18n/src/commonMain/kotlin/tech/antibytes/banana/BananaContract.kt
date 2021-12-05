@@ -21,7 +21,6 @@ internal interface BananaContract {
         LITERAL,
         WHITESPACE,
         VARIABLE,
-        TEXT,
         EOF
     }
 
