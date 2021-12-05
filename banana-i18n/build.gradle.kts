@@ -6,8 +6,8 @@
 
 import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
-import tech.antibytes.gradle.jflex.JFlexTask
-import tech.antibytes.gradle.jflex.PostConverterTask
+import tech.antibytes.gradle.grammar.jflex.JFlexTask
+import tech.antibytes.gradle.grammar.PostConverterTask
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -138,13 +138,21 @@ tasks.named("postProcessJFlex", PostConverterTask::class.java) {
             to "zzBuffer.copyInto($1destination = zzBuffer,$1destinationOffset = 0,$1startIndex = zzStartRead,$1endIndex = zzEndRead$2)",
             "\\).also[ \t\n]+run \\{ pushBackOffset = 0 \\}".toRegex() to ").also { pushBackOffset = 0 }",
             "return[ \t\n]+if \\(tokenValue.length == 3\\) \\{".toRegex() to "return if (tokenValue.length == 3) {",
-            "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer("
+            "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer(",
+            "if \\(zzReader != null\\) \\{[ \t\n]+zzReader.close\\(\\)[ \t\n]+\\}".toRegex() to "zzReader.close()",
         )
     )
 
     deleteWithString.set(
         listOf(
             "java.io."
+        )
+    )
+
+    deleteWithRegEx.set(
+        listOf(
+            "// source:[a-zA-Z0-9/ \\-.]+\n".toRegex(),
+            "[ \t\n]+run ".toRegex()
         )
     )
 }

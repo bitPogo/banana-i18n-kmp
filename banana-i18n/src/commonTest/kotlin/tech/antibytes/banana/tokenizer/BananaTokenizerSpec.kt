@@ -353,7 +353,7 @@ class BananaTokenizerSpec {
     }
 
     @Test
-    fun `Given next is called, it returns the right most RuleClosure Tokens`() {
+    fun `Given next is called, it returns the left most RuleClosure Tokens`() {
         val value = "}}}"
 
         val input = StringReader(value)
@@ -364,8 +364,8 @@ class BananaTokenizerSpec {
         val token2 = tokenizer.next()
 
         // Then
-        token1 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 0, 1)
-        token2 mustBe Token(TokenTypes.RULE_CLOSURE, value.drop(1), 1, value.length)
+        token1 mustBe Token(TokenTypes.RULE_CLOSURE, value.drop(1), 0, 2)
+        token2 mustBe Token(TokenTypes.LITERAL, value.drop(2), 2, value.length)
     }
 
     @Test
@@ -441,8 +441,6 @@ class BananaTokenizerSpec {
             tokens.add(tokenizer.next())
         } while (tokens.last() != EOF)
 
-        println(tokens)
-
         // Then
         tokens[0] mustBe Token(type = TokenTypes.NON_ASCII_STRING, value = "ηὕρηκα", start = 0, end = 6)
         tokens[1] mustBe Token(type = TokenTypes.LITERAL, "!", start = 6, end = 7)
@@ -472,7 +470,7 @@ class BananaTokenizerSpec {
         tokens[25] mustBe Token(type = TokenTypes.ASCII_STRING, value = "a", start = 83, end = 84)
         tokens[26] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 84, end = 85)
         tokens[27] mustBe Token(type = TokenTypes.ASCII_STRING, value = "developer", start = 85, end = 94)
-        tokens[28] mustBe Token(type = TokenTypes.LITERAL, value = ".", start = 0, end = 1)
+        tokens[28] mustBe Token(type = TokenTypes.LITERAL, value = ".", start = 94, end = 95)
         tokens[29] mustBe EOF
     }
 
