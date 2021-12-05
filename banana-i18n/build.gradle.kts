@@ -147,5 +147,11 @@ tasks.named("postProcessJFlex", PostConverterTask::class.java) {
             "java.io."
         )
     )
+
+    deleteWithRegEx.set(
+        listOf(
+            "// source:[a-zA-Z0-9/ \\-.]+\n".toRegex()
+        )
+    )
 }
 
