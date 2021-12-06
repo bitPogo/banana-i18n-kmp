@@ -6,8 +6,8 @@
 
 import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
-import tech.antibytes.gradle.jflex.JFlexTask
-import tech.antibytes.gradle.jflex.PostConverterTask
+import tech.antibytes.gradle.grammar.jflex.JFlexTask
+import tech.antibytes.gradle.grammar.PostConverterTask
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -18,7 +18,7 @@ plugins {
     id("tech.antibytes.gradle.configuration")
     id("tech.antibytes.gradle.publishing")
     id("tech.antibytes.gradle.coverage")
-    id("tech.antibytes.gradle.jflex")
+    id("tech.antibytes.gradle.grammar")
 }
 
 group = BananaCoreConfiguration.group
@@ -95,7 +95,7 @@ tasks.withType(JFlexTask::class.java) {
     )
 }
 
-tasks.named("postProcessJFlex", PostConverterTask::class.java) {
+val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
     targetFile.set(File("$tokenizerPath/BananaFlexTokenizer.kt"))
 
     replaceWithString.set(
