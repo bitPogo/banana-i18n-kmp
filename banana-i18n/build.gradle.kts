@@ -8,6 +8,7 @@ import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
 import tech.antibytes.gradle.grammar.jflex.JFlexTask
 import tech.antibytes.gradle.grammar.PostConverterTask
+import tech.antibytes.gradle.grammar.bison.BisonTask
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -82,6 +83,7 @@ kotlin {
 }
 
 val tokenizerPath = "${projectDir.absolutePath}/src-gen/commonMain/kotlin/tech/antibytes/banana/tokenizer"
+val parserPath = "${projectDir.absolutePath}/src-gen/commonMain/kotlin/tech/antibytes/banana/parser"
 
 tasks.withType(JFlexTask::class.java) {
     flexFile.set(
@@ -91,8 +93,33 @@ tasks.withType(JFlexTask::class.java) {
         File(tokenizerPath)
     )
     customSkeletonFile.set(
-        File("${projectDir.absolutePath}/flex/KotlinCompatipleSkeleton.skel")
+        File("${projectDir.absolutePath}/flex/FlexKotlinCompatibleSkeleton.skel")
     )
+}
+
+tasks.named("bison", BisonTask::class.java) {
+    val exec = project.findProperty("bison.exec")
+    val topLevelParser = project.file("$parserPath/BananaTopLevelParser.java")
+    if (exec is String) {
+        executable.set(project.file(exec))
+    }
+
+    grammarFile.set(
+        project.file("${projectDir.absolutePath}/bison/BananaTopLevelParser.y")
+    )
+
+    customSkeletonFile.set(
+        File("${projectDir.absolutePath}/bison/skeleton/kotlin-skel.m4")
+    )
+
+    outputFile.set(topLevelParser)
+
+    doFirst {
+        if(topLevelParser.exists()) {
+            topLevelParser.delete()
+        }
+    }
+
 }
 
 val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
