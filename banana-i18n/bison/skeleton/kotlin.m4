@@ -218,8 +218,9 @@ m4_define([b4_declare_symbol_enum],
               case ',':
                 break strip_quotes;
               case '\\':
-                if (yystr.charAt(++i) != '\\')
+                if (yystr.charAt(++i) != '\\') {
                   break strip_quotes;
+                }
                 /* Fall through.  */
               default:
                 yyr.append(yystr.charAt(i));
@@ -235,7 +236,7 @@ m4_define([b4_declare_symbol_enum],
        First, the terminals, then, starting at \a YYNTOKENS_, nonterminals.  */
     ]b4_typed_parser_table_define([String], [tname], [b4_tname])[
     /* The user-facing name of this symbol.  */
-    public final String getName() {
+    public final String getSymbolName() {
       return yytnamerr_(yytname_[yycode_]);
     }
 ]],

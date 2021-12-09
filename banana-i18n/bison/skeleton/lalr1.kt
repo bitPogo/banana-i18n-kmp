@@ -544,7 +544,7 @@ import java.util.ArrayList;
     if (yydebug > 0) {
         yycdebug(s
             + (yykind.getCode() < YYNTOKENS_ ? " token " : " nterm ")
-        + yykind.getName() + " ("]b4_locations_if([
+        + yykind.getSymbolName() + " ("]b4_locations_if([
         + yylocation + ": "])[
         + (yyvalue == null ? "(null)" : yyvalue.toString()) + ")");
     }
@@ -1054,7 +1054,7 @@ import java.util.ArrayList;
     // Clear it, to get rid of potential left-overs from previous call.
     yylacStack.clear();
     // Reduce until we encounter a shift and thereby accept the token.
-    yycdebugNnl("LAC: checking lookahead " + yytoken.getName() + ":");
+    yycdebugNnl("LAC: checking lookahead " + yytoken.getSymbolName() + ":");
     int lacTop = 0;
     while (true)
     {
@@ -1147,7 +1147,7 @@ import java.util.ArrayList;
     if (yylacEstablished) {
         return true;
     } else {
-        yycdebug("LAC: initial context established for " + yytoken.getName());
+        yycdebug("LAC: initial context established for " + yytoken.getSymbolName());
         yylacEstablished = true;
         return yylacCheck(yystack, yytoken);
     }

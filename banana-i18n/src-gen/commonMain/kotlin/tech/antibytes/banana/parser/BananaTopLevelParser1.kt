@@ -1,15 +1,10 @@
-import java.io.IOException
-import java.io.PrintStream
-import java.util.ArrayList
-import java.util.Arrays
-
 /**
  * A Bison parser, automatically generated from <tt>/Users/d4l000126/projects/own/banana-i18n-kmp/banana-i18n/bison/BananaTopLevelParser.y</tt>.
  *
  * @author LALR (1) parser skeleton written by Paolo Bonzini.
  */
-internal class YYParser(yylexer: Lexer) {
-    enum class SymbolKind(  /* text  */
+internal abstract class YYParser(yylexer: Lexer) {
+    enum class SymbolKind(  /* space  */
         val code: Int
     ) {
         S_YYEOF(0),  /* "end of file"  */
@@ -26,12 +21,22 @@ internal class YYParser(yylexer: Lexer) {
         S_LITERAL(11),  /* LITERAL  */
         S_WHITESPACE(12),  /* WHITESPACE  */
         S_VARIABLE(13),  /* VARIABLE  */
-        S_YYACCEPT(14),  /* $accept  */
-        S_message(15),  /* message  */
-        S_text(16);
+        S_14_(14),  /* ":"  */
+        S_YYACCEPT(15),  /* $accept  */
+        S_message(16),  /* message  */
+        S_text(17),  /* text  */
+        S_rule(18),  /* rule  */
+        S_complexRule(19),  /* complexRule  */
+        S_arguments(20),  /* arguments  */
+        S_optionGroup(21),  /* optionGroup  */
+        S_option(22),  /* option  */
+        S_nestedMessage(23),  /* nestedMessage  */
+        S_nestedText(24),  /* nestedText  */
+        S_simpleRule(25),  /* simpleRule  */
+        S_space(26);
 
         /* The user-facing name of this symbol.  */
-        override val name: String?
+        val symbolName: String?
             get() = yytnamerr_(yytname_[this.code])
 
         companion object {
@@ -50,9 +55,19 @@ internal class YYParser(yylexer: Lexer) {
                 S_LITERAL,
                 S_WHITESPACE,
                 S_VARIABLE,
+                S_14_,
                 S_YYACCEPT,
                 S_message,
-                S_text
+                S_text,
+                S_rule,
+                S_complexRule,
+                S_arguments,
+                S_optionGroup,
+                S_option,
+                S_nestedMessage,
+                S_nestedText,
+                S_simpleRule,
+                S_space
             )
 
             operator fun get(code: Int): SymbolKind {
@@ -72,7 +87,9 @@ internal class YYParser(yylexer: Lexer) {
                         when (yystr[i]) {
                             '\'', ',' -> break@strip_quotes
                             '\\' -> {
-                                if (yystr[++i] != '\\') break@strip_quotes
+                                if (yystr[++i] != '\\') {
+                                    break@strip_quotes
+                                }
                                 yyr.append(yystr[i])
                             }
                             '"' -> return yyr.toString()
@@ -91,8 +108,10 @@ internal class YYParser(yylexer: Lexer) {
                 return arrayOf(
                     "\"end of file\"", "error", "\"invalid token\"", "\"{{\"", "\"}}\"",
                     "DOUBLE", "INTEGER", "ESCAPED", "\"|\"", "ASCII_STRING",
-                    "NON_ASCII_STRING", "LITERAL", "WHITESPACE", "VARIABLE", "\$accept",
-                    "message", "text", null
+                    "NON_ASCII_STRING", "LITERAL", "WHITESPACE", "VARIABLE", "\":\"",
+                    "\$accept", "message", "text", "rule", "complexRule", "arguments",
+                    "optionGroup", "option", "nestedMessage", "nestedText", "simpleRule",
+                    "space", null
                 )
             }
         }
@@ -103,21 +122,6 @@ internal class YYParser(yylexer: Lexer) {
      * parser <tt>YYParser</tt>.
      */
     interface Lexer {
-        /**
-         * Method to retrieve the semantic value of the last scanned token.
-         * @return the semantic value of the last scanned token.
-         */
-        val lVal: Any?
-
-        /**
-         * Entry point for the scanner.  Returns the token identifier corresponding
-         * to the next token and prepares to return the semantic value
-         * of the token.
-         * @return the token identifier corresponding to the next token.
-         */
-        @Throws(IOException::class)
-        fun yylex(): Int
-
         /**
          * Emit an errorin a user-defined way.
          *
@@ -210,7 +214,7 @@ internal class YYParser(yylexer: Lexer) {
      * @param msg The error message.
      */
     fun yyerror(msg: String?) {
-        yylexer.yyerror(msg)
+        yylexer.yyerror(msg!!)
     }
 
     protected fun yycdebugNnl(s: String?) {
@@ -225,7 +229,7 @@ internal class YYParser(yylexer: Lexer) {
         }
     }
 
-    private inner class YYStack {
+    class YYStack {
         private var stateStack = IntArray(16)
         private var valueStack = arrayOfNulls<Any>(16)
         var size = 16
@@ -277,6 +281,22 @@ internal class YYParser(yylexer: Lexer) {
 
     private var yyerrstatus_ = 0
 
+    /* Lookahead token kind.  */
+    var yychar = YYEMPTY_
+
+    /* Lookahead symbol kind.  */
+    var yytoken: SymbolKind? = null
+
+    /* State.  */
+    var yyn = 0
+    var yylen = 0
+    var yystate = 0
+    var yystack = YYStack()
+    var label = YYNEWSTATE
+
+    /* Semantic value of the lookahead.  */
+    var yylval: Any? = null
+
     /**
      * Whether error recovery is being done.  In this state, the parser
      * reads token until it reaches a known state, and then restarts normal
@@ -307,7 +327,12 @@ internal class YYParser(yylexer: Lexer) {
            This behavior is undocumented and Bison
            users should not rely upon it.  */
         var yylen = yylen
-        val yyval = if (0 < yylen) yystack.valueAt(yylen - 1) else yystack.valueAt(0)
+        val yyval: Any?
+        yyval = if (0 < yylen) {
+            yystack.valueAt(yylen - 1)
+        } else {
+            yystack.valueAt(0)
+        }
         yyReducePrint(yyn, yystack)
         when (yyn) {
             else -> {}
@@ -335,46 +360,31 @@ internal class YYParser(yylexer: Lexer) {
         if (debugLevel > 0) {
             yycdebug(
                 s
-                    + (if (yykind.getCode() < YYNTOKENS_) " token " else " nterm ")
-                    + yykind.getName() + " ("
+                    + (if (yykind.code < YYNTOKENS_) " token " else " nterm ")
+                    + yykind.symbolName + " ("
                     + (yyvalue?.toString() ?: "(null)") + ")"
             )
         }
     }
 
     /**
-     * Parse input from the scanner that was specified at object construction
-     * time.  Return whether the end of the input was reached successfully.
+     * Push Parse input from external lexer
      *
-     * @return <tt>true</tt> if the parsing succeeds.  Note that this does not
-     * imply that there were no syntax errors.
+     * @param yylextoken current token
+     * @param yylexval current lval
+     *
+     * @return <tt>YYACCEPT, YYABORT, YYPUSH_MORE</tt>
      */
     @Throws(IOException::class)
-    fun parse(): Boolean {
-
-/* Lookahead token kind.  */
-        var yychar = YYEMPTY_
-        /* Lookahead symbol kind.  */
-        var yytoken: SymbolKind? = null
-
-/* State.  */
-        var yyn = 0
-        var yylen = 0
-        var yystate = 0
-        val yystack = YYParser.YYStack()
-        var label = YYNEWSTATE
-
-/* Semantic value of the lookahead.  */
-        var yylval: Any? = null
-
-        // Discard the LAC context in case there still is one left from a
-        // previous invocation.
-        yylacDiscard("init")
-        yycdebug("Starting parse")
-        yyerrstatus_ = 0
-        numberOfErrors = 0
-
-        /* Initialize the stack.  */yystack.push(yystate, yylval)
+    fun push_parse(yylextoken: Int, yylexval: Any?): Int {
+        if (!push_parse_initialized) {
+            push_parse_initialize()
+            yycdebug("Starting parse")
+            yyerrstatus_ = 0
+        } else {
+            label = YYGETTOKEN
+        }
+        var push_token_consumed = true
         while (true) {
             labelSwitch@ when (label) {
                 YYNEWSTATE -> {
@@ -384,7 +394,8 @@ internal class YYParser(yylexer: Lexer) {
                     }
 
                     /* Accept?  */if (yystate == YYFINAL_) {
-                        return true
+                        label = YYACCEPT
+                        break@labelSwitch
                     }
 
                     /* Take a decision.  First try without lookahead.  */yyn = yypact_[yystate].toInt()
@@ -392,16 +403,19 @@ internal class YYParser(yylexer: Lexer) {
                         label = YYDEFAULT
                         break@labelSwitch
                     }
-
                     /* Read a lookahead token.  */if (yychar == YYEMPTY_) {
+                        if (!push_token_consumed) {
+                            return YYPUSH_MORE
+                        }
                         yycdebug("Reading a token")
-                        yychar = yylexer.yylex()
-                        yylval = yylexer.getLVal()
+                        yychar = yylextoken
+                        yylval = yylexval
+                        push_token_consumed = false
                     }
 
                     /* Convert token to internal form.  */yytoken = yytranslate_(yychar)
                     yySymbolPrint(
-                        "Next token is", yytoken,
+                        "Next token is", yytoken!!,
                         yylval
                     )
                     if (yytoken == SymbolKind.S_YYerror) {
@@ -415,16 +429,16 @@ internal class YYParser(yylexer: Lexer) {
                     } else {
                         /* If the proper action on seeing token YYTOKEN is to reduce or to
                        detect an error, take that action.  */
-                        yyn += yytoken.getCode()
-                        if (yyn < 0 || YYLAST_ < yyn || yycheck_[yyn] != yytoken.getCode()) {
-                            label = if (!yylacEstablish(yystack, yytoken)) {
+                        yyn += yytoken!!.code
+                        if (yyn < 0 || YYLAST_ < yyn || yycheck_[yyn] != yytoken.code) {
+                            label = if (!yylacEstablish(yystack, yytoken!!)) {
                                 YYERRLAB
                             } else YYDEFAULT
                         } else if (yytable_[yyn] <= 0) { /* <= 0 means reduce or error.  */
                             yyn = yytable_[yyn].toInt()
                             if (yyTableValueIsError(yyn)) {
                                 label = YYERRLAB
-                            } else if (!yylacEstablish(yystack, yytoken)) {
+                            } else if (!yylacEstablish(yystack, yytoken!!)) {
                                 label = YYERRLAB
                             } else {
                                 yyn = -yyn
@@ -433,7 +447,7 @@ internal class YYParser(yylexer: Lexer) {
                         } else {
                             /* Shift the lookahead token.  */
                             yySymbolPrint(
-                                "Shifting", yytoken,
+                                "Shifting", yytoken!!,
                                 yylval
                             )
 
@@ -441,6 +455,58 @@ internal class YYParser(yylexer: Lexer) {
 
                             /* Count tokens shifted since error; after three, turn off error
                            status.  */if (yyerrstatus_ > 0) {
+                                --yyerrstatus_
+                            }
+                            yystate = yyn
+                            yystack.push(yystate, yylval)
+                            yylacDiscard("shift")
+                            label = YYNEWSTATE
+                        }
+                    }
+                    break@labelSwitch
+                }
+                YYGETTOKEN -> {
+                    if (yychar == YYEMPTY_) {
+                        if (!push_token_consumed) {
+                            return YYPUSH_MORE
+                        }
+                        yycdebug("Reading a token")
+                        yychar = yylextoken
+                        yylval = yylexval
+                        push_token_consumed = false
+                    }
+                    yytoken = yytranslate_(yychar)
+                    yySymbolPrint(
+                        "Next token is", yytoken!!,
+                        yylval
+                    )
+                    if (yytoken == SymbolKind.S_YYerror) {
+                        yychar = Lexer.YYUNDEF
+                        yytoken = SymbolKind.S_YYUNDEF
+                        label = YYERRLAB1
+                    } else {
+                        yyn += yytoken.code
+                        if (yyn < 0 || YYLAST_ < yyn || yycheck_[yyn] != yytoken.code) {
+                            label = if (!yylacEstablish(yystack, yytoken!!)) {
+                                YYERRLAB
+                            } else YYDEFAULT
+                        } else if (yytable_[yyn] <= 0) {
+                            yyn = yytable_[yyn].toInt()
+                            if (yyTableValueIsError(yyn)) {
+                                label = YYERRLAB
+                            } else if (!yylacEstablish(yystack, yytoken!!)) {
+                                label = YYERRLAB
+                            } else {
+                                yyn = -yyn
+                                label = YYREDUCE
+                            }
+                        } else {
+                            yySymbolPrint(
+                                "Shifting", yytoken!!,
+                                yylval
+                            )
+                            yychar = YYEMPTY_
+                            if (yyerrstatus_ > 0) {
                                 --yyerrstatus_
                             }
                             yystate = yyn
@@ -472,7 +538,7 @@ internal class YYParser(yylexer: Lexer) {
                         if (yychar == YYEMPTY_) {
                             yytoken = null
                         }
-                        yyreportSyntaxError(Context(this, yystack, yytoken!!))
+                        yyreportSyntaxError(Context(this, yystack, yytoken))
                     }
                     if (yyerrstatus_ == 3) {
                         /* If just tried and failed to reuse lookahead token after an
@@ -480,7 +546,8 @@ internal class YYParser(yylexer: Lexer) {
                         if (yychar <= Lexer.YYEOF) {
                             /* Return failure if at end of input.  */
                             if (yychar == Lexer.YYEOF) {
-                                return false
+                                label = YYABORT
+                                break@labelSwitch
                             }
                         } else {
                             yychar = YYEMPTY_
@@ -506,8 +573,8 @@ internal class YYParser(yylexer: Lexer) {
                     while (true) {
                         yyn = yypact_[yystate].toInt()
                         if (!yyPactValueIsDefault(yyn)) {
-                            yyn += SymbolKind.S_YYerror.getCode()
-                            if (yyn >= 0 && yyn <= YYLAST_ && yycheck_[yyn] == SymbolKind.S_YYerror.getCode()) {
+                            yyn += SymbolKind.S_YYerror.code
+                            if (yyn >= 0 && yyn <= YYLAST_ && yycheck_[yyn] == SymbolKind.S_YYerror.code) {
                                 yyn = yytable_[yyn].toInt()
                                 if (0 < yyn) {
                                     break
@@ -517,7 +584,8 @@ internal class YYParser(yylexer: Lexer) {
 
                         /* Pop the current state because it cannot handle the
                      * error token.  */if (yystack.height == 0) {
-                            return false
+                            label = YYABORT
+                            break@labelSwitch
                         }
                         yystack.pop()
                         yystate = yystack.stateAt(0)
@@ -540,10 +608,41 @@ internal class YYParser(yylexer: Lexer) {
                     label = YYNEWSTATE
                     break@labelSwitch
                 }
-                YYACCEPT -> return true
-                YYABORT -> return false
+                YYACCEPT -> {
+                    push_parse_initialized = false
+                    return YYACCEPT
+                }
+                YYABORT -> {
+                    push_parse_initialized = false
+                    return YYABORT
+                }
             }
         }
+    }
+
+    private var push_parse_initialized = false
+
+    /**
+     * (Re-)Initialize the state of the push parser.
+     */
+    fun push_parse_initialize() {
+        /* Lookahead and lookahead in internal form.  */
+        yychar = YYEMPTY_
+        yytoken = null
+
+        /* State.  */yyn = 0
+        yylen = 0
+        yystate = 0
+        yystack = YYParser.YYStack()
+        yylacStack = ArrayList()
+        yylacEstablished = false
+        label = YYNEWSTATE
+
+        /* Error handling.  */numberOfErrors = 0
+
+        /* Semantic value of the lookahead.  */yylval = null
+        yystack.push(yystate, yylval)
+        push_parse_initialized = true
     }
 
     /**
@@ -551,7 +650,8 @@ internal class YYParser(yylexer: Lexer) {
      * a syntax error diagnostic.
      */
     class Context internal constructor(
-        private val yyparser: YYParser, private val yystack: YYParser.YYStack,
+        private val yyparser: YYParser,
+        private val yystack: YYParser.YYStack,
         /**
          * The symbol kind of the lookahead token.
          */
@@ -608,13 +708,13 @@ internal class YYParser(yylexer: Lexer) {
         // Clear it, to get rid of potential left-overs from previous call.
         yylacStack.clear()
         // Reduce until we encounter a shift and thereby accept the token.
-        yycdebugNnl("LAC: checking lookahead " + yytoken.getName() + ":")
+        yycdebugNnl("LAC: checking lookahead " + yytoken.symbolName + ":")
         var lacTop = 0
         while (true) {
             var topState = if (yylacStack.isEmpty()) yystack.stateAt(lacTop) else yylacStack[yylacStack.size - 1]
             var yyrule = yypact_[topState].toInt()
-            if (yyPactValueIsDefault(yyrule) || yytoken.getCode()
-                    .let { yyrule += it; yyrule } < 0 || YYLAST_ < yyrule || yycheck_[yyrule] != yytoken.getCode()
+            if (yyPactValueIsDefault(yyrule) || yytoken.code
+                    .let { yyrule += it; yyrule } < 0 || YYLAST_ < yyrule || yycheck_[yyrule] != yytoken.code
             ) {
                 // Use the default action.
                 yyrule = yydefact_[+topState].toInt()
@@ -696,7 +796,7 @@ internal class YYParser(yylexer: Lexer) {
         return if (yylacEstablished) {
             true
         } else {
-            yycdebug("LAC: initial context established for " + yytoken.getName())
+            yycdebug("LAC: initial context established for " + yytoken.symbolName)
             yylacEstablished = true
             yylacCheck(yystack, yytoken)
         }
@@ -736,7 +836,7 @@ internal class YYParser(yylexer: Lexer) {
     /**
      * Build and emit a "syntax error" message in a user-defined way.
      *
-     * @param ctx  The context of the error.
+     * @param yyctx  The context of the error.
      */
     private fun yyreportSyntaxError(yyctx: Context) {
         yyerror("syntax error")
@@ -744,20 +844,29 @@ internal class YYParser(yylexer: Lexer) {
 
     // Report on the debug stream that the rule yyrule is going to be reduced.
     private fun yyReducePrint(yyrule: Int, yystack: YYParser.YYStack) {
-        if (debugLevel == 0) return
-        val yylno: Int = yyrline_.get(yyrule)
+        if (debugLevel == 0) {
+            return
+        }
+        val yylno = yyrline_[yyrule].toInt()
         val yynrhs = yyr2_[yyrule].toInt()
         /* Print the symbols being reduced, and their result.  */yycdebug(
             "Reducing stack by rule " + (yyrule - 1)
                 + " (line " + yylno + "):"
         )
 
-        /* The symbols being reduced.  */for (yyi in 0 until yynrhs) yySymbolPrint(
-            "   $" + (yyi + 1) + " =",
-            SymbolKind[yystos_[yystack.stateAt(yynrhs - (yyi + 1))].toInt()],
-            yystack.valueAt(yynrhs - (yyi + 1))
-        )
+        /* The symbols being reduced.  */
+        // TODO: Use Stringbuilder
+        for (yyi in 0 until yynrhs) {
+            yySymbolPrint(
+                "   $" + (yyi + 1) + " =",
+                SymbolKind[yystos_[yystack.stateAt(yynrhs - (yyi + 1))].toInt()],
+                yystack.valueAt(yynrhs - (yyi + 1))
+            )
+        }
     }
+
+    /* Unqualified %code blocks.  */ /* "/Users/d4l000126/projects/own/banana-i18n-kmp/banana-i18n/bison/BananaTopLevelParser.y":9  */
+    fun test(): `fun` {} /* "/Users/d4l000126/projects/own/banana-i18n-kmp/banana-i18n/src-gen/commonMain/kotlin/tech/antibytes/banana/parser/BananaTopLevelParser.java":1253  */
 
     companion object {
         /** Version number for the Bison executable that generated this parser.   */
@@ -780,6 +889,11 @@ internal class YYParser(yylexer: Lexer) {
         const val YYABORT = 1
 
         /**
+         * Returned by a Bison action in order to request a new token.
+         */
+        const val YYPUSH_MORE = 4
+
+        /**
          * Returned by a Bison action in order to start error recovery without
          * printing an error message.
          */
@@ -795,6 +909,7 @@ internal class YYParser(yylexer: Lexer) {
         private const val YYREDUCE = 6
         private const val YYERRLAB1 = 7
         private const val YYRETURN = 8
+        private const val YYGETTOKEN = 9 /* Signify that a new token is expected when doing push-parsing.  */
 
         /**
          * Whether the given `yypact_` value indicates a defaulted state.
@@ -813,16 +928,19 @@ internal class YYParser(yylexer: Lexer) {
             return yyvalue == yytable_ninf_.toInt()
         }
 
-        private const val yypact_ninf_: Byte = -5
-        private const val yytable_ninf_: Byte = -1
+        private const val yypact_ninf_: Byte = -32
+        private const val yytable_ninf_: Byte = -37
 
         /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
         private val yypact_ = yypact_init()
         private fun yypact_init(): ByteArray {
             return byteArrayOf(
-                -4, -5, -5, -5, -5, -5, -5, -5, -5, -5,
-                9, -4, -5, -5
+                9, -7, -32, -32, -32, -32, -32, -32, -32, -32,
+                -32, -32, 8, 9, -32, -32, -32, -32, 1, -32,
+                -32, -7, 10, -7, -7, 26, 24, -7, -32, -6,
+                -32, 20, 26, -32, -32, -32, -32, -32, -32, -32,
+                -32, -32, 20, -32, -32
             )
         }
 
@@ -832,8 +950,11 @@ internal class YYParser(yylexer: Lexer) {
         private val yydefact_ = yydefact_init()
         private fun yydefact_init(): ByteArray {
             return byteArrayOf(
-                0, 12, 4, 5, 6, 7, 8, 9, 10, 11,
-                0, 2, 1, 3
+                5, 36, 14, 6, 7, 8, 9, 10, 11, 12,
+                13, 34, 0, 2, 3, 16, 15, 35, 0, 1,
+                4, 36, 19, 36, 36, 22, 0, 36, 18, 21,
+                17, 0, 22, 27, 28, 29, 30, 31, 32, 33,
+                25, 23, 24, 20, 26
             )
         }
 
@@ -841,7 +962,8 @@ internal class YYParser(yylexer: Lexer) {
         private val yypgoto_ = yypgoto_init()
         private fun yypgoto_init(): ByteArray {
             return byteArrayOf(
-                -5, -1, -5
+                -32, 22, -32, -31, -32, -32, 4, -32, -5, -32,
+                -32, -20
             )
         }
 
@@ -849,7 +971,8 @@ internal class YYParser(yylexer: Lexer) {
         private val yydefgoto_ = yydefgoto_init()
         private fun yydefgoto_init(): ByteArray {
             return byteArrayOf(
-                0, 10, 11
+                0, 12, 13, 14, 15, 24, 28, 29, 41, 42,
+                16, 18
             )
         }
 
@@ -859,16 +982,20 @@ internal class YYParser(yylexer: Lexer) {
         private val yytable_ = yytable_init()
         private fun yytable_init(): ByteArray {
             return byteArrayOf(
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 12,
-                13
+                40, 22, -36, 25, 26, 17, 17, 31, 19, 32,
+                21, 40, 1, 2, 3, 4, 5, 6, 7, 8,
+                9, 10, 11, 1, 23, 33, 34, 35, 30, 36,
+                37, 38, 39, 11, 27, 20, 43, 44
             )
         }
 
         private val yycheck_ = yycheck_init()
         private fun yycheck_init(): ByteArray {
             return byteArrayOf(
-                4, 5, 6, 7, 8, 9, 10, 11, 12, 0,
-                11
+                31, 21, 8, 23, 24, 12, 12, 27, 0, 29,
+                9, 42, 3, 4, 5, 6, 7, 8, 9, 10,
+                11, 12, 13, 3, 14, 5, 6, 7, 4, 9,
+                10, 11, 12, 13, 8, 13, 32, 42
             )
         }
 
@@ -877,8 +1004,11 @@ internal class YYParser(yylexer: Lexer) {
         private val yystos_ = yystos_init()
         private fun yystos_init(): ByteArray {
             return byteArrayOf(
-                0, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                15, 16, 0, 15
+                0, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                12, 13, 16, 17, 18, 19, 25, 12, 26, 0,
+                16, 9, 26, 14, 20, 26, 26, 8, 21, 22,
+                4, 26, 26, 5, 6, 7, 9, 10, 11, 12,
+                18, 23, 24, 21, 23
             )
         }
 
@@ -886,8 +1016,10 @@ internal class YYParser(yylexer: Lexer) {
         private val yyr1_ = yyr1_init()
         private fun yyr1_init(): ByteArray {
             return byteArrayOf(
-                0, 14, 15, 15, 16, 16, 16, 16, 16, 16,
-                16, 16, 16
+                0, 15, 16, 16, 16, 16, 17, 17, 17, 17,
+                17, 17, 17, 17, 17, 18, 18, 19, 20, 20,
+                21, 21, 21, 22, 23, 23, 23, 24, 24, 24,
+                24, 24, 24, 24, 25, 26, 26
             )
         }
 
@@ -895,17 +1027,21 @@ internal class YYParser(yylexer: Lexer) {
         private val yyr2_ = yyr2_init()
         private fun yyr2_init(): ByteArray {
             return byteArrayOf(
-                0, 2, 1, 2, 1, 1, 1, 1, 1, 1,
-                1, 1, 1
+                0, 2, 1, 1, 2, 0, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 7, 3, 0,
+                3, 1, 0, 3, 1, 1, 2, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 0
             )
         }
 
         /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-        private val yyrline_: ByteArray = yyrline_init()
+        private val yyrline_ = yyrline_init()
         private fun yyrline_init(): ByteArray {
             return byteArrayOf(
-                0, 24, 24, 25, 29, 30, 31, 32, 33, 34,
-                35, 36, 37
+                0, 30, 30, 31, 32, 33, 37, 38, 39, 40,
+                41, 42, 43, 44, 45, 48, 49, 52, 54, 55,
+                58, 59, 60, 63, 65, 66, 67, 71, 72, 73,
+                74, 75, 76, 77, 80, 83, 84
             )
         }
 
@@ -913,8 +1049,14 @@ internal class YYParser(yylexer: Lexer) {
        as returned by yylex, with out-of-bounds checking.  */
         private fun yytranslate_(t: Int): SymbolKind {
             // Last valid token kind.
-            val code_max = 268
-            return if (t <= 0) SymbolKind.S_YYEOF else if (t <= code_max) SymbolKind[yytranslate_table_[t].toInt()] else SymbolKind.S_YYUNDEF
+            val code_max = 269
+            return if (t <= 0) {
+                SymbolKind.S_YYEOF
+            } else if (t <= code_max) {
+                SymbolKind[yytranslate_table_[t].toInt()]
+            } else {
+                SymbolKind.S_YYUNDEF
+            }
         }
 
         private val yytranslate_table_ = yytranslate_table_init()
@@ -946,14 +1088,14 @@ internal class YYParser(yylexer: Lexer) {
                 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                 2, 2, 2, 2, 2, 2, 1, 2, 3, 4,
-                5, 6, 7, 8, 9, 10, 11, 12, 13
+                5, 6, 7, 8, 9, 10, 11, 12, 13, 14
             )
         }
 
-        private const val YYLAST_ = 10
+        private const val YYLAST_ = 37
         private const val YYEMPTY_ = -2
-        private const val YYFINAL_ = 12
-        private const val YYNTOKENS_ = 14
+        private const val YYFINAL_ = 19
+        private const val YYNTOKENS_ = 15
     }
 
     /**
