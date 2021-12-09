@@ -6,12 +6,10 @@
 
 package tech.antibytes.banana.tokenizer
 
-import java.io.StringReader
-
 internal actual class StringReader actual constructor(
     value: String
 ) : TokenizerContract.Reader {
-    private val reader: StringReader = value.reader()
+    private val reader = value.reader()
 
     actual override fun read(buffer: CharArray, offset: Int, limit: Int): Int {
         return reader.read(buffer, offset, limit)

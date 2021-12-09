@@ -34,7 +34,7 @@ val repositories = listOf(
     CustomRepository(
         "https://raw.github.com/bitPogo/maven-releases/main/releases",
         githubGroups
-    ),
+    )
 )
 
 fun RepositoryHandler.addCustomRepositories() {
