@@ -6,8 +6,10 @@
 
 import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
-import tech.antibytes.gradle.jflex.JFlexTask
-import tech.antibytes.gradle.jflex.PostConverterTask
+import tech.antibytes.gradle.grammar.jflex.JFlexTask
+import tech.antibytes.gradle.grammar.PostConverterTask
+import tech.antibytes.gradle.coverage.api.JvmJacocoConfiguration
+import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -18,10 +20,21 @@ plugins {
     id("tech.antibytes.gradle.configuration")
     id("tech.antibytes.gradle.publishing")
     id("tech.antibytes.gradle.coverage")
-    id("tech.antibytes.gradle.jflex")
+    id("tech.antibytes.gradle.grammar")
 }
 
 group = BananaCoreConfiguration.group
+
+antiBytesCoverage {
+    val generatedCommonSources = File(
+        "${projectDir.absolutePath}/src-gen"
+    ).walkBottomUp().toSet()
+
+    val jvmConfig = JvmJacocoConfiguration.createJvmKmpConfiguration(project)
+    configurations["jvm"] = jvmConfig.copy(
+        additionalSources = generatedCommonSources
+    )
+}
 
 antiBytesPublishing{
     packageConfiguration = BananaCoreConfiguration.publishing.packageConfiguration
@@ -83,7 +96,10 @@ kotlin {
 
 val tokenizerPath = "${projectDir.absolutePath}/src-gen/commonMain/kotlin/tech/antibytes/banana/tokenizer"
 
-tasks.withType(JFlexTask::class.java) {
+val jflex by tasks.creating(JFlexTask::class.java) {
+    group = "Code Generation"
+    description = "Creates a Java file from the given configuration for the Tokenizer"
+
     flexFile.set(
         File("${projectDir.absolutePath}/flex/BananaTokenizer.flex")
     )
@@ -95,20 +111,24 @@ tasks.withType(JFlexTask::class.java) {
     )
 }
 
-tasks.named("postProcessJFlex", PostConverterTask::class.java) {
+val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
+    group = "Code Generation"
+    description = "Cleans up the generated and converted Tokenizer"
+
     targetFile.set(File("$tokenizerPath/BananaFlexTokenizer.kt"))
 
     replaceWithString.set(
         listOf(
             "import tech.antibytes.banana.BananaContract\n" +
                 "import tech.antibytes.banana.tokenizer.BananaFlexTokenizer\n" +
-                "import tech.antibytes.banana.BananaRuntimeError\n" +
+                "import tech.antibytes.banana.tokenizer.TokenizerError.IllegalCharacter\n" +
                 "import java.io.IOException\n" +
                 "import java.io.Reader\n" +
                 "import java.lang.Character\n" +
                 "import java.lang.Error"
-            to "import tech.antibytes.banana.BananaRuntimeError\n" +
-                "import tech.antibytes.banana.BananaContract",
+            to "import tech.antibytes.banana.BananaContract\n" +
+                "import tech.antibytes.banana.tokenizer.TokenizerError.IllegalCharacter\n" +
+                "import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState",
             "IOException" to "Exception",
             "ArrayIndexOutOfBoundsException" to "Exception",
             "java.io.Reader" to "TokenizerContract.Reader",
@@ -120,13 +140,14 @@ tasks.named("postProcessJFlex", PostConverterTask::class.java) {
             "packed.length()" to "packed.length",
             "packed.charAt(i++)" to "packed[i++].code",
             "return String(zzBuffer, zzStartRead, zzMarkedPos-zzStartRead)" to
-                "return zzBuffer.concatToString(zzStartRead, zzStartRead + (zzMarkedPos - zzStartRead))",
+                "return zzBuffer.concatToString(zzStartRead, zzMarkedPos)",
             "Character.isHighSurrogate(zzBuffer[zzEndRead - 1])" to "zzBuffer[zzEndRead - 1].isHighSurrogate()",
             "System.arraycopy(zzBuffer, 0, newBuffer, 0, zzBuffer.size)" to "zzBuffer.copyInto(destination = newBuffer)",
             "    fun" to "    protected fun",
             "String(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead)" to "zzBuffer.concatToString(zzStartRead, zzMarkedPos)",
             "zzReader!!" to "zzReader",
-            "TokenizerContract.Reader?" to "TokenizerContract.Reader"
+            "TokenizerContract.Reader?" to "TokenizerContract.Reader",
+            "throw Error(message)" to "throw UnknownState(message)"
         )
     )
 
@@ -136,9 +157,9 @@ tasks.named("postProcessJFlex", PostConverterTask::class.java) {
             "var offset = 0([ \t\n]+)offset = ".toRegex() to "val offset = 0$1",
             "System.arraycopy\\(([ \t\n]+)zzBuffer, zzStartRead,[ \t\n]+zzBuffer, 0,[ \t\n]+zzEndRead - zzStartRead\n([ \t\n]+)\\)".toRegex()
             to "zzBuffer.copyInto($1destination = zzBuffer,$1destinationOffset = 0,$1startIndex = zzStartRead,$1endIndex = zzEndRead$2)",
-            "\\).also[ \t\n]+run \\{ pushBackOffset = 0 \\}".toRegex() to ").also { pushBackOffset = 0 }",
             "return[ \t\n]+if \\(tokenValue.length == 3\\) \\{".toRegex() to "return if (tokenValue.length == 3) {",
-            "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer("
+            "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer(",
+            "if \\(zzReader != null\\) \\{[ \t\n]+zzReader.close\\(\\)[ \t\n]+\\}".toRegex() to "zzReader.close()",
         )
     )
 
@@ -147,5 +168,17 @@ tasks.named("postProcessJFlex", PostConverterTask::class.java) {
             "java.io."
         )
     )
+
+    deleteWithRegEx.set(
+        listOf(
+            "// source:[a-zA-Z0-9/ \\-.]+\n".toRegex(),
+            "[ \t\n]+run ".toRegex()
+        )
+    )
 }
 
+tasks.withType(Test::class.java) {
+    testLogging {
+        events(FAILED)
+    }
+}

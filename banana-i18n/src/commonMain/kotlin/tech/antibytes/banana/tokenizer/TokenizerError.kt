@@ -12,4 +12,5 @@ sealed class TokenizerError(
     override val message: String
 ) : BananaRuntimeError(message) {
     class IllegalCharacter(message: String) : BananaRuntimeError(message)
+    class UnknownState(message: String) : BananaRuntimeError(message)
 }
