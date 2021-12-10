@@ -67,6 +67,6 @@ whitespaces         = [\s\t\n\r]+
 
     {variable}          { return createVariableToken(); }
 
-    {illegal}           { throw new BananaRuntimeError("Illegal token \"" + yytext() + "\" detected."); }
+    {illegal}           { throw new TokenizerError.IllegalCharacter("Illegal token \"" + yytext() + "\" detected."); }
     .                   { return createToken(TokenTypes.LITERAL); }
 }

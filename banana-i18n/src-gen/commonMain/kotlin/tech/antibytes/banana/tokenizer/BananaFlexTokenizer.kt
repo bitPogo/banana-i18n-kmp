@@ -8,7 +8,8 @@
 package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaRuntimeError
+import tech.antibytes.banana.tokenizer.TokenizerError.IllegalCharacter
+import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState
 
 // See https://github.com/jflex-de/jflex/issues/222
 internal abstract class BananaFlexTokenizer(
@@ -399,7 +400,7 @@ internal abstract class BananaFlexTokenizer(
             } else {
                 when (if (zzAction < 0) zzAction else ZZ_ACTION[zzAction]) {
                     1 -> {
-                        throw BananaRuntimeError("Illegal token \"" + yytext() + "\" detected.")
+                        throw IllegalCharacter("Illegal token \"" + yytext() + "\" detected.")
                     }
                     10 -> {}
                     2 -> {
@@ -880,7 +881,7 @@ internal abstract class BananaFlexTokenizer(
             } catch (e: Exception) {
                 ZZ_ERROR_MSG[ZZ_UNKNOWN_ERROR]
             }
-            throw Error(message)
+            throw UnknownState(message)
         }
     }
 }

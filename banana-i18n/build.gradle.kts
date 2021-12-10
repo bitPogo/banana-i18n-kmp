@@ -115,13 +115,14 @@ val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
         listOf(
             "import tech.antibytes.banana.BananaContract\n" +
                 "import tech.antibytes.banana.tokenizer.BananaFlexTokenizer\n" +
-                "import tech.antibytes.banana.BananaRuntimeError\n" +
+                "import tech.antibytes.banana.tokenizer.TokenizerError.IllegalCharacter\n" +
                 "import java.io.IOException\n" +
                 "import java.io.Reader\n" +
                 "import java.lang.Character\n" +
                 "import java.lang.Error"
-            to "import tech.antibytes.banana.BananaRuntimeError\n" +
-                "import tech.antibytes.banana.BananaContract",
+            to "import tech.antibytes.banana.BananaContract\n" +
+                "import tech.antibytes.banana.tokenizer.TokenizerError.IllegalCharacter\n" +
+                "import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState",
             "IOException" to "Exception",
             "ArrayIndexOutOfBoundsException" to "Exception",
             "java.io.Reader" to "TokenizerContract.Reader",
@@ -139,7 +140,8 @@ val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
             "    fun" to "    protected fun",
             "String(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead)" to "zzBuffer.concatToString(zzStartRead, zzMarkedPos)",
             "zzReader!!" to "zzReader",
-            "TokenizerContract.Reader?" to "TokenizerContract.Reader"
+            "TokenizerContract.Reader?" to "TokenizerContract.Reader",
+            "throw Error(message)" to "throw UnknownState(message)"
         )
     )
 

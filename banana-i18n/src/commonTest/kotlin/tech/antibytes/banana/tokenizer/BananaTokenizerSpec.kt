@@ -9,7 +9,6 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.BananaContract.TokenTypes
-import tech.antibytes.banana.BananaRuntimeError
 import tech.antibytes.mock.tokenizer.MockReader
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -68,7 +67,7 @@ class BananaTokenizerSpec {
         val tokenizer = BananaTokenizer.getInstance(input)
 
         // Then
-        val error = assertFailsWith<BananaRuntimeError> {
+        val error = assertFailsWith<TokenizerError.IllegalCharacter> {
             // When
             tokenizer.next()
         }
