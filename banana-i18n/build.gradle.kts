@@ -96,7 +96,10 @@ kotlin {
 
 val tokenizerPath = "${projectDir.absolutePath}/src-gen/commonMain/kotlin/tech/antibytes/banana/tokenizer"
 
-tasks.withType(JFlexTask::class.java) {
+val jflex by tasks.creating(JFlexTask::class.java) {
+    group = "Code Generation"
+    description = "Creates a Java file from the given configuration for the Tokenizer"
+
     flexFile.set(
         File("${projectDir.absolutePath}/flex/BananaTokenizer.flex")
     )
@@ -109,6 +112,9 @@ tasks.withType(JFlexTask::class.java) {
 }
 
 val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
+    group = "Code Generation"
+    description = "Cleans up the generated and converted Tokenizer"
+
     targetFile.set(File("$tokenizerPath/BananaFlexTokenizer.kt"))
 
     replaceWithString.set(
