@@ -10,12 +10,9 @@ import tech.antibytes.banana.tokenizer.TokenizerContract
 
 internal interface BananaContract {
     enum class TokenTypes {
-        RULE_OPENING,
-        RULE_CLOSURE,
         DOUBLE,
         INTEGER,
         ESCAPED,
-        DELIMITER,
         ASCII_STRING,
         NON_ASCII_STRING,
         LITERAL,
@@ -38,6 +35,16 @@ internal interface BananaContract {
 
     interface TokenizerFactory {
         fun getInstance(reader: TokenizerContract.Reader): Tokenizer
+    }
+
+    interface TokenStore : Iterator<Token> {
+        val currentToken: Token
+        val lookahead: Token
+        val tokenizer: Tokenizer
+
+        fun shift()
+        fun resolveValues(): Array<String>
+        fun consume()
     }
 
     companion object {

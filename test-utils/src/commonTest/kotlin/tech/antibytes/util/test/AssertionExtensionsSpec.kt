@@ -60,4 +60,20 @@ class AssertionExtensionsSpec {
 
         string sameAs string
     }
+
+    @Test
+    fun `Given isNot is called it fails if the lefthand is equal to righthand`() {
+        val string: String = fixture()
+
+        assertFailsWith<AssertionError> {
+            string isNot string
+        }
+    }
+
+    @Test
+    fun `Given isNot is called it runs if the lefthand is not equal righthand`() {
+        val string: String = fixture()
+
+        string isNot fixture()
+    }
 }

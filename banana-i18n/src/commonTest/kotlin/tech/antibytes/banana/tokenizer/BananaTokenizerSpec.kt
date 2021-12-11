@@ -9,7 +9,7 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.BananaContract.TokenTypes
-import tech.antibytes.mock.tokenizer.MockReader
+import tech.antibytes.mock.tokenizer.ReaderStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -24,7 +24,7 @@ class BananaTokenizerSpec {
     @Test
     fun `Given getInstance is called with a Reader it returns a Tokenizer`() {
         // Given
-        val reader = MockReader()
+        val reader = ReaderStub()
 
         // When
         val result = BananaTokenizer.getInstance(reader)
@@ -404,7 +404,7 @@ class BananaTokenizerSpec {
     @Test
     fun `Given setReader is called with a Reader, it replaces the current Reader`() {
         // Given
-        val reader = MockReader()
+        val reader = ReaderStub()
 
         val tokenizer = BananaTokenizer.getInstance(reader)
 

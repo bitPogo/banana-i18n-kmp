@@ -8,6 +8,7 @@ package tech.antibytes.util.test
 
 import kotlin.reflect.KClass
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
@@ -19,6 +20,13 @@ inline infix fun <reified T : Any> Any.mustBe(value: T) {
     assertEquals(
         actual = this,
         expected = value
+    )
+}
+
+inline infix fun <reified T : Any> Any.isNot(value: T) {
+    assertNotEquals(
+        actual = this,
+        illegal = value
     )
 }
 
