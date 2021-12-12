@@ -24,6 +24,10 @@ banana-i18n-kmp:
 # Components
 tokenizer:
   - banana-i18n/flex/*
+  - banana-i18n/**/tokenizer/*
+
+parser:
+  - banana-i18n/**/parser/*
 
 # Sample Apps
 sample-android:
