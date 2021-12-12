@@ -86,7 +86,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.LITERAL, "!", 0, 1)
+        result mustBe Token(TokenTypes.LITERAL, "!", 0, 0)
     }
 
     @Test
@@ -100,7 +100,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.WHITESPACE, value, 0, value.length)
+        result mustBe Token(TokenTypes.WHITESPACE, value, 0, 0)
     }
 
     @Test
@@ -113,7 +113,7 @@ class BananaTokenizerSpec {
         // When
         val result = tokenizer.next()
 
-        result mustBe Token(TokenTypes.ASCII_STRING, value, 0, value.length)
+        result mustBe Token(TokenTypes.ASCII_STRING, value, 0, 0)
     }
 
     @Test
@@ -126,7 +126,7 @@ class BananaTokenizerSpec {
         // When
         val result = tokenizer.next()
 
-        result mustBe Token(TokenTypes.NON_ASCII_STRING, value, 0, value.length)
+        result mustBe Token(TokenTypes.NON_ASCII_STRING, value, 0, 0)
     }
 
     @Test
@@ -146,7 +146,7 @@ class BananaTokenizerSpec {
             val result = tokenizer.next()
 
             // Then
-            result mustBe Token(TokenTypes.ESCAPED, "\\$char", idx, idx + 2)
+            result mustBe Token(TokenTypes.ESCAPED, "\\$char", idx, 0)
             idx += 2
         }
     }
@@ -163,7 +163,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.INTEGER, value, 0, value.length)
+        result mustBe Token(TokenTypes.INTEGER, value, 0, 0)
     }
 
     @Test
@@ -178,7 +178,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.INTEGER, value, 0, value.length)
+        result mustBe Token(TokenTypes.INTEGER, value, 0, 0)
     }
 
     @Test
@@ -192,7 +192,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -206,7 +206,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -220,7 +220,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -234,7 +234,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -248,7 +248,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -262,7 +262,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -276,7 +276,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -290,7 +290,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.DOUBLE, value, 0, value.length)
+        result mustBe Token(TokenTypes.DOUBLE, value, 0, 0)
     }
 
     @Test
@@ -304,7 +304,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.VARIABLE, value.drop(1), 0, value.length)
+        result mustBe Token(TokenTypes.VARIABLE, value.drop(1), 0, 0)
     }
 
     @Test
@@ -318,7 +318,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.VARIABLE, value.drop(1), 0, value.length)
+        result mustBe Token(TokenTypes.VARIABLE, value.drop(1), 0, 0)
     }
 
     @Test
@@ -332,7 +332,7 @@ class BananaTokenizerSpec {
         val result = tokenizer.next()
 
         // Then
-        result mustBe Token(TokenTypes.VARIABLE, value.drop(1), 0, value.length)
+        result mustBe Token(TokenTypes.VARIABLE, value.drop(1), 0, 0)
     }
 
     @Test
@@ -347,8 +347,8 @@ class BananaTokenizerSpec {
         val token2 = tokenizer.next()
 
         // Then
-        token1 mustBe Token(TokenTypes.VARIABLE, value.drop(1).trimEnd('_'), 0, value.lastIndex)
-        token2 mustBe Token(TokenTypes.LITERAL, value.last().toString(), value.lastIndex, value.length)
+        token1 mustBe Token(TokenTypes.VARIABLE, value.drop(1).trimEnd('_'), 0, 0)
+        token2 mustBe Token(TokenTypes.LITERAL, value.last().toString(), value.lastIndex, 0)
     }
 
     @Test
@@ -367,37 +367,37 @@ class BananaTokenizerSpec {
         } while (tokens.last() != EOF)
 
         // Then
-        tokens[0] mustBe Token(type = TokenTypes.NON_ASCII_STRING, value = "ηὕρηκα", start = 0, end = 6)
-        tokens[1] mustBe Token(type = TokenTypes.LITERAL, "!", start = 6, end = 7)
-        tokens[2] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 7, end = 8)
-        tokens[3] mustBe Token(type = TokenTypes.LITERAL, "{", start = 8, end = 9)
-        tokens[4] mustBe Token(type = TokenTypes.LITERAL, "{", start = 9, end = 10)
-        tokens[5] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 10, end = 11)
-        tokens[6] mustBe Token(type = TokenTypes.ASCII_STRING, value = "measurement", start = 11, end = 22)
-        tokens[7] mustBe Token(type = TokenTypes.LITERAL, value = ":", start = 22, end = 23)
-        tokens[8] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 23, end = 24)
-        tokens[9] mustBe Token(type = TokenTypes.LITERAL, value = "+", start = 24, end = 25)
-        tokens[10] mustBe Token(type = TokenTypes.INTEGER, value = "١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩", start = 25, end = 44)
-        tokens[11] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 44, end = 45)
-        tokens[12] mustBe Token(type = TokenTypes.LITERAL, value = "|", start = 45, end = 46)
-        tokens[13] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 46, end = 47)
-        tokens[14] mustBe Token(type = TokenTypes.ASCII_STRING, value = "kilometer", start = 47, end = 56)
-        tokens[15] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 56, end = 57)
-        tokens[16] mustBe Token(type = TokenTypes.LITERAL, value = "}", start = 57, end = 58)
-        tokens[17] mustBe Token(type = TokenTypes.LITERAL, value = "}", start = 58, end = 59)
-        tokens[18] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 59, end = 60)
-        tokens[19] mustBe Token(type = TokenTypes.ASCII_STRING, value = "to", start = 60, end = 62)
-        tokens[20] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 62, end = 63)
-        tokens[21] mustBe Token(type = TokenTypes.ASCII_STRING, value = "walk", start = 63, end = 67)
-        tokens[22] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 67, end = 68)
-        tokens[23] mustBe Token(type = TokenTypes.ASCII_STRING, value = "until", start = 68, end = 73)
-        tokens[24] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 73, end = 74)
-        tokens[25] mustBe Token(type = TokenTypes.ASCII_STRING, value = "becoming", start = 74, end = 82)
-        tokens[26] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 82, end = 83)
-        tokens[27] mustBe Token(type = TokenTypes.ASCII_STRING, value = "a", start = 83, end = 84)
-        tokens[28] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", start = 84, end = 85)
-        tokens[29] mustBe Token(type = TokenTypes.ASCII_STRING, value = "developer", start = 85, end = 94)
-        tokens[30] mustBe Token(type = TokenTypes.LITERAL, value = ".", start = 94, end = 95)
+        tokens[0] mustBe Token(type = TokenTypes.NON_ASCII_STRING, value = "ηὕρηκα", column = 0, line = 0)
+        tokens[1] mustBe Token(type = TokenTypes.LITERAL, "!", column = 6, line = 0)
+        tokens[2] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 7, line = 0)
+        tokens[3] mustBe Token(type = TokenTypes.LITERAL, "{", column = 8, line = 0)
+        tokens[4] mustBe Token(type = TokenTypes.LITERAL, "{", column = 9, line = 0)
+        tokens[5] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 10, line = 0)
+        tokens[6] mustBe Token(type = TokenTypes.ASCII_STRING, value = "measurement", column = 11, line = 0)
+        tokens[7] mustBe Token(type = TokenTypes.LITERAL, value = ":", column = 22, line = 0)
+        tokens[8] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 23, line = 0)
+        tokens[9] mustBe Token(type = TokenTypes.LITERAL, value = "+", column = 24, line = 0)
+        tokens[10] mustBe Token(type = TokenTypes.INTEGER, value = "١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩", column = 25, line = 0)
+        tokens[11] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 44, line = 0)
+        tokens[12] mustBe Token(type = TokenTypes.LITERAL, value = "|", column = 45, line = 0)
+        tokens[13] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 46, line = 0)
+        tokens[14] mustBe Token(type = TokenTypes.ASCII_STRING, value = "kilometer", column = 47, line = 0)
+        tokens[15] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 56, line = 0)
+        tokens[16] mustBe Token(type = TokenTypes.LITERAL, value = "}", column = 57, line = 0)
+        tokens[17] mustBe Token(type = TokenTypes.LITERAL, value = "}", column = 58, line = 0)
+        tokens[18] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 59, line = 0)
+        tokens[19] mustBe Token(type = TokenTypes.ASCII_STRING, value = "to", column = 60, line = 0)
+        tokens[20] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 62, line = 0)
+        tokens[21] mustBe Token(type = TokenTypes.ASCII_STRING, value = "walk", column = 63, line = 0)
+        tokens[22] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 67, line = 0)
+        tokens[23] mustBe Token(type = TokenTypes.ASCII_STRING, value = "until", column = 68, line = 0)
+        tokens[24] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 73, line = 0)
+        tokens[25] mustBe Token(type = TokenTypes.ASCII_STRING, value = "becoming", column = 74, line = 0)
+        tokens[26] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 82, line = 0)
+        tokens[27] mustBe Token(type = TokenTypes.ASCII_STRING, value = "a", column = 83, line = 0)
+        tokens[28] mustBe Token(type = TokenTypes.WHITESPACE, value = " ", column = 84, line = 0)
+        tokens[29] mustBe Token(type = TokenTypes.ASCII_STRING, value = "developer", column = 85, line = 0)
+        tokens[30] mustBe Token(type = TokenTypes.LITERAL, value = ".", column = 94, line = 0)
         tokens[31] mustBe EOF
     }
 

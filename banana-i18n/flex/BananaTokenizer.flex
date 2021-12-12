@@ -22,10 +22,10 @@ import tech.antibytes.banana.BananaContract.TokenTypes;
 
     private Token createToken(TokenTypes tokenType) {
           return new Token(
-              tokenType,
-              yytext(),
-              offset,
-              offset + yylength()
+                tokenType,
+                yytext(),
+                yycolumn,
+                yyline
           ).also { offset += yylength() };
     }
 
@@ -33,8 +33,8 @@ import tech.antibytes.banana.BananaContract.TokenTypes;
           return new Token(
                TokenTypes.VARIABLE,
                yytext().drop(1),
-               offset,
-               offset + yylength()
+               yycolumn,
+               yyline
           ).also { offset += yylength() };
     }
 %}
