@@ -9,7 +9,7 @@ package tech.antibytes.mock.tokenizer
 import tech.antibytes.banana.tokenizer.TokenizerContract
 import tech.antibytes.util.test.MockContract
 
-class MockReader : TokenizerContract.Reader, MockContract.Mock {
+class ReaderStub : TokenizerContract.Reader, MockContract.Mock {
     override fun read(buffer: CharArray, offset: Int, limit: Int): Int {
         TODO("Not yet implemented")
     }
