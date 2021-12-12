@@ -8,7 +8,7 @@
 package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.tokenizer.TokenizerError.IllegalCharacter
+import tech.antibytes.banana.BananaRuntimeError
 import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState
 
 // See https://github.com/jflex-de/jflex/issues/222
@@ -75,8 +75,8 @@ internal abstract class BananaFlexTokenizer(
         return BananaContract.Token(
             tokenType,
             yytext(),
-            offset,
-            offset + yylength()
+            yycolumn,
+            yyline
         ).also { offset += yylength() }
     }
 
@@ -84,8 +84,8 @@ internal abstract class BananaFlexTokenizer(
         return BananaContract.Token(
             BananaContract.TokenTypes.VARIABLE,
             yytext().drop(1),
-            offset,
-            offset + yylength()
+            yycolumn,
+            yyline
         ).also { offset += yylength() }
     }
 
@@ -93,9 +93,9 @@ internal abstract class BananaFlexTokenizer(
      * Refills the input buffer.
      *
      * @return `false` iff there was new input.
-     * @exception Exception  if any I/O-Error occurs
+     * @exception BananaRuntimeError  if any I/O-Error occurs
      */
-    @Throws(Exception::class)
+    @Throws(BananaRuntimeError::class)
     private fun zzRefill(): Boolean {
 
         /* first: make room (if you can) */
@@ -129,7 +129,7 @@ internal abstract class BananaFlexTokenizer(
         val numRead = zzReader.read(zzBuffer, zzEndRead, requested)
 
         /* not supposed to occur according to specification of TokenizerContract.Reader */if (numRead == 0) {
-            throw Exception(
+            throw BananaRuntimeError(
                 "Reader returned 0 characters. See JFlex examples/zero-reader for a workaround."
             )
         }
@@ -157,9 +157,9 @@ internal abstract class BananaFlexTokenizer(
     /**
      * Closes the input reader.
      *
-     * @throws Exception if the reader could not be closed.
+     * @throws BananaRuntimeError if the reader could not be closed.
      */
-    @Throws(Exception::class)
+    @Throws(BananaRuntimeError::class)
     protected fun yyclose() {
         zzAtEOF = true // indicate end of file
         zzEndRead = zzStartRead // invalidate buffer
@@ -285,9 +285,9 @@ internal abstract class BananaFlexTokenizer(
      * or an I/O-Error occurs.
      *
      * @return the next token.
-     * @exception Exception if any I/O-Error occurs.
+     * @exception BananaRuntimeError if any I/O-Error occurs.
      */
-    @Throws(Exception::class)
+    @Throws(BananaRuntimeError::class)
     protected fun yylex(): BananaContract.Token? {
         var zzInput: Int
         var zzAction: Int
@@ -400,7 +400,7 @@ internal abstract class BananaFlexTokenizer(
             } else {
                 when (if (zzAction < 0) zzAction else ZZ_ACTION[zzAction]) {
                     1 -> {
-                        throw IllegalCharacter("Illegal token \"" + yytext() + "\" detected.")
+                        throw TokenizerError.IllegalCharacter("Illegal token \"" + yytext() + "\" detected.")
                     }
                     10 -> {}
                     2 -> {
@@ -878,7 +878,7 @@ internal abstract class BananaFlexTokenizer(
         private fun zzScanError(errorCode: Int) {
             val message = try {
                 ZZ_ERROR_MSG[errorCode]
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 ZZ_ERROR_MSG[ZZ_UNKNOWN_ERROR]
             }
             throw UnknownState(message)

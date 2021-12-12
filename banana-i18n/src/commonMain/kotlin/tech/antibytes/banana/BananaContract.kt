@@ -27,8 +27,8 @@ internal interface BananaContract {
     data class Token(
         val type: TokenTypes,
         val value: String,
-        val start: Int,
-        val end: Int
+        val column: Int,
+        val line: Int
     )
 
     interface Tokenizer {
