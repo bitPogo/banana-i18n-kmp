@@ -366,7 +366,7 @@ class BananaTokenizerSpec {
     }
 
     @Test
-    fun `Given next is called, it returns RuleOpening Tokens`() {
+    fun `Given next is called, it returns FunktionStart Tokens`() {
         val value = "{{"
 
         val input = StringReader(value)
@@ -380,7 +380,7 @@ class BananaTokenizerSpec {
     }
 
     @Test
-    fun `Given next is called, it returns the right most RuleOpening Tokens`() {
+    fun `Given next is called, it returns the right most FunctionStart Tokens`() {
         val value = "{{{"
 
         val input = StringReader(value)
@@ -396,7 +396,7 @@ class BananaTokenizerSpec {
     }
 
     @Test
-    fun `Given next is called, it returns RuleClosure Tokens`() {
+    fun `Given next is called, it returns FunktionEnd Tokens`() {
         val value = "}}"
 
         val input = StringReader(value)
@@ -410,7 +410,7 @@ class BananaTokenizerSpec {
     }
 
     @Test
-    fun `Given next is called, it returns the left most RuleClosure Tokens`() {
+    fun `Given next is called, it returns the left most FunctionEnd Tokens`() {
         val value = "}}}"
 
         val input = StringReader(value)
@@ -422,6 +422,66 @@ class BananaTokenizerSpec {
 
         // Then
         token1 mustBe Token(TokenTypes.FUNCTION_END, value.drop(1), 0, 0)
+        token2 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 2, 0)
+    }
+
+    @Test
+    fun `Given next is called, it returns LinkStart Tokens`() {
+        val value = "[["
+
+        val input = StringReader(value)
+        val tokenizer = BananaTokenizer.getInstance(input)
+
+        // When
+        val result = tokenizer.next()
+
+        // Then
+        result mustBe Token(TokenTypes.LINK_START, value, 0, 0)
+    }
+
+    @Test
+    fun `Given next is called, it returns the right most LinkStart Tokens`() {
+        val value = "[[["
+
+        val input = StringReader(value)
+        val tokenizer = BananaTokenizer.getInstance(input)
+
+        // When
+        val token1 = tokenizer.next()
+        val token2 = tokenizer.next()
+
+        // Then
+        token1 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 0, 0)
+        token2 mustBe Token(TokenTypes.LINK_START, value.drop(1), 1, 0)
+    }
+
+    @Test
+    fun `Given next is called, it returns LinkEnd Tokens`() {
+        val value = "]]"
+
+        val input = StringReader(value)
+        val tokenizer = BananaTokenizer.getInstance(input)
+
+        // When
+        val result = tokenizer.next()
+
+        // Then
+        result mustBe Token(TokenTypes.LINK_END, value, 0, 0)
+    }
+
+    @Test
+    fun `Given next is called, it returns the left most LinkEnd Tokens`() {
+        val value = "]]]"
+
+        val input = StringReader(value)
+        val tokenizer = BananaTokenizer.getInstance(input)
+
+        // When
+        val token1 = tokenizer.next()
+        val token2 = tokenizer.next()
+
+        // Then
+        token1 mustBe Token(TokenTypes.LINK_END, value.drop(1), 0, 0)
         token2 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 2, 0)
     }
 

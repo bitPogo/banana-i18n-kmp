@@ -21,6 +21,8 @@ internal interface BananaContract {
         DELIMITER,
         FUNCTION_START,
         FUNCTION_END,
+        LINK_START,
+        LINK_END,
         EOF
     }
 

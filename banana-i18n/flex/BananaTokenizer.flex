@@ -69,6 +69,8 @@ variable            = "\$" {integer} | "\$" {ascii} ( "_" {ascii} )*
 whitespaces         = [\s\t\n\r]+
 function_start      = "{" "{" "{"?
 function_end        = "}" "}"
+link_start          = "[" "[" "["?
+link_end            = "]" "]"
 delimiter           = "|"
 
 %%
@@ -88,6 +90,8 @@ delimiter           = "|"
     {delimiter}         { return createToken(TokenTypes.DELIMITER); }
     {function_start}    { return rightMostBraceToken(TokenTypes.FUNCTION_START); }
     {function_end}      { return createToken(TokenTypes.FUNCTION_END); }
+    {link_start}        { return rightMostBraceToken(TokenTypes.LINK_START); }
+    {link_end}          { return createToken(TokenTypes.LINK_END); }
 
     {illegal}           { throw new TokenizerError.IllegalCharacter("Illegal token \"" + yytext() + "\" detected."); }
     .                   { return createToken(TokenTypes.LITERAL); }
