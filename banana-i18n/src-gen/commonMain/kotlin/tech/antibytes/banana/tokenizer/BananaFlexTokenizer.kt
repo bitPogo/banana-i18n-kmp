@@ -8,8 +8,8 @@
 package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaRuntimeError
 import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState
+import tech.antibytes.banana.BananaRuntimeError
 
 // See https://github.com/jflex-de/jflex/issues/222
 internal abstract class BananaFlexTokenizer(
@@ -77,7 +77,7 @@ internal abstract class BananaFlexTokenizer(
             yytext(),
             yycolumn,
             yyline
-        ).also { offset += yylength() }
+        ).also{ offset += yylength() }
     }
 
     private fun createVariableToken(): BananaContract.Token {
@@ -86,13 +86,13 @@ internal abstract class BananaFlexTokenizer(
             yytext().drop(1),
             yycolumn,
             yyline
-        ).also { offset += yylength() }
+        ).also{ offset += yylength() }
     }
 
     private fun rightMostBraceToken(tokenType: BananaContract.TokenTypes): BananaContract.Token {
         val tokenValue = yytext()
-        return if (tokenValue.length == 3) {
-            yypushback(2)
+        return if (tokenValue.length > 2) {
+            yypushback(tokenValue.length - 1)
             offset += 1
             createToken(BananaContract.TokenTypes.LITERAL)
         } else {
@@ -101,7 +101,7 @@ internal abstract class BananaFlexTokenizer(
                 yytext(),
                 yycolumn,
                 yyline
-            ).also { offset += 2 }
+            ).also{ offset += 2 }
         }
     }
 
@@ -122,8 +122,7 @@ internal abstract class BananaFlexTokenizer(
                 destination = zzBuffer,
                 destinationOffset = 0,
                 startIndex = zzStartRead,
-                endIndex = zzEndRead
-            )
+                endIndex = zzEndRead            )
 
             /* translate stored positions */zzEndRead -= zzStartRead
             zzCurrentPos -= zzStartRead
@@ -155,7 +154,7 @@ internal abstract class BananaFlexTokenizer(
                 if (numRead == requested) { // We requested too few chars to encode a full Unicode character
                     --zzEndRead
                     zzFinalHighSurrogate = 1
-                } else { // There is room in the buffer for at least one more char
+                } else {                    // There is room in the buffer for at least one more char
                     val c = zzReader.read() // Expecting to read a paired low surrogate char
                     if (c == -1) {
                         return true
@@ -759,10 +758,10 @@ internal abstract class BananaFlexTokenizer(
         private const val ZZ_ACTION_PACKED_0 =
             "\u0001\u0000\u0001\u0001\u0001\u0002\u0003\u0003\u0001\u0004\u0001\u0005\u0004\u0003\u0001\u0006" +
                 "\u0001\u0003\u0001\u0007\u0002\u0008\u0001\u0009\u0002\u0000\u0001\u000a\u0001\u000b\u0001\u000c" +
-                "\u0001\u000d\u0001\u000e\u0002\u0000\u0001\u0009\u0001\u000a\u0001\u000d"
+                "\u0001\u000d\u0001\u000e\u0002\u0000\u0001\u0009"
 
         private fun zzUnpackAction(): IntArray {
-            val result = IntArray(30)
+            val result = IntArray(28)
             val offset = 0
             zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result)
             return result
@@ -787,11 +786,11 @@ internal abstract class BananaFlexTokenizer(
         private const val ZZ_ROWMAP_PACKED_0 =
             "\u0000\u0000\u0000\u0014\u0000\u0028\u0000\u0014\u0000\u003c\u0000\u0050\u0000\u0064\u0000\u0078" +
                 "\u0000\u008c\u0000\u00a0\u0000\u00b4\u0000\u00c8\u0000\u0014\u0000\u00dc\u0000\u00f0\u0000\u0104" +
-                "\u0000\u0118\u0000\u012c\u0000\u0050\u0000\u0140\u0000\u0154\u0000\u0014\u0000\u0014\u0000\u0168" +
-                "\u0000\u0014\u0000\u017c\u0000\u0190\u0000\u0190\u0000\u0014\u0000\u0014"
+                "\u0000\u0118\u0000\u012c\u0000\u0050\u0000\u0140\u0000\u008c\u0000\u0014\u0000\u0014\u0000\u00c8" +
+                "\u0000\u0014\u0000\u0154\u0000\u0168\u0000\u0168"
 
         private fun zzUnpackRowMap(): IntArray {
-            val result = IntArray(30)
+            val result = IntArray(28)
             val offset = 0
             zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result)
             return result
@@ -820,11 +819,11 @@ internal abstract class BananaFlexTokenizer(
                 "\u0001\u000f\u000b\u0000\u0001\u0015\u000b\u0000\u0005\u0016\u0003\u0000\u0007\u0016\u000f\u0000" +
                 "\u0001\u0017\u0015\u0000\u0001\u0018\u0015\u0000\u0001\u0019\u000b\u0000\u0002\u000f\u0008\u0000" +
                 "\u0001\u000f\u0008\u0000\u0001\u0010\u0014\u0000\u0002\u0011\u0003\u0000\u0001\u001a\u000d\u0000" +
-                "\u0001\u0012\u0001\u0000\u0001\u0014\u000f\u0000\u0001\u001b\u0001\u0000\u0001\u001c\u0016\u0000" +
-                "\u0001\u001d\u0017\u0000\u0001\u001e\u000d\u0000\u0002\u0011\u0011\u0000\u0001\u001c\u000c\u0000"
+                "\u0001\u0012\u0001\u0000\u0001\u0014\u000f\u0000\u0001\u001b\u0001\u0000\u0001\u001c\u0014\u0000" +
+                "\u0002\u0011\u0011\u0000\u0001\u001c\u000c\u0000"
 
         private fun zzUnpackTrans(): IntArray {
-            val result = IntArray(420)
+            val result = IntArray(380)
             val offset = 0
             zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result)
             return result
@@ -868,10 +867,10 @@ internal abstract class BananaFlexTokenizer(
         private val ZZ_ATTRIBUTE = zzUnpackAttribute()
         private const val ZZ_ATTRIBUTE_PACKED_0 =
             "\u0001\u0000\u0001\u0009\u0001\u0001\u0001\u0009\u0008\u0001\u0001\u0009\u0005\u0001\u0002\u0000" +
-                "\u0001\u0001\u0002\u0009\u0001\u0001\u0001\u0009\u0002\u0000\u0001\u0001\u0002\u0009"
+                "\u0001\u0001\u0002\u0009\u0001\u0001\u0001\u0009\u0002\u0000\u0001\u0001"
 
         private fun zzUnpackAttribute(): IntArray {
-            val result = IntArray(30)
+            val result = IntArray(28)
             val offset = 0
             zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result)
             return result

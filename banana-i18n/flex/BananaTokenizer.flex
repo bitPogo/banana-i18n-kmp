@@ -40,8 +40,8 @@ import tech.antibytes.banana.BananaContract.TokenTypes;
 
     private Token rightMostBraceToken(TokenTypes tokenType) {
           String tokenValue = yytext();
-          return if (tokenValue.length() == 3) {
-                yypushback(2);
+          return if (tokenValue.length() > 2) {
+                yypushback(tokenValue.length() - 1);
                 offset += 1;
                 createToken(TokenTypes.LITERAL);
           } else {
@@ -67,9 +67,9 @@ non_ascii           = {non_ascii_letter}+
 escaped             = "\\" [\u0021-\u002F \u003A-\u0040 \u005B-\u0060 \u007B-\u007E]
 variable            = "\$" {integer} | "\$" {ascii} ( "_" {ascii} )*
 whitespaces         = [\s\t\n\r]+
-function_start      = "{" "{" "{"?
+function_start      = "{" "{" "{"*
 function_end        = "}" "}"
-link_start          = "[" "[" "["?
+link_start          = "[" "[" "["*
 link_end            = "]" "]"
 delimiter           = "|"
 
