@@ -18,6 +18,9 @@ internal interface BananaContract {
         LITERAL,
         WHITESPACE,
         VARIABLE,
+        DELIMITER,
+        FUNCTION_START,
+        FUNCTION_END,
         EOF
     }
 
