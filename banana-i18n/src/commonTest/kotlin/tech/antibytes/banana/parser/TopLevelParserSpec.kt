@@ -11,6 +11,7 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
+import tech.antibytes.banana.ast.MagicLinkNode
 import tech.antibytes.banana.ast.MagicWordNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
@@ -428,6 +429,119 @@ class TopLevelParserSpec {
                 TokenTypes.NON_ASCII_STRING to word,
                 TokenTypes.WHITESPACE to " ",
                 TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(
+            listOf(tokens[0].value, tokens[1].value, tokens[2].value, tokens[3].value, tokens[4].value)
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts MagicLinks`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = "WORD"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.FUNCTION_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe MagicLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts MagicLinks with Identifiers`() {
+        // Given
+        val parser = TopLevelParser()
+        val word1 = "WORD1"
+        val word2 = "WORD2"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.ASCII_STRING to word1,
+                TokenTypes.LITERAL to "_",
+                TokenTypes.ASCII_STRING to word2,
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe MagicLinkNode("${word1}_$word2")
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Links which contain additional spaces`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = "WORD"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe MagicLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Link like syntax as Text`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = "ηὕρηκα"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.NON_ASCII_STRING to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
             )
         )
 

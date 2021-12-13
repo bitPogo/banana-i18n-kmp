@@ -22,12 +22,13 @@ generic grammar:
 
 [source]
 ----
-<message>   := (<text> | <variable> | <function>)*
-<text>      := double | escaped | integer | ascii | nonascii | literal | link_start | link_start | function_end | delimiter | link_end | whitespace
-<variable>  := variable
-<function>  := function_start <space> <identier> <space> function_end
-<space>     := whitespace*
-<identifier := ascii ( "_" ascii )*
+<message>       := (<text> | <variable> | <function> | <link>)*
+<text>          := double | escaped | integer | ascii | nonascii | literal | link_start | link_start | function_end | delimiter | link_end | whitespace
+<variable>      := variable
+<function>      := function_start <space> <identifier> <space> function_end
+<link>          := link_start <space> <identifier> <space> link_end
+<space>         := whitespace*
+<identifier>    := ascii ( "_" ascii )*
 
 
 

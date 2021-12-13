@@ -11,6 +11,7 @@ import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.ast.CompoundNode
+import tech.antibytes.banana.ast.MagicLinkNode
 import tech.antibytes.banana.ast.MagicWordNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
@@ -41,10 +42,30 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         return type == TokenTypes.WHITESPACE
     }
 
+    private fun Token.isFunctionStart(): Boolean {
+        return type == TokenTypes.FUNCTION_START
+    }
+
+    private fun Token.isLinkStart(): Boolean {
+        return type == TokenTypes.LINK_START
+    }
+
+    private fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isFunctionStart() &&
+            (tokenizer.lookahead.isAscii() ||
+                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isAscii()))
+    }
+
+    private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isLinkStart() &&
+            (tokenizer.lookahead.isAscii() ||
+                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isAscii()))
+    }
+
     private fun text(tokenizer: BananaContract.TokenStore): Node {
         do {
             tokenizer.shift()
-        } while (tokenizer.currentToken.isText())
+        } while (tokenizer.currentToken.isText() && !isFunction(tokenizer) && !isLink(tokenizer))
 
         return TextNode(tokenizer.resolveValues())
     }
@@ -85,13 +106,26 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         }
     }
 
+    private fun link(tokenizer: BananaContract.TokenStore): Node {
+        tokenizer.consume()
+        space(tokenizer)
+
+        return MagicLinkNode(
+            identifier(tokenizer)
+        ).also {
+            space(tokenizer)
+            tokenizer.consume()
+        }
+    }
+
     private fun message(tokenizer: BananaContract.TokenStore): List<Node> {
         val nodes: MutableList<Node> = mutableListOf()
 
         while (!tokenizer.currentToken.isEOF()) {
-            val node = when (tokenizer.currentToken.type) {
-                TokenTypes.VARIABLE -> variable(tokenizer)
-                TokenTypes.FUNCTION_START -> function(tokenizer)
+            val node = when {
+                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                isFunction(tokenizer) -> function(tokenizer)
+                isLink(tokenizer) -> link(tokenizer)
                 else -> text(tokenizer)
             }
 

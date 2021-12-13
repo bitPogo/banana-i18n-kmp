@@ -18,7 +18,11 @@ internal data class VariableNode(
 
 internal data class MagicWordNode(
     val word: String
-) :  Node
+) : Node
+
+internal data class MagicLinkNode(
+    val word: String
+) : Node
 
 internal data class CompoundNode(
     val children: List<Node>
