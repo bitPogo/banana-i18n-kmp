@@ -248,4 +248,363 @@ class TokenStoreSpec {
         buffer[0] mustBe tokens[2].value
         buffer[1] mustBe tokens[3].value
     }
+
+    @Test
+    fun `Given lookahead is called with an Int, it returns EOF if no Token is available on the given position`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        val token = store.lookahead(5)
+
+        // Then
+        token mustBe EOF
+    }
+
+    @Test
+    fun `Given lookahead is called with an Int, it returns the Token if available on the given position`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        val token = store.lookahead(2)
+
+        // Then
+        token mustBe tokens[2]
+    }
+
+    @Test
+    fun `Given lookahead is called with an Int, it returns the Token if available on the given position, while using the TokenBuffer`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        store.lookahead(3)
+        val token = store.lookahead(2)
+
+        // Then
+        token mustBe tokens[2]
+    }
+
+    @Test
+    fun `Given lookahead is called with an Int, it returns the Token if available on the given position, while extending the TokenBuffer`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        store.lookahead(3)
+        val token = store.lookahead(4)
+
+        // Then
+        token mustBe tokens[4]
+    }
+
+    @Test
+    fun `Given lookahead is called with an Int which is zero, it returns current Token`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        val token = store.lookahead(0)
+
+        // Then
+        token mustBe store.currentToken
+    }
+
+    @Test
+    fun `Given lookahead is called with an Int which is negative, it returns current Token`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        val token = store.lookahead(-23)
+
+        // Then
+        token mustBe store.currentToken
+    }
+
+    @Test
+    fun `Given lookahead is called with an Int which is one, it returns lookahead Token`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        val token = store.lookahead(1)
+
+        // Then
+        token mustBe store.lookahead
+    }
+
+    @Test
+    fun `Given is shift called, it reads from the token buffer until it is cleared`() {
+        // Given
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        store.lookahead(2)
+        store.shift()
+        store.shift()
+
+        store.shift()
+        store.shift()
+        val buffer = store.resolveValues()
+
+        // Then
+        buffer[0] mustBe tokens[0].value
+        buffer[1] mustBe tokens[1].value
+        buffer[2] mustBe tokens[2].value
+        buffer[3] mustBe tokens[3].value
+    }
+
+    @Test
+    fun `Given consume is called, it reads from the token buffer until it is cleared`() {
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        store.lookahead(2)
+        store.consume()
+        store.consume()
+        store.consume()
+
+        // Then
+        store.currentToken mustBe tokens[3]
+        store.lookahead mustBe tokens[4]
+    }
 }

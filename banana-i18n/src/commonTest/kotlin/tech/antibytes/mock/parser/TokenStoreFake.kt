@@ -60,6 +60,10 @@ internal class TokenStoreFake(
 
     override fun consume() = nextToken()
 
+    override fun lookahead(n: Int): BananaContract.Token {
+        TODO("Not yet implemented")
+    }
+
     override fun clear() {
         tokens = mutableListOf(EOF, EOF)
         stringBuffer.clear()

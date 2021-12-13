@@ -50,6 +50,7 @@ internal interface BananaContract {
         fun shift()
         fun resolveValues(): List<String>
         fun consume()
+        fun lookahead(k: Int): Token
     }
 
     interface Node
