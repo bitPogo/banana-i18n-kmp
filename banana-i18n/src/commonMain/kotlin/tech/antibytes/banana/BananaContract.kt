@@ -42,14 +42,26 @@ internal interface BananaContract {
         fun getInstance(reader: TokenizerContract.Reader): Tokenizer
     }
 
-    interface TokenStore : Iterator<Token> {
+    interface TokenStore {
         val currentToken: Token
         val lookahead: Token
         val tokenizer: Tokenizer
 
         fun shift()
-        fun resolveValues(): Array<String>
+        fun resolveValues(): List<String>
         fun consume()
+    }
+
+    interface Node
+
+    fun interface ParserPlugin {
+        fun parse(tokenizer: TokenStore): Node
+    }
+
+    interface TopLevelParser : ParserPlugin
+
+    interface ParserController {
+        fun resolveParserPlugin(name: String)
     }
 
     companion object {

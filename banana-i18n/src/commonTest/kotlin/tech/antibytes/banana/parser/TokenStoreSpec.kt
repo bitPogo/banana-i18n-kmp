@@ -11,7 +11,6 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.mock.parser.TokenizerStub
 import tech.antibytes.util.test.fulfils
-import tech.antibytes.util.test.isNot
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -30,13 +29,6 @@ class TokenStoreSpec {
         val store: Any = TokenStore(tokenizer.also { it.next = { EOF } })
 
         store fulfils BananaContract.TokenStore::class
-    }
-
-    @Test
-    fun `It fulfils Iterator`() {
-        val store: Any = TokenStore(tokenizer.also { it.next = { EOF } })
-
-        store fulfils Iterator::class
     }
 
     @Test
@@ -69,44 +61,6 @@ class TokenStoreSpec {
 
         store.currentToken mustBe tokens[0]
         store.lookahead mustBe tokens[1]
-    }
-
-    @Test
-    fun `Given next is called, it returns the lookahead and sets a new lookahead and sets the old lookahead as currentToken`() {
-        // Given
-        val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            )
-        )
-        val consumableTokens = tokens.toMutableList()
-
-        tokenizer.next = { consumableTokens.removeAt(0) }
-
-        val store = TokenStore(tokenizer)
-
-        // When
-        val result = store.next()
-
-        // Then
-        result mustBe tokens[1]
-        store.currentToken mustBe tokens[1]
-        store.lookahead mustBe tokens[2]
     }
 
     @Test
@@ -232,7 +186,7 @@ class TokenStoreSpec {
         // When
         store.shift()
         store.shift()
-        val buffer = store.resolveValues().also { println(it) }
+        val buffer = store.resolveValues()
 
         // Then
         buffer[0] mustBe tokens[0].value
@@ -240,23 +194,21 @@ class TokenStoreSpec {
     }
 
     @Test
-    fun `Given has next is called it returns true if the lookahead is not EOF`() {
-        // Given
-        tokenizer.next = { EOF }
-
-        val store = TokenStore(tokenizer)
-
-        // When
-        val result = store.hasNext()
-
-        // Then
-        result mustBe false
-    }
-
-    @Test
-    fun `Given has next is called it returns false if the lookahead is EOF`() {
+    fun `Given shift is called and resolveValues afterwards, it clears the buffer on resolveValues`() {
         // Given
         val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
             BananaContract.Token(
                 BananaContract.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
@@ -284,50 +236,16 @@ class TokenStoreSpec {
         val store = TokenStore(tokenizer)
 
         // When
-        val result = store.hasNext()
+        store.shift()
+        store.shift()
+        store.resolveValues()
+
+        store.shift()
+        store.shift()
+        val buffer = store.resolveValues()
 
         // Then
-        result mustBe true
-    }
-
-    @Test
-    fun `It behaves like an initialized Iterator`() {
-        // Given
-        val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            EOF
-        )
-        val consumableTokens = tokens.toMutableList()
-
-        tokenizer.next = { consumableTokens.removeAt(0) }
-
-        val store = TokenStore(tokenizer)
-
-        // When
-        var idx = 1
-
-        for (token in store) {
-            // Then
-            token mustBe tokens[idx]
-            token.value isNot ""
-            idx++
-        }
+        buffer[0] mustBe tokens[2].value
+        buffer[1] mustBe tokens[3].value
     }
 }

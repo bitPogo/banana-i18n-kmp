@@ -156,7 +156,7 @@ val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
             "var offset = 0([ \t\n]+)offset = ".toRegex() to "val offset = 0$1",
             "System.arraycopy\\(([ \t\n]+)zzBuffer, zzStartRead,[ \t\n]+zzBuffer, 0,[ \t\n]+zzEndRead - zzStartRead\n([ \t\n]+)\\)".toRegex()
             to "zzBuffer.copyInto($1destination = zzBuffer,$1destinationOffset = 0,$1startIndex = zzStartRead,$1endIndex = zzEndRead$2)",
-            "return[ \t\n]+if \\(tokenValue.length == 3\\) \\{".toRegex() to "return if (tokenValue.length == 3) {",
+            "return[ \t\n]+if \\(tokenValue.length > 2\\) \\{".toRegex() to "return if (tokenValue.length > 2) {",
             "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer(",
             "if \\(zzReader != null\\) \\{[ \t\n]+zzReader.close\\(\\)[ \t\n]+\\}".toRegex() to "zzReader.close()",
         )

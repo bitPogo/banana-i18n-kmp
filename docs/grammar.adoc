@@ -18,11 +18,19 @@ ifdef::env-github[]
 endif::[]
 
 The following description of the grammar is unofficial and users should not rely on it, since it is owned by the Wikimedia Foundation.
-Please note ε means empty or ε-transitions.
 generic grammar:
 
 [source]
 ----
+<message>   := (<text> | <variable> | <function>)*
+<text>      := double | escaped | integer | ascii | nonascii | literal | link_start | link_start | function_end | delimiter | link_end | whitespace
+<variable>  := variable
+<function>  := function_start <space> <identier> <space> function_end
+<space>     := whitespace*
+<identifier := ascii ( "_" ascii )*
+
+
+
 <message>                       := <ruleOrText> <message> | <ruleOrText> | ε
 <ruleOrText>                    := <text> | <rule>
 <text>                          := <includeSpaceClose> <text> | <includeSpaceClose>
@@ -42,21 +50,25 @@ generic grammar:
 <space>                         := whitespace <space> | whitespace | ε
 <mandatorySpace>                := whitespace <mandatorySpace> | whitespace
 
+// PseudoToken
+float               := {integer}? "." {integer}
+ascii_letter        := [A-Za-z]
+non_ascii_letter    := {::LETTER::--{ascii_letter}}
+
 // Token
 illegal             := [\u0000-\u0008 \u000B \u000C \u000E-\u001F \u007F-\u009F]
 integer             := {::NUMBER::}+
-float               := {integer}? "." {integer}
 double              := {float} ( [eE] [-+]? {integer} )? | {integer} [eE] [-+]? {integer}
-delimiter           := "|"
-ascii_letter        := [A-Za-z]
 ascii               := {ascii_letter}+
-non_ascii_letter    := {::LETTER::--{ascii_letter}}
 non_ascii           := {non_ascii_letter}+
 escaped             := "\\" [\u0021-\u002F \u003A-\u0040 \u005B-\u0060 \u007B-\u007E]
 variable            := "\$" {integer} | "\$" {ascii} ( "_" {ascii} )*
-rule_closure        := "}" "}"
-rule_opnening       := "{" "{" [^{] | "{" "{" $
-whitespaces         := [\s\t\n\r]+
+function_start      = "{" "{"
+function_end        = "}" "}"
+link_start          = "[" "["
+link_end            = "]" "]"
+delimiter           = "|"
+space               := [\s\t\n\r]+
 ----
 
 Please note a plain `$` means End of Message

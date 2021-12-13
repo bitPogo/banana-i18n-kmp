@@ -381,7 +381,7 @@ class BananaTokenizerSpec {
 
     @Test
     fun `Given next is called, it returns the right most FunctionStart Tokens`() {
-        val value = "{{{"
+        val value = "{{{{{"
 
         val input = StringReader(value)
         val tokenizer = BananaTokenizer.getInstance(input)
@@ -389,10 +389,14 @@ class BananaTokenizerSpec {
         // When
         val token1 = tokenizer.next()
         val token2 = tokenizer.next()
+        val token3 = tokenizer.next()
+        val token4 = tokenizer.next()
 
         // Then
         token1 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 0, 0)
-        token2 mustBe Token(TokenTypes.FUNCTION_START, value.drop(1), 1, 0)
+        token2 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 1, 0)
+        token3 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 2, 0)
+        token4 mustBe Token(TokenTypes.FUNCTION_START, value.drop(3), 3, 0)
     }
 
     @Test
@@ -441,7 +445,7 @@ class BananaTokenizerSpec {
 
     @Test
     fun `Given next is called, it returns the right most LinkStart Tokens`() {
-        val value = "[[["
+        val value = "[[[[["
 
         val input = StringReader(value)
         val tokenizer = BananaTokenizer.getInstance(input)
@@ -449,10 +453,14 @@ class BananaTokenizerSpec {
         // When
         val token1 = tokenizer.next()
         val token2 = tokenizer.next()
+        val token3 = tokenizer.next()
+        val token4 = tokenizer.next()
 
         // Then
         token1 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 0, 0)
-        token2 mustBe Token(TokenTypes.LINK_START, value.drop(1), 1, 0)
+        token2 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 1, 0)
+        token3 mustBe Token(TokenTypes.LITERAL, value[0].toString(), 2, 0)
+        token4 mustBe Token(TokenTypes.LINK_START, value.drop(3), 3, 0)
     }
 
     @Test

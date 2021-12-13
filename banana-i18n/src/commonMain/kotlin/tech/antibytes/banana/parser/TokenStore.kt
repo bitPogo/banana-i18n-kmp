@@ -7,7 +7,6 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.Companion.EOF
 
 // TODO: Investigate if LL(k) has sense to use as for now LL(1) should be sufficient
 internal class TokenStore(
@@ -22,25 +21,21 @@ internal class TokenStore(
     private var _lookahead: BananaContract.Token = tokenizer.next()
     private var stringBuffer: MutableList<String> = mutableListOf()
 
-    private fun nextToken() {
+    private fun next() {
         _currentToken = _lookahead
         _lookahead = tokenizer.next()
     }
 
     override fun shift() {
         stringBuffer.add(_currentToken.value)
-        nextToken()
+        next()
     }
 
-    override fun resolveValues(): Array<String> = stringBuffer.toTypedArray()
-
-    override fun consume() = nextToken()
-
-    override fun hasNext(): Boolean = _lookahead != EOF
-
-    override fun next(): BananaContract.Token {
-        nextToken()
-
-        return _currentToken
+    override fun resolveValues(): List<String> {
+        val buffer = stringBuffer.toList()
+        stringBuffer.clear()
+        return buffer
     }
+
+    override fun consume() = next()
 }
