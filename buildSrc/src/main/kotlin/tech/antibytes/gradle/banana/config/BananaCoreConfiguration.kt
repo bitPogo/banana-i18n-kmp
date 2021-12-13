@@ -10,7 +10,7 @@ import tech.antibytes.gradle.publishing.api.PackageConfiguration
 import tech.antibytes.gradle.publishing.api.PomConfiguration
 
 object BananaCoreConfiguration {
-    const val group = "tech.antibytes"
+    const val group = "tech.antibytes.banana-i18n-kmp"
 
     val publishing = Publishing
 
