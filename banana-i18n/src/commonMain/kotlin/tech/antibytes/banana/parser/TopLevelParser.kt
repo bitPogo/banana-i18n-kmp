@@ -131,7 +131,12 @@ internal class TopLevelParser(
 
     private fun isDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isDelimiter() ||
-            (tokenizer.currentToken.isSpace() && tokenizer.lookahead.isDelimiter()) ||
+            (tokenizer.currentToken.isSpace() && tokenizer.lookahead.isDelimiter())
+    }
+
+    private fun isFunctionEndOrDelimiter(tokenizer: BananaContract.TokenStore) : Boolean {
+        return isDelimiter(tokenizer) ||
+            tokenizer.currentToken.isFunctionEnd() ||
             (tokenizer.currentToken.isSpace() && tokenizer.lookahead.isFunctionEnd())
     }
 
@@ -189,18 +194,26 @@ internal class TopLevelParser(
 
     private fun nestedText(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
-            tokenizer.currentToken.isNestedText() && !isFunction(tokenizer) && !isDelimiter(tokenizer)
+            tokenizer.currentToken.isNestedText() && !isFunction(tokenizer) && !isFunctionEndOrDelimiter(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
     }
 
     private fun argument(tokenizer: BananaContract.TokenStore): Node {
-        return if (tokenizer.currentToken.isVariable()) {
-            variable(tokenizer)
-        } else {
-            nestedText(tokenizer)
+        val argument = mutableListOf<Node>()
+
+        while (!isFunctionEndOrDelimiter(tokenizer)) {
+            val partialArgument = when {
+                isFunction(tokenizer) -> function(tokenizer)
+                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                else -> nestedText(tokenizer)
+            }
+
+            argument.add(partialArgument)
         }
+
+        return CompoundNode(argument)
     }
 
     private fun arguments(tokenizer: BananaContract.TokenStore): List<Node> {

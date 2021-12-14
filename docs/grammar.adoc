@@ -31,7 +31,7 @@ generic grammar:
 <freeLink>      := "[" <space> url <space> "]"
 <function>      := function_start <space> <identifier> <space> <arguments>? function_end
 <arguments>     := ":" <space> <argument> <space> (delimiter <space> <argument> <space>)*
-<argument>      := (<nestedText> | <variable>)+
+<argument>      := (<nestedText> | <variable> | <function>)+
 <nestedText>    := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | whitespace
 <space>         := whitespace*
 <identifier>    := ascii ( "_" ascii )*

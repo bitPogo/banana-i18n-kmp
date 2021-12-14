@@ -472,7 +472,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -506,7 +510,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -540,7 +548,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -574,7 +586,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -608,7 +624,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -642,7 +662,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -679,7 +703,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                TextNode(listOf(argument, space, argument))
+                CompoundNode(
+                    listOf(
+                        TextNode(listOf(argument, space, argument))
+                    )
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -713,7 +741,90 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(
             name,
             listOf(
-                VariableNode(argument)
+                CompoundNode(
+                    listOf(
+                        VariableNode(argument)
+                    )
+                )
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with a nested Function as single Argument as Variable`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "name"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.LITERAL to ":",
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to argument,
+                TokenTypes.FUNCTION_END to "}}",
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                CompoundNode(
+                    listOf(
+                        FunctionNode(argument)
+                    )
+                )
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with mixed values as single Argument as Variable`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argumentPart1 = "name"
+        val argumentPart2 = " "
+        val argumentPart3 = "something"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.VARIABLE to argumentPart1,
+                TokenTypes.WHITESPACE to argumentPart2,
+                TokenTypes.ASCII_STRING to argumentPart3,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                CompoundNode(
+                    listOf(VariableNode(argumentPart1), TextNode(listOf(argumentPart2, argumentPart3)))
+                )
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
