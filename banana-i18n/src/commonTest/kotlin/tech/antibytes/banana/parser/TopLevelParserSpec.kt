@@ -286,6 +286,29 @@ class TopLevelParserSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts URL as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val url = "https://example.org"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.URL to url,
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(listOf(url))
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[0])
+    }
+
+    @Test
     fun `Given parse is called it accepts multiple specified Tokens as one Text`() {
         // Given
         val parser = TopLevelParser(logger)
@@ -685,6 +708,34 @@ class TopLevelParserSpec {
                 TokenTypes.LINK_START to "[[",
                 TokenTypes.WHITESPACE to " ",
                 TokenTypes.ESCAPED to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts URL as Link`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "https://example.org"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.URL to word,
                 TokenTypes.WHITESPACE to " ",
                 TokenTypes.LINK_END to "]]",
             )

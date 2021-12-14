@@ -23,6 +23,7 @@ internal interface BananaContract {
         FUNCTION_END,
         LINK_START,
         LINK_END,
+        URL,
         EOF
     }
 

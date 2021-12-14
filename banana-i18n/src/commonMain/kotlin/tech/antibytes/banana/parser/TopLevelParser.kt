@@ -33,7 +33,8 @@ internal class TopLevelParser(
             type == TokenTypes.DELIMITER ||
             type == TokenTypes.LINK_END ||
             type == TokenTypes.FUNCTION_START ||
-            type == TokenTypes.LINK_START
+            type == TokenTypes.LINK_START ||
+            type == TokenTypes.URL
     }
 
     private fun Token.isLinkText(): Boolean {
@@ -43,7 +44,8 @@ internal class TopLevelParser(
             type == TokenTypes.NON_ASCII_STRING ||
             type == TokenTypes.LITERAL ||
             type == TokenTypes.ESCAPED ||
-            type == TokenTypes.WHITESPACE) &&
+            type == TokenTypes.WHITESPACE ||
+            type == TokenTypes.URL) &&
             !INVALID_LINK_LITERAL.contains(value)
     }
 

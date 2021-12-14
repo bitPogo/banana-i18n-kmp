@@ -494,6 +494,34 @@ class BananaTokenizerSpec {
     }
 
     @Test
+    fun `Given next is called, it returns URL Tokens`() {
+        val value = "https://example.org"
+
+        val input = StringReader(value)
+        val tokenizer = BananaTokenizer.getInstance(input)
+
+        // When
+        val token = tokenizer.next()
+
+        // Then
+        token mustBe Token(TokenTypes.URL, value, 0, 0)
+    }
+
+    @Test
+    fun `Given next is called, it returns URL Tokens for protocol-relative URIs`() {
+        val value = "https://example.org"
+
+        val input = StringReader(value)
+        val tokenizer = BananaTokenizer.getInstance(input)
+
+        // When
+        val token = tokenizer.next()
+
+        // Then
+        token mustBe Token(TokenTypes.URL, value, 0, 0)
+    }
+
+    @Test
     fun `Given the Tokenizer gets an complex input stream it tokenizes it`() {
         // Given
         val value = "ηὕρηκα! {{ measurement: +١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩ | kilometer }} to walk until becoming a developer."
