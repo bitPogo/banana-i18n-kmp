@@ -17,6 +17,7 @@ import tech.antibytes.banana.ast.HeadlessFunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.banana.BananaContract.Tag
+import tech.antibytes.banana.ast.HeadlessFreeLinkNode
 
 internal class TopLevelParser(
     private val logger: BananaContract.Logger
@@ -33,7 +34,8 @@ internal class TopLevelParser(
             type == TokenTypes.DELIMITER ||
             type == TokenTypes.LINK_END ||
             type == TokenTypes.FUNCTION_START ||
-            type == TokenTypes.LINK_START
+            type == TokenTypes.LINK_START ||
+            type == TokenTypes.URL
     }
 
     private fun Token.isLinkText(): Boolean {
@@ -75,6 +77,18 @@ internal class TopLevelParser(
         return type == TokenTypes.LINK_END
     }
 
+    private fun Token.isFreeLinkStart(): Boolean {
+        return value == "["
+    }
+
+    private fun Token.isFreeLinkEnd(): Boolean {
+        return value == "]"
+    }
+
+    private fun Token.isUrl(): Boolean {
+        return type == TokenTypes.URL
+    }
+
     private fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFunctionStart() &&
             (tokenizer.lookahead.isAscii() ||
@@ -85,6 +99,12 @@ internal class TopLevelParser(
         return tokenizer.currentToken.isLinkStart() &&
             (tokenizer.lookahead.isAscii() ||
                 (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isLinkText()))
+    }
+
+    private fun isFreeLink(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isFreeLinkStart() &&
+            (tokenizer.lookahead.isUrl() ||
+                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isUrl()))
     }
 
     private fun shiftUntil(tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
@@ -109,7 +129,7 @@ internal class TopLevelParser(
 
     private fun text(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
-            tokenizer.currentToken.isText() && !isFunction(tokenizer) && !isLink(tokenizer)
+            tokenizer.currentToken.isText() && !isFunction(tokenizer) && !isLink(tokenizer) && !isFreeLink(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -148,7 +168,7 @@ internal class TopLevelParser(
         space(tokenizer)
 
         if (!tokenizer.currentToken.isFunctionEnd()) {
-            log("Warning: Function $functionName has not been closed!")
+            log("Warning: Function ($functionName) had not been closed!")
         } else {
             tokenizer.consume()
         }
@@ -172,11 +192,27 @@ internal class TopLevelParser(
 
         when {
             tokenizer.currentToken.isLinkEnd() -> tokenizer.consume()
-            tokenizer.currentToken == EOF -> log("Warning: Link $linkName has not been closed!")
+            tokenizer.currentToken == EOF -> log("Warning: Link ($linkName) had not been closed!")
             else -> log("Error: Unexpected Token (${tokenizer.currentToken}) in Link ($linkName)!", LogLevel.ERROR)
         }
 
         return HeadlessLinkNode(linkName)
+    }
+
+    private fun freeLink(tokenizer: BananaContract.TokenStore): Node {
+        tokenizer.consume()
+        space(tokenizer)
+        val url = tokenizer.currentToken.value
+        tokenizer.consume()
+        space(tokenizer)
+
+        if (!tokenizer.currentToken.isFreeLinkEnd()) {
+            log("Warning: FreeLink ($url) had not been closed!")
+        } else {
+            tokenizer.consume()
+        }
+
+        return HeadlessFreeLinkNode(url)
     }
 
     private fun message(tokenizer: BananaContract.TokenStore): List<Node> {
@@ -187,6 +223,7 @@ internal class TopLevelParser(
                 tokenizer.currentToken.isVariable() -> variable(tokenizer)
                 isFunction(tokenizer) -> function(tokenizer)
                 isLink(tokenizer) -> link(tokenizer)
+                isFreeLink(tokenizer) -> freeLink(tokenizer)
                 else -> text(tokenizer)
             }
 

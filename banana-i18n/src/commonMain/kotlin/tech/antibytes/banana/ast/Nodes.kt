@@ -24,6 +24,10 @@ internal data class HeadlessLinkNode(
     val identifier: String
 ) : Node
 
+internal data class HeadlessFreeLinkNode(
+    val identifier: String
+) : Node
+
 internal data class CompoundNode(
     val children: List<Node>
 ) : Node

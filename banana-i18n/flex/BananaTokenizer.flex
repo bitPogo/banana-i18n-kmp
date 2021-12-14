@@ -72,6 +72,8 @@ function_end        = "}" "}"
 link_start          = "[" "[" "["*
 link_end            = "]" "]"
 delimiter           = "|"
+url_letter          = {ascii_letter} | digit | "-" | "_" | "." | "~" | "!" | "*" | "'" | "(" | ")" | ";" | ":" | "@" | "&" | "=" | "+" | "$" | "," | "/" | "?" | "%" | "#" | "[" | "]"
+url                 = {ascii} "://" {url_letter}+ | "//" {url_letter}+
 
 %%
 
@@ -92,6 +94,8 @@ delimiter           = "|"
     {function_end}      { return createToken(TokenTypes.FUNCTION_END); }
     {link_start}        { return rightMostBraceToken(TokenTypes.LINK_START); }
     {link_end}          { return createToken(TokenTypes.LINK_END); }
+
+    {url}               { return createToken(TokenTypes.URL); }
 
     {illegal}           { throw new TokenizerError.IllegalCharacter("Illegal token \"" + yytext() + "\" detected."); }
     .                   { return createToken(TokenTypes.LITERAL); }

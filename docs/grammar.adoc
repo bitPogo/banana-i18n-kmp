@@ -22,13 +22,14 @@ generic grammar:
 
 [source]
 ----
-<message>       := (<text> | <variable> | <function> | <link>)*
+<message>       := (<text> | <variable> | <function> | <link> | <freeLink>)*
 <text>          := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace
 <variable>      := variable
 <function>      := function_start <space> <identifier> <space> function_end
 <link>          := link_start <space> (<linkText> | <function>) <space> link_end
-<linkText>      := double | escaped | integer | ascii | nonascii | <linkLiteral> | whitespace
+<linkText>      := double | escaped | integer | ascii | nonascii | <linkLiteral> | whitespace | url
 <linkLiteral>   := ^"{" | ^"[" | ^"}" | ^"]"
+<freeLink>      := "[" <space> url <space> "]"
 <space>         := whitespace*
 <identifier>    := ascii ( "_" ascii )*
 
@@ -57,6 +58,7 @@ generic grammar:
 float               := {integer}? "." {integer}
 ascii_letter        := [A-Za-z]
 non_ascii_letter    := {::LETTER::--{ascii_letter}}
+url_letter          := {ascii_letter} | digit | "-" | "_" | "." | "~" | "!" | "*" | "'" | "(" | ")" | ";" | ":" | "@" | "&" | "=" | "+" | "$" | "," | "/" | "?" | "%" | "#" | "[" | "]"
 
 // Token
 illegal             := [\u0000-\u0008 \u000B \u000C \u000E-\u001F \u007F-\u009F]
@@ -66,25 +68,29 @@ ascii               := {ascii_letter}+
 non_ascii           := {non_ascii_letter}+
 escaped             := "\\" [\u0021-\u002F \u003A-\u0040 \u005B-\u0060 \u007B-\u007E]
 variable            := "\$" {integer} | "\$" {ascii} ( "_" {ascii} )*
-function_start      = "{" "{"
-function_end        = "}" "}"
-link_start          = "[" "["
-link_end            = "]" "]"
-delimiter           = "|"
+url                 := {ascii} "://" {url_letter}+ | "//" {url_letter}+
+function_start      := "{" "{"
+function_end        := "}" "}"
+link_start          := "[" "["
+link_end            := "]" "]"
+delimiter           := "|"
 space               := [\s\t\n\r]+
 ----
 
 Please note a plain `$` means End of Message
 Please note, `{::SOME_NAME::}` refers to the unicode definition of the Name.See link:https://www.unicode.org/reports/tr18/#General_Category_Property[here] for more.
 Please note, that `<generic>` will replaced by the following rules, if the specific requirement matches.
+Please note, `<text>` should accept any until a new parser rule kicks in.
 
 == Error Handling
 If the parser faces an unexpected Token (for example [[ A illegal character follows me }]]), it should recover by assuming the expected Token was beforehand or producing a TextNode and log an Error.
 The reason is simply to avoid any unexpected behaviour in a consuming application (like app crashes) which could lead to bad user experience.
 
 == Up to discussion
+The following points are up to discussion and part of the parser core. They can and should be implemented once the need arises.
+
 === Links
-* do not support label extensions nor the redirect prefixes
+* label extensions nor the redirect prefixes are not supported
 * free links without braces are not supported
 
 == Shared rules
