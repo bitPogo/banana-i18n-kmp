@@ -196,7 +196,11 @@ internal class TopLevelParser(
     }
 
     private fun argument(tokenizer: BananaContract.TokenStore): Node {
-        return nestedText(tokenizer)
+        return if (tokenizer.currentToken.isVariable()) {
+            variable(tokenizer)
+        } else {
+            nestedText(tokenizer)
+        }
     }
 
     private fun arguments(tokenizer: BananaContract.TokenStore): List<Node> {

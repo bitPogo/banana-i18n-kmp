@@ -479,7 +479,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with NON_ASCII as single Argument as Text which contain additional spacing`() {
+    fun `Given parse is called it accepts Functions with NON_ASCII as single Argument as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val name = "WORD1"
@@ -513,7 +513,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with DOUBLE as single Argument as Text which contain additional spacing`() {
+    fun `Given parse is called it accepts Functions with DOUBLE as single Argument as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val name = "WORD1"
@@ -547,7 +547,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with INTEGER as single Argument as Text which contain additional spacing`() {
+    fun `Given parse is called it accepts Functions with INTEGER as single Argument as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val name = "WORD1"
@@ -581,7 +581,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with ESCAPED as single Argument as Text which contain additional spacing`() {
+    fun `Given parse is called it accepts Functions with ESCAPED as single Argument as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val name = "WORD1"
@@ -615,7 +615,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with LITERAL as single Argument as Text which contain additional spacing`() {
+    fun `Given parse is called it accepts Functions with LITERAL as single Argument as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val name = "WORD1"
@@ -649,7 +649,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with WHITESPACES as single Argument as Text which contain additional spacing`() {
+    fun `Given parse is called it accepts Functions with WHITESPACES as single Argument as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val name = "WORD1"
@@ -680,6 +680,40 @@ class TopLevelParserSpec {
             name,
             listOf(
                 TextNode(listOf(argument, space, argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with VARIABLE as single Argument as Variable`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "var"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.VARIABLE to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                VariableNode(argument)
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
