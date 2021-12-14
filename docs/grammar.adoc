@@ -22,8 +22,8 @@ generic grammar:
 
 [source]
 ----
-<message>       := (<text> | <variable> | <function> | <link>)*
-<text>          := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace | url
+<message>       := (<text> | <variable> | <function> | <link> | <freeLink>)*
+<text>          := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace
 <variable>      := variable
 <function>      := function_start <space> <identifier> <space> function_end
 <link>          := link_start <space> (<linkText> | <function>) <space> link_end
@@ -80,6 +80,7 @@ space               := [\s\t\n\r]+
 Please note a plain `$` means End of Message
 Please note, `{::SOME_NAME::}` refers to the unicode definition of the Name.See link:https://www.unicode.org/reports/tr18/#General_Category_Property[here] for more.
 Please note, that `<generic>` will replaced by the following rules, if the specific requirement matches.
+Please note, `<text>` should accept any until a new parser rule kicks in.
 
 == Error Handling
 If the parser faces an unexpected Token (for example [[ A illegal character follows me }]]), it should recover by assuming the expected Token was beforehand or producing a TextNode and log an Error.
