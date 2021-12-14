@@ -14,7 +14,7 @@ import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.HeadlessFreeLinkNode
 import tech.antibytes.banana.ast.HeadlessLinkNode
-import tech.antibytes.banana.ast.HeadlessFunctionNode
+import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
@@ -380,13 +380,13 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode(word)
+        (message as CompoundNode).children[0] mustBe FunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts HeadlessFunctions with Identifiers`() {
+    fun `Given parse is called it accepts Functions with Identifiers`() {
         // Given
         val parser = TopLevelParser(logger)
         val word1 = "WORD1"
@@ -409,13 +409,13 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode("${word1}_$word2")
+        (message as CompoundNode).children[0] mustBe FunctionNode("${word1}_$word2")
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts HeadlessFunctions which contain additional spaces`() {
+    fun `Given parse is called it accepts Functions which contain additional spaces`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "WORD"
@@ -437,13 +437,256 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode(word)
+        (message as CompoundNode).children[0] mustBe FunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts Function like syntax as Text`() {
+    fun `Given parse is called it accepts Functions with ASCII as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "WORD2"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to argument,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with NON_ASCII as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "ηὕρηκα"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.NON_ASCII_STRING to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with DOUBLE as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = fixture<Double>().toString()
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.DOUBLE to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with INTEGER as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = fixture<Int>().toString()
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.INTEGER to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with ESCAPED as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "\\{"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.ESCAPED to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with LITERAL as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "{"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.LITERAL to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with WHITESPACES as single Argument as Text which contain additional spacing`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument = "{"
+        val space = " "
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.LITERAL to argument,
+                TokenTypes.WHITESPACE to space,
+                TokenTypes.LITERAL to argument,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                TextNode(listOf(argument, space, argument))
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions like syntax as Text`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "ηὕρηκα"
@@ -473,7 +716,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Function while it had not been closed and reports a warning`() {
+    fun `Given parse is called it accepts Functions while it had not been closed and reports a warning`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "abc"
@@ -494,7 +737,7 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode(word)
+        (message as CompoundNode).children[0] mustBe FunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
@@ -504,7 +747,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts HeadlessLinks`() {
+    fun `Given parse is called it accepts Links`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "WORD"
@@ -530,7 +773,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts HeadlessLinks with Identifiers`() {
+    fun `Given parse is called it accepts Links with Identifiers`() {
         // Given
         val parser = TopLevelParser(logger)
         val word1 = "WORD1"
@@ -904,4 +1147,6 @@ class TopLevelParserSpec {
             "Warning: FreeLink ($word) had not been closed!"
         )
     }
+
+    // TODO Mixed on Message Level
 }

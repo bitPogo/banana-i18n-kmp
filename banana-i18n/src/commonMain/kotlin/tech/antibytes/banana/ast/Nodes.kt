@@ -16,8 +16,9 @@ internal data class VariableNode(
     val name: String
 ) : Node
 
-internal data class HeadlessFunctionNode(
-    val name: String
+internal data class FunctionNode(
+    val name: String,
+    val arguments: List<Node> = emptyList()
 ) : Node
 
 internal data class HeadlessLinkNode(
