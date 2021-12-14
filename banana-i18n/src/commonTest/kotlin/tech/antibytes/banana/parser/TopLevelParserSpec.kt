@@ -11,8 +11,8 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.MagicLinkNode
-import tech.antibytes.banana.ast.MagicWordNode
+import tech.antibytes.banana.ast.HeadlessLinkNode
+import tech.antibytes.banana.ast.HeadlessFunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.mock.parser.TokenStoreFake
@@ -103,7 +103,7 @@ class TopLevelParserSpec {
     fun `Given parse is called it accepts ESCAPED as Text`() {
         // Given
         val parser = TopLevelParser()
-        val escaped = "\$"
+        val escaped = "\\$"
 
         val tokens = createTokens(
             listOf(
@@ -334,7 +334,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts MagicWords`() {
+    fun `Given parse is called it accepts HeadlessFunctions`() {
         // Given
         val parser = TopLevelParser()
         val word = "WORD"
@@ -354,13 +354,13 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe MagicWordNode(word)
+        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts MagicWords with Identifiers`() {
+    fun `Given parse is called it accepts HeadlessFunctions with Identifiers`() {
         // Given
         val parser = TopLevelParser()
         val word1 = "WORD1"
@@ -383,13 +383,13 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe MagicWordNode("${word1}_$word2")
+        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode("${word1}_$word2")
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts MagicWords which contain additional spaces`() {
+    fun `Given parse is called it accepts HeadlessFunctions which contain additional spaces`() {
         // Given
         val parser = TopLevelParser()
         val word = "WORD"
@@ -411,7 +411,7 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe MagicWordNode(word)
+        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
     }
@@ -447,7 +447,7 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts MagicLinks`() {
+    fun `Given parse is called it accepts HeadlessLinks`() {
         // Given
         val parser = TopLevelParser()
         val word = "WORD"
@@ -456,7 +456,7 @@ class TopLevelParserSpec {
             listOf(
                 TokenTypes.LINK_START to "[[",
                 TokenTypes.ASCII_STRING to word,
-                TokenTypes.FUNCTION_END to "]]",
+                TokenTypes.LINK_END to "]]",
             )
         )
 
@@ -467,13 +467,13 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe MagicLinkNode(word)
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts MagicLinks with Identifiers`() {
+    fun `Given parse is called it accepts HeadlessLinks with Identifiers`() {
         // Given
         val parser = TopLevelParser()
         val word1 = "WORD1"
@@ -496,7 +496,7 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe MagicLinkNode("${word1}_$word2")
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode("${word1}_$word2")
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
     }
@@ -524,13 +524,69 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe MagicLinkNode(word)
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
     }
 
     @Test
-    fun `Given parse is called it accepts Link like syntax as Text`() {
+    fun `Given parse is called it accepts it accepts DOUBLE as Link`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = fixture<Double>().toString()
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.DOUBLE to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts it accepts INTEGER as Link`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = fixture<Int>().toString()
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.INTEGER to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts it accepts NON_ASCII as Link`() {
         // Given
         val parser = TopLevelParser()
         val word = "ηὕρηκα"
@@ -552,10 +608,64 @@ class TopLevelParserSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe TextNode(
-            listOf(tokens[0].value, tokens[1].value, tokens[2].value, tokens[3].value, tokens[4].value)
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts it accepts LITERAL as Link`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = "!"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
         )
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts it accepts ESCAPED as Link`() {
+        // Given
+        val parser = TopLevelParser()
+        val word = "\\{"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ESCAPED to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
     }
 }

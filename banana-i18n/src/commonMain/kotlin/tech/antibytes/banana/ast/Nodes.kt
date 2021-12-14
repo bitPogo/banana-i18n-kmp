@@ -16,12 +16,12 @@ internal data class VariableNode(
     val name: String
 ) : Node
 
-internal data class MagicWordNode(
-    val word: String
+internal data class HeadlessFunctionNode(
+    val name: String
 ) : Node
 
-internal data class MagicLinkNode(
-    val word: String
+internal data class HeadlessLinkNode(
+    val identifier: String
 ) : Node
 
 internal data class CompoundNode(
