@@ -21,13 +21,9 @@ internal class TokenStoreFake(
     var tokens: MutableList<BananaContract.Token>
         get() = _tokens
         set(newValues) {
-            _tokens = newValues.also {
-                if (it.size < 2) {
-                    throw RuntimeException("You must at least specify 2 tokens.")
-                }
-            }
-            _currentToken = tokens.removeAt(0)
-            _lookahead = tokens.removeAt(0)
+            _tokens = newValues
+            _currentToken = tokens.removeFirstOrNull() ?: EOF
+            _lookahead = tokens.removeFirstOrNull() ?: EOF
         }
 
     override val currentToken: BananaContract.Token
@@ -43,7 +39,7 @@ internal class TokenStoreFake(
 
     private fun nextToken() {
         _currentToken = _lookahead
-        _lookahead = tokens.removeAt(0)
+        _lookahead = tokens.removeFirstOrNull() ?: EOF
     }
 
     override fun shift() {
@@ -61,10 +57,10 @@ internal class TokenStoreFake(
     override fun consume() = nextToken()
 
     override fun lookahead(k: Int): BananaContract.Token {
-        return when {
-            k > tokens.lastIndex -> EOF
-            k > 1 -> tokens[k - 2]
-            else -> _lookahead
+        return if (k > 1) {
+            tokens.getOrElse(k - 2) { EOF }
+        } else {
+            _lookahead
         }
     }
 

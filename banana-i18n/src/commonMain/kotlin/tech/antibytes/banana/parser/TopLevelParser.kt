@@ -11,8 +11,8 @@ import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.MagicLinkNode
-import tech.antibytes.banana.ast.MagicWordNode
+import tech.antibytes.banana.ast.HeadlessLinkNode
+import tech.antibytes.banana.ast.HeadlessFunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 
@@ -25,9 +25,21 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
             type == TokenTypes.LITERAL ||
             type == TokenTypes.ESCAPED ||
             type == TokenTypes.WHITESPACE ||
-            type == TokenTypes.DELIMITER ||
             type == TokenTypes.FUNCTION_END ||
-            type == TokenTypes.LINK_END
+            type == TokenTypes.DELIMITER ||
+            type == TokenTypes.LINK_END ||
+            type == TokenTypes.FUNCTION_START ||
+            type == TokenTypes.LINK_START
+    }
+
+    private fun Token.isLinkText(): Boolean {
+        return type == TokenTypes.DOUBLE ||
+            type == TokenTypes.INTEGER ||
+            type == TokenTypes.ASCII_STRING ||
+            type == TokenTypes.NON_ASCII_STRING ||
+            type == TokenTypes.LITERAL ||
+            type == TokenTypes.ESCAPED ||
+            type == TokenTypes.WHITESPACE
     }
 
     private fun Token.isVariable(): Boolean {
@@ -59,13 +71,19 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
     private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkStart() &&
             (tokenizer.lookahead.isAscii() ||
-                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isAscii()))
+                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isLinkText()))
+    }
+
+    private fun shiftUntil(tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
+        do {
+            tokenizer.shift()
+        } while (condition())
     }
 
     private fun text(tokenizer: BananaContract.TokenStore): Node {
-        do {
-            tokenizer.shift()
-        } while (tokenizer.currentToken.isText() && !isFunction(tokenizer) && !isLink(tokenizer))
+        shiftUntil(tokenizer) {
+            tokenizer.currentToken.isText() && !isFunction(tokenizer) && !isLink(tokenizer)
+        }
 
         return TextNode(tokenizer.resolveValues())
     }
@@ -98,7 +116,7 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         tokenizer.consume()
         space(tokenizer)
 
-        return MagicWordNode(
+        return HeadlessFunctionNode(
             identifier(tokenizer)
         ).also {
             space(tokenizer)
@@ -106,12 +124,20 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         }
     }
 
+    private fun linkText(tokenizer: BananaContract.TokenStore): String {
+        shiftUntil(tokenizer) {
+            tokenizer.currentToken.isLinkText() && !isFunction(tokenizer)
+        }
+
+        return tokenizer.resolveValues().joinToString("").trimEnd()
+    }
+
     private fun link(tokenizer: BananaContract.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
 
-        return MagicLinkNode(
-            identifier(tokenizer)
+        return HeadlessLinkNode(
+            linkText(tokenizer)
         ).also {
             space(tokenizer)
             tokenizer.consume()

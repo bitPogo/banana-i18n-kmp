@@ -7,7 +7,6 @@
 package tech.antibytes.util
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.Companion.EOF
 
 internal fun createTokens(
     templates: List<Pair<BananaContract.TokenTypes, String>>
@@ -37,5 +36,5 @@ internal fun createTokens(
         }
     }
 
-    return tokens.also { it.addAll(listOf(EOF, EOF)) }
+    return tokens
 }
