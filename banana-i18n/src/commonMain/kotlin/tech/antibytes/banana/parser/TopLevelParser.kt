@@ -7,6 +7,7 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
 import tech.antibytes.banana.BananaContract.Token
@@ -15,8 +16,11 @@ import tech.antibytes.banana.ast.HeadlessLinkNode
 import tech.antibytes.banana.ast.HeadlessFunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
+import tech.antibytes.banana.BananaContract.Tag
 
-internal class TopLevelParser : BananaContract.TopLevelParser {
+internal class TopLevelParser(
+    private val logger: BananaContract.Logger
+) : BananaContract.TopLevelParser {
     private fun Token.isText(): Boolean {
         return type == TokenTypes.DOUBLE ||
             type == TokenTypes.INTEGER ||
@@ -33,13 +37,14 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
     }
 
     private fun Token.isLinkText(): Boolean {
-        return type == TokenTypes.DOUBLE ||
+        return (type == TokenTypes.DOUBLE ||
             type == TokenTypes.INTEGER ||
             type == TokenTypes.ASCII_STRING ||
             type == TokenTypes.NON_ASCII_STRING ||
             type == TokenTypes.LITERAL ||
             type == TokenTypes.ESCAPED ||
-            type == TokenTypes.WHITESPACE
+            type == TokenTypes.WHITESPACE) &&
+            !INVALID_LINK_LITERAL.contains(value)
     }
 
     private fun Token.isVariable(): Boolean {
@@ -58,8 +63,16 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         return type == TokenTypes.FUNCTION_START
     }
 
+    private fun Token.isFunctionEnd(): Boolean {
+        return type == TokenTypes.FUNCTION_END
+    }
+
     private fun Token.isLinkStart(): Boolean {
         return type == TokenTypes.LINK_START
+    }
+
+    private fun Token.isLinkEnd(): Boolean {
+        return type == TokenTypes.LINK_END
     }
 
     private fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
@@ -78,6 +91,20 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         do {
             tokenizer.shift()
         } while (condition())
+    }
+
+    private enum class LogLevel {
+        INFO,
+        WARNING,
+        ERROR
+    }
+
+    private fun log(message: String, level: LogLevel = LogLevel.WARNING) {
+        when (level) {
+            LogLevel.INFO -> logger.info(Tag.PARSER, message)
+            LogLevel.WARNING -> logger.warning(Tag.PARSER, message)
+            else -> logger.error(Tag.PARSER, message)
+        }
     }
 
     private fun text(tokenizer: BananaContract.TokenStore): Node {
@@ -116,12 +143,17 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         tokenizer.consume()
         space(tokenizer)
 
-        return HeadlessFunctionNode(
-            identifier(tokenizer)
-        ).also {
-            space(tokenizer)
+        val functionName = identifier(tokenizer)
+
+        space(tokenizer)
+
+        if (!tokenizer.currentToken.isFunctionEnd()) {
+            log("Warning: Function $functionName has not been closed!")
+        } else {
             tokenizer.consume()
         }
+
+        return HeadlessFunctionNode(functionName)
     }
 
     private fun linkText(tokenizer: BananaContract.TokenStore): String {
@@ -135,13 +167,16 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
     private fun link(tokenizer: BananaContract.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
+        val linkName = linkText(tokenizer)
+        space(tokenizer)
 
-        return HeadlessLinkNode(
-            linkText(tokenizer)
-        ).also {
-            space(tokenizer)
-            tokenizer.consume()
+        when {
+            tokenizer.currentToken.isLinkEnd() -> tokenizer.consume()
+            tokenizer.currentToken == EOF -> log("Warning: Link $linkName has not been closed!")
+            else -> log("Error: Unexpected Token (${tokenizer.currentToken}) in Link ($linkName)!", LogLevel.ERROR)
         }
+
+        return HeadlessLinkNode(linkName)
     }
 
     private fun message(tokenizer: BananaContract.TokenStore): List<Node> {
@@ -169,5 +204,9 @@ internal class TopLevelParser : BananaContract.TopLevelParser {
         }
 
         return CompoundNode(tokens)
+    }
+
+    private companion object {
+        val INVALID_LINK_LITERAL = listOf("{", "[", "}", "]")
     }
 }

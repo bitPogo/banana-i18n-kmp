@@ -28,7 +28,7 @@ generic grammar:
 <function>      := function_start <space> <identifier> <space> function_end
 <link>          := link_start <space> (<linkText> | <function>) <space> link_end
 <linkText>      := double | escaped | integer | ascii | nonascii | <linkLiteral> | whitespace
-<linkLiteral>   := ^"{" | ^"[" | ^"}" | "]"
+<linkLiteral>   := ^"{" | ^"[" | ^"}" | ^"]"
 <space>         := whitespace*
 <identifier>    := ascii ( "_" ascii )*
 
@@ -77,6 +77,15 @@ space               := [\s\t\n\r]+
 Please note a plain `$` means End of Message
 Please note, `{::SOME_NAME::}` refers to the unicode definition of the Name.See link:https://www.unicode.org/reports/tr18/#General_Category_Property[here] for more.
 Please note, that `<generic>` will replaced by the following rules, if the specific requirement matches.
+
+== Error Handling
+If the parser faces an unexpected Token (for example [[ A illegal character follows me }]]), it should recover by assuming the expected Token was beforehand or producing a TextNode and log an Error.
+The reason is simply to avoid any unexpected behaviour in a consuming application (like app crashes) which could lead to bad user experience.
+
+== Up to discussion
+=== Links
+* do not support label extensions nor the redirect prefixes
+* free links without braces are not supported
 
 == Shared rules
 `<argument>`, `<rule>`, `<simpleRule>`, `<option>`, `<nestedRuleOrText>`, `<nestedText>`, `<exclusiveText>`, `<space>` and `<mandatorySpace>` are shared rules. That means each of those rules can be used in a parser component. (see PluralRule for example)

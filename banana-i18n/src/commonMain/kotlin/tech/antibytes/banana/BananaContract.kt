@@ -65,6 +65,16 @@ internal interface BananaContract {
         fun resolveParserPlugin(name: String)
     }
 
+    enum class Tag {
+        PARSER
+    }
+
+    interface Logger {
+        fun info(tag: Tag, message: String)
+        fun warning(tag: Tag, message: String)
+        fun error(tag: Tag, message: String)
+    }
+
     companion object {
         val EOF = Token(TokenTypes.EOF, "", -1, -1)
     }
