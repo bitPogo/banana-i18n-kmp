@@ -8,6 +8,7 @@ package tech.antibytes.banana.parser
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.BananaContract.Tag
 import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
@@ -15,6 +16,7 @@ import tech.antibytes.banana.ast.HeadlessLinkNode
 import tech.antibytes.banana.ast.HeadlessFunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
+import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
@@ -22,10 +24,10 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-
 class TopLevelParserSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
+    private val logger = LoggerStub()
 
     @AfterTest
     fun tearDown() {
@@ -34,7 +36,7 @@ class TopLevelParserSpec {
 
     @Test
     fun `It fulfils TopLevelParser`() {
-        val parser: Any = TopLevelParser()
+        val parser: Any = TopLevelParser(logger)
 
         parser fulfils BananaContract.TopLevelParser::class
     }
@@ -42,7 +44,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts Empty Messages`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         tokenStore.tokens.addAll(listOf(EOF, EOF))
 
         // When
@@ -56,7 +58,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts DOUBLE as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val double = fixture<Double>().toString()
 
         val tokens = createTokens(
@@ -79,7 +81,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts INTEGER as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val integer = fixture<Int>().toString()
 
         val tokens = createTokens(
@@ -102,7 +104,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts ESCAPED as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val escaped = "\\$"
 
         val tokens = createTokens(
@@ -125,7 +127,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts ASCII as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
         val tokens = createTokens(
@@ -148,7 +150,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts NON_ASCII as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val nonAscii = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -171,7 +173,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts LITERAL as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val literal = "%"
 
         val tokens = createTokens(
@@ -194,7 +196,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts WHITESPACE as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val space = " "
 
         val tokens = createTokens(
@@ -217,7 +219,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts DELIMITER as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val delimiter = "|"
 
         val tokens = createTokens(
@@ -240,7 +242,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts FUNCTION_END as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val end = "}}"
 
         val tokens = createTokens(
@@ -263,7 +265,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts LINK_END as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val end = "]]"
 
         val tokens = createTokens(
@@ -282,11 +284,11 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe TextNode(listOf(end))
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[0])
     }
-    
+
     @Test
     fun `Given parse is called it accepts multiple specified Tokens as one Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         val space = " "
         val nonAscii = "ηὕρηκα"
@@ -313,7 +315,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts VARIABLE as Variable`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val variable = "1"
 
         val tokens = createTokens(
@@ -336,7 +338,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts HeadlessFunctions`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -362,7 +364,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts HeadlessFunctions with Identifiers`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word1 = "WORD1"
         val word2 = "WORD2"
 
@@ -391,7 +393,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts HeadlessFunctions which contain additional spaces`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -419,7 +421,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts Function like syntax as Text`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -447,9 +449,40 @@ class TopLevelParserSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts Function while it has not been closed and reports a warning`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "abc"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.WHITESPACE to " ",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessFunctionNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning[0] mustBe Pair(
+            Tag.PARSER,
+            "Warning: Function $word has not been closed!"
+        )
+    }
+
+    @Test
     fun `Given parse is called it accepts HeadlessLinks`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -475,7 +508,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts HeadlessLinks with Identifiers`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word1 = "WORD1"
         val word2 = "WORD2"
 
@@ -504,7 +537,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts Links which contain additional spaces`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -530,9 +563,9 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts it accepts DOUBLE as Link`() {
+    fun `Given parse is called it accepts DOUBLE as Link`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = fixture<Double>().toString()
 
         val tokens = createTokens(
@@ -558,9 +591,9 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts it accepts INTEGER as Link`() {
+    fun `Given parse is called it accepts INTEGER as Link`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = fixture<Int>().toString()
 
         val tokens = createTokens(
@@ -586,9 +619,9 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts it accepts NON_ASCII as Link`() {
+    fun `Given parse is called it accepts NON_ASCII as Link`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -614,9 +647,9 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts it accepts LITERAL as Link`() {
+    fun `Given parse is called it accepts LITERAL as Link`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "!"
 
         val tokens = createTokens(
@@ -642,9 +675,9 @@ class TopLevelParserSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts it accepts ESCAPED as Link`() {
+    fun `Given parse is called it accepts ESCAPED as Link`() {
         // Given
-        val parser = TopLevelParser()
+        val parser = TopLevelParser(logger)
         val word = "\\{"
 
         val tokens = createTokens(
@@ -667,5 +700,101 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Link like as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "\\{"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to "{",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(
+            listOf(tokens[0].value, tokens[1].value, tokens[2].value, tokens[3].value, tokens[4].value)
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
+        tokenStore.tokens.isEmpty() mustBe true
+    }
+
+    @Test
+    fun `Given parse is called it accepts Link while it has not been closed, while beeing on the End of the Message and reports a warning`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "abc"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.WHITESPACE to " ",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning[0] mustBe Pair(
+            Tag.PARSER,
+            "Warning: Link $word has not been closed!"
+        )
+    }
+
+    @Test
+    fun `Given parse is called it accepts Link while it encountered an unexpected token and reports an error`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "abc"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.LINK_START to "[[",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to "[",
+                TokenTypes.ASCII_STRING to "not important",
+                TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        message as CompoundNode
+        message.children[0] mustBe HeadlessLinkNode(word)
+        message.children[1] fulfils TextNode::class
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.error[0] mustBe Pair(
+            Tag.PARSER,
+            "Error: Unexpected Token (${tokens[4]}) in Link ($word)!"
+        )
     }
 }
