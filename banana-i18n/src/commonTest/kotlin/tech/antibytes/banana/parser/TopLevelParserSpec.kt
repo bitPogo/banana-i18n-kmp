@@ -383,6 +383,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -412,6 +414,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode("${word1}_$word2")
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -440,6 +444,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -480,6 +486,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -518,6 +526,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -556,6 +566,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -594,6 +606,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -632,6 +646,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -670,6 +686,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -711,6 +729,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -749,6 +769,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -788,6 +810,8 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -828,6 +852,100 @@ class TopLevelParserSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with multible Arguments`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument1 = "name"
+        val argument2 = "something"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.VARIABLE to argument1,
+                TokenTypes.LITERAL to "|",
+                TokenTypes.ASCII_STRING to argument2,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                CompoundNode(
+                    listOf(VariableNode(argument1))
+                ),
+                CompoundNode(
+                    listOf(TextNode(listOf(argument2)))
+                )
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with multible spaced Arguments`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument1 = "name"
+        val argument2 = "something"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.ASCII_STRING to name,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to ":",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.VARIABLE to argument1,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.LITERAL to "|",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to argument2,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                CompoundNode(
+                    listOf(VariableNode(argument1))
+                ),
+                CompoundNode(
+                    listOf(TextNode(listOf(argument2)))
+                )
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -858,6 +976,8 @@ class TopLevelParserSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -915,6 +1035,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -944,6 +1066,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode("${word1}_$word2")
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -972,6 +1096,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1000,6 +1126,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1028,6 +1156,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1056,6 +1186,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1084,6 +1216,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1112,6 +1246,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1140,6 +1276,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1232,6 +1370,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test
@@ -1260,6 +1400,8 @@ class TopLevelParserSpec {
         (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
         tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     @Test

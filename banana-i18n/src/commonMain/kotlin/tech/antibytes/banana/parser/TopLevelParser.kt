@@ -220,10 +220,18 @@ internal class TopLevelParser(
         tokenizer.consume()
         space(tokenizer)
 
-        val argument = argument(tokenizer)
+        val arguments = mutableListOf(argument(tokenizer))
+
+        while (isDelimiter(tokenizer)) {
+            space(tokenizer)
+            tokenizer.consume()
+            space(tokenizer)
+
+            arguments.add(argument(tokenizer))
+        }
 
         space(tokenizer)
-        return listOf(argument)
+        return arguments
     }
 
     private fun function(tokenizer: BananaContract.TokenStore): Node {
