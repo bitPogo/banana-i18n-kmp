@@ -1012,6 +1012,40 @@ class TopLevelParserSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts Error if the Grammar was incorrect`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "abc"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.FUNCTION_START to "{{",
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ESCAPED to ":",
+                TokenTypes.ASCII_STRING to word,
+                TokenTypes.FUNCTION_END to "}}",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(word)
+
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning[0] mustBe Pair(
+            Tag.PARSER,
+            "Warning: Function ($word) had not been closed!"
+        )
+    }
+
+    @Test
     fun `Given parse is called it accepts Links`() {
         // Given
         val parser = TopLevelParser(logger)
@@ -1473,6 +1507,41 @@ class TopLevelParserSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts Link with escaped illegal Link Literals`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "abc"
+
+        listOf("{", "[", "}", "]").forEach { illegal ->
+            val tokens = createTokens(
+                listOf(
+                    TokenTypes.LINK_START to "[[",
+                    TokenTypes.WHITESPACE to " ",
+                    TokenTypes.ASCII_STRING to word,
+                    TokenTypes.WHITESPACE to " ",
+                    TokenTypes.ESCAPED to illegal,
+                    TokenTypes.ASCII_STRING to "not important",
+                    TokenTypes.LINK_END to "]]",
+                )
+            )
+
+            tokenStore.tokens = tokens.toMutableList()
+
+            // When
+            val message = parser.parse(tokenStore)
+
+            // Then
+            message fulfils CompoundNode::class
+            message as CompoundNode
+            message.children[0] mustBe HeadlessLinkNode(TextNode(listOf(word, " ", illegal, "not important")))
+            tokenStore.tokens.isEmpty() mustBe true
+            logger.error.isEmpty() mustBe true
+
+            logger.clear()
+        }
+    }
+
+    @Test
     fun `Given parse is called it accepts Link like with nested Function like as Text`() {
         // Given
         val parser = TopLevelParser(logger)
@@ -1576,7 +1645,7 @@ class TopLevelParserSpec {
                 TokenTypes.LITERAL to "[",
                 TokenTypes.WHITESPACE to " ",
                 TokenTypes.URL to word,
-                TokenTypes.WHITESPACE to " ",
+                TokenTypes.ESCAPED to "]",
             )
         )
 
@@ -1588,12 +1657,38 @@ class TopLevelParserSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             Tag.PARSER,
             "Warning: FreeLink ($word) had not been closed!"
         )
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks like as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "https://example.org"
+
+        val tokens = createTokens(
+            listOf(
+                TokenTypes.ESCAPED to "[",
+                TokenTypes.URL to word,
+                TokenTypes.ESCAPED to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", word, "]"))
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<Tag, String>>()
+        logger.error mustBe emptyList<Pair<Tag, String>>()
     }
 
     // TODO Mixed on Message Level
