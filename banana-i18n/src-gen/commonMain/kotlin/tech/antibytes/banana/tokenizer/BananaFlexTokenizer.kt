@@ -80,9 +80,9 @@ internal abstract class BananaFlexTokenizer(
         ).also{ offset += yylength() }
     }
 
-    private fun createVariableToken(): BananaContract.Token {
+    private fun createCleanedToken(tokenType: BananaContract.TokenTypes): BananaContract.Token {
         return BananaContract.Token(
-            BananaContract.TokenTypes.VARIABLE,
+            tokenType,
             yytext().drop(1),
             yycolumn,
             yyline
@@ -443,7 +443,7 @@ internal abstract class BananaFlexTokenizer(
                     }
                     22 -> {}
                     8 -> {
-                        return createVariableToken()
+                        return createCleanedToken(BananaContract.TokenTypes.VARIABLE)
                     }
                     23 -> {}
                     9 -> {
@@ -455,7 +455,7 @@ internal abstract class BananaFlexTokenizer(
                     }
                     25 -> {}
                     11 -> {
-                        return createToken(BananaContract.TokenTypes.ESCAPED)
+                        return createCleanedToken(BananaContract.TokenTypes.ESCAPED)
                     }
                     26 -> {}
                     12 -> {
