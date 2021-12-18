@@ -96,12 +96,28 @@ internal class TopLevelParser(
     private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkStart() && (
             (tokenizer.lookahead.isSpaceFreeLinkText() ||
-                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isSpaceFreeLinkText())) ||
+                (tokenizer.lookahead.isSpace() &&
+                    tokenizer.lookahead(2).isSpaceFreeLinkText()
+                )
+            ) ||
             (tokenizer.lookahead.isVariable() ||
-                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isVariable())) ||
-            (tokenizer.lookahead.isFunctionStart() && tokenizer.lookahead(2).isAscii() ||
-                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isFunctionStart() && tokenizer.lookahead(3).isAscii()) ||
-                (tokenizer.lookahead.isSpace() && tokenizer.lookahead(2).isFunctionStart() && tokenizer.lookahead(3).isSpace() && tokenizer.lookahead(4).isAscii())))
+                (tokenizer.lookahead.isSpace() &&
+                    tokenizer.lookahead(2).isVariable()
+                )
+            ) ||
+            (tokenizer.lookahead.isFunctionStart() &&
+                tokenizer.lookahead(2).isAscii() ||
+                (tokenizer.lookahead.isSpace() &&
+                    tokenizer.lookahead(2).isFunctionStart() &&
+                    tokenizer.lookahead(3).isAscii()
+                ) ||
+                (tokenizer.lookahead.isSpace() &&
+                    tokenizer.lookahead(2).isFunctionStart() &&
+                    tokenizer.lookahead(3).isSpace() &&
+                    tokenizer.lookahead(4).isAscii()
+                )
+            )
+        )
     }
 
     private fun isFreeLink(tokenizer: BananaContract.TokenStore): Boolean {
