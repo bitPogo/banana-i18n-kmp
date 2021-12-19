@@ -22,7 +22,7 @@ internal data class FunctionNode(
 ) : Node
 
 internal data class HeadlessLinkNode(
-    val target: Node
+    val target: List<Node>
 ) : Node
 
 internal data class HeadlessFreeLinkNode(

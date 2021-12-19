@@ -54,7 +54,7 @@ class TopLevelParserFunctionSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts HeadlessFunctions`() {
+    fun `Given parse is called it accepts Functions`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "WORD"

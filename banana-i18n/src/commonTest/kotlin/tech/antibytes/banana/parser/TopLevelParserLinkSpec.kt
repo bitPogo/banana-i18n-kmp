@@ -53,7 +53,9 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -84,7 +86,9 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word1, "_", word2)))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word1, "_", word2)))
+        )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -114,8 +118,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -144,8 +150,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -174,8 +182,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -204,8 +214,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -234,8 +246,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -264,8 +278,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -292,7 +308,9 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(VariableNode(word))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(VariableNode(word))
+        )
         tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -322,7 +340,9 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(VariableNode(word))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(VariableNode(word))
+        )
         tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -352,7 +372,9 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(FunctionNode(word))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(FunctionNode(word))
+        )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -370,7 +392,6 @@ class TopLevelParserLinkSpec {
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.FUNCTION_START to "{{",
                 BananaContract.TokenTypes.ASCII_STRING to word,
-                BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.FUNCTION_END to "}}",
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.LINK_END to "]]",
@@ -384,18 +405,52 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(FunctionNode(word))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(FunctionNode(word))
+        )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
     }
 
     @Test
-    fun `Given parse is called it accepts Functions with more additional space as Link`() {
+    fun `Given parse is called it accepts Functions with inner additional space as Link`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "word"
 
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(FunctionNode(word))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with all out additional space as Link`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "word"
         val tokens = createTokens(
             listOf(
                 BananaContract.TokenTypes.LINK_START to "[[",
@@ -417,7 +472,55 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(FunctionNode(word))
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(FunctionNode(word))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts mixed Values as Link`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word1 = "word1"
+        val word2 = "word2"
+        val word3 = "word3"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word1,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word2,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.VARIABLE to word3,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(
+                TextNode(listOf(word1, " ")),
+                FunctionNode(word2),
+                TextNode(listOf(" ")),
+                VariableNode(word3)
+            )
+        )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -445,8 +548,10 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
-        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2], tokens[3])
+        (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
+            listOf(TextNode(listOf(word)))
+        )
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             BananaContract.Tag.PARSER,
@@ -481,7 +586,9 @@ class TopLevelParserLinkSpec {
             // Then
             message fulfils CompoundNode::class
             message as CompoundNode
-            message.children[0] mustBe HeadlessLinkNode(TextNode(listOf(word)))
+            message.children[0] mustBe HeadlessLinkNode(
+                listOf(TextNode(listOf(word, " ")))
+            )
             message.children[1] fulfils TextNode::class
             tokenStore.tokens.isEmpty() mustBe true
             logger.error[0] mustBe Pair(
@@ -520,7 +627,9 @@ class TopLevelParserLinkSpec {
             // Then
             message fulfils CompoundNode::class
             message as CompoundNode
-            message.children[0] mustBe HeadlessLinkNode(TextNode(listOf(word, " ", illegal, "not important")))
+            message.children[0] mustBe HeadlessLinkNode(
+                listOf(TextNode(listOf(word, " ", illegal, "not important")))
+            )
             tokenStore.tokens.isEmpty() mustBe true
             logger.error.isEmpty() mustBe true
 
@@ -532,7 +641,7 @@ class TopLevelParserLinkSpec {
     fun `Given parse is called it accepts Link like with nested Function like as Text`() {
         // Given
         val parser = TopLevelParser(logger)
-        val word = "{{"
+        val word = "23"
 
         val tokens = createTokens(
             listOf(
@@ -540,8 +649,9 @@ class TopLevelParserLinkSpec {
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.FUNCTION_START to "{{",
                 BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to word,
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
                 BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.INTEGER to word,
                 BananaContract.TokenTypes.FUNCTION_END to "}}",
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.LINK_END to "]]",
@@ -556,7 +666,7 @@ class TopLevelParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(
-            listOf("[[", " ", "{{", " ", word, " ", "}}", " ", "]]",)
+            listOf("[[", " ", "{{", " ", "{{", " ", word, "}}", " ", "]]")
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
