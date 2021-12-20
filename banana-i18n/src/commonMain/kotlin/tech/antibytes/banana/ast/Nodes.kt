@@ -21,8 +21,9 @@ internal data class FunctionNode(
     val arguments: List<Node> = emptyList()
 ) : Node
 
-internal data class HeadlessLinkNode(
-    val target: List<Node>
+internal data class LinkNode(
+    val target: List<Node>,
+    val displayText: List<Node> = emptyList()
 ) : Node
 
 internal data class HeadlessFreeLinkNode(

@@ -12,7 +12,7 @@ import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.HeadlessFreeLinkNode
-import tech.antibytes.banana.ast.HeadlessLinkNode
+import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
@@ -106,7 +106,7 @@ class TopLevelParserSpec {
         message.children[4] mustBe TextNode(
             listOf(" ", "{{", " ", "{{", "}}",)
         )
-        message.children[5] mustBe HeadlessLinkNode(
+        message.children[5] mustBe LinkNode(
             listOf(VariableNode(word4))
         )
         message.children[6] mustBe TextNode(listOf(" ", word5))
