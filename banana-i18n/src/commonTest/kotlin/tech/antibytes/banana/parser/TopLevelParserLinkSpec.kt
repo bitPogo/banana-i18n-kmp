@@ -414,6 +414,77 @@ class TopLevelParserLinkSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts Functions like with inner additional space as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "word"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.NON_ASCII_STRING to word,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(
+            listOf(
+                "[[", "{{", " ", word, " ", "}}", "]]"
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions like with spacing as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "word"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.NON_ASCII_STRING to word,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(
+            listOf(
+                "[[", " ", "{{", word, " ", "}}", " ", "]]"
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
     fun `Given parse is called it accepts Functions with inner additional space as Link`() {
         // Given
         val parser = TopLevelParser(logger)
@@ -440,6 +511,43 @@ class TopLevelParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe HeadlessLinkNode(
             listOf(FunctionNode(word))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions like with all out additional space as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "word"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to "{",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.NON_ASCII_STRING to word,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(
+            listOf(
+                "[[", " ", "{", " ", word, " ", "}}", " ", "]]"
+            )
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -732,7 +840,7 @@ class TopLevelParserLinkSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts FreeLinks, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
+    fun `Given parse is called it accepts FreeLinks, while it had not been closed with its Literal, if it is locatated at the End of the Message and reports a warning`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "https://example.org"
@@ -743,6 +851,36 @@ class TopLevelParserLinkSpec {
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.URL to word,
                 BananaContract.TokenTypes.ESCAPED to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning[0] mustBe Pair(
+            BananaContract.Tag.PARSER,
+            "Warning: FreeLink ($word) had not been closed!"
+        )
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "https://example.org"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to word,
+                BananaContract.TokenTypes.LITERAL to "%",
             )
         )
 
@@ -783,6 +921,35 @@ class TopLevelParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(listOf("[", word, "]"))
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks wiht Spaces like as Text`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "something"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " " , word, " ", "]"))
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()

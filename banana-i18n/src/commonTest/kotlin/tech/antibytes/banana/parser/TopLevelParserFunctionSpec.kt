@@ -514,8 +514,8 @@ class TopLevelParserFunctionSpec {
         val parser = TopLevelParser(logger)
         val name = "WORD1"
         val argumentPart1 = "name"
-        val argumentPart2 = " "
-        val argumentPart3 = "something"
+        val argumentPart2 = "something"
+        val argumentPart3 = "somethingElse"
 
         val tokens = createTokens(
             listOf(
@@ -524,8 +524,13 @@ class TopLevelParserFunctionSpec {
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.LITERAL to ":",
                 BananaContract.TokenTypes.VARIABLE to argumentPart1,
-                BananaContract.TokenTypes.WHITESPACE to argumentPart2,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to argumentPart2,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
                 BananaContract.TokenTypes.ASCII_STRING to argumentPart3,
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.FUNCTION_END to "}}",
             )
         )
@@ -541,7 +546,11 @@ class TopLevelParserFunctionSpec {
             name,
             listOf(
                 CompoundNode(
-                    listOf(VariableNode(argumentPart1), TextNode(listOf(argumentPart2, argumentPart3)))
+                    listOf(
+                        VariableNode(argumentPart1),
+                        TextNode(listOf(" ", argumentPart2, " ")),
+                        FunctionNode(argumentPart3)
+                    )
                 )
             )
         )
@@ -591,6 +600,52 @@ class TopLevelParserFunctionSpec {
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts Functions with Arguments, which are not closed`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val name = "WORD1"
+        val argument1 = "name"
+        val argument2 = "something"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.ASCII_STRING to name,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to ":",
+                BananaContract.TokenTypes.VARIABLE to argument1,
+                BananaContract.TokenTypes.DELIMITER to "|",
+                BananaContract.TokenTypes.ASCII_STRING to argument2,
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            name,
+            listOf(
+                CompoundNode(
+                    listOf(VariableNode(argument1))
+                ),
+                CompoundNode(
+                    listOf(TextNode(listOf(argument2)))
+                )
+            )
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning[0] mustBe Pair(
+            BananaContract.Tag.PARSER,
+            "Warning: Function ($name) had not been closed!"
+        )
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
     }
 

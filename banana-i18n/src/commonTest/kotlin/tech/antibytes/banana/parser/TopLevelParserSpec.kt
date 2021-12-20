@@ -10,8 +10,14 @@ import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
+import tech.antibytes.banana.ast.FunctionNode
+import tech.antibytes.banana.ast.HeadlessFreeLinkNode
+import tech.antibytes.banana.ast.HeadlessLinkNode
+import tech.antibytes.banana.ast.TextNode
+import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.TokenStoreFake
+import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -48,5 +54,61 @@ class TopLevelParserSpec {
         (message as CompoundNode).children.isEmpty() mustBe true
     }
 
-    // TODO Mixed on Message Level
+    @Test
+    fun `Given parse is called it accepts mixed values`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word1 = "abc"
+        val word2 = "def"
+        val word3 = "ghi"
+        val word4 = "lop"
+        val word5 = "lop"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.ASCII_STRING to word1,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word2,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.URL to word3,
+                BananaContract.TokenTypes.LITERAL to "]",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to "{{",
+                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.VARIABLE to word4,
+                BananaContract.TokenTypes.LINK_END to "]]",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word5
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+        println(message)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children.isEmpty() mustBe false
+        message.children[0] mustBe TextNode(listOf(word1, " "))
+        message.children[1] mustBe FunctionNode(word2)
+        message.children[2] mustBe TextNode(listOf(" "))
+        message.children[3] mustBe HeadlessFreeLinkNode(word3)
+        message.children[4] mustBe TextNode(
+            listOf(" ", "{{", " ", "{{", "}}",)
+        )
+        message.children[5] mustBe HeadlessLinkNode(
+            listOf(VariableNode(word4))
+        )
+        message.children[6] mustBe TextNode(listOf(" ", word5))
+    }
 }
