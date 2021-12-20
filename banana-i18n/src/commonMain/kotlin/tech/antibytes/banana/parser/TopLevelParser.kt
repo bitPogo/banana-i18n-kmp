@@ -12,80 +12,82 @@ import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.HeadlessLinkNode
+import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.banana.BananaContract.Tag
-import tech.antibytes.banana.ast.HeadlessFreeLinkNode
+import tech.antibytes.banana.ast.FreeLinkNode
+
+val INVALID_LINK_LITERAL = listOf("{", "[", "}", "]")
+
+private fun Token.isLegalLinkLiteral(): Boolean {
+    return type == TokenTypes.LITERAL && !INVALID_LINK_LITERAL.contains(value)
+}
+
+private fun Token.isLinkText(): Boolean {
+    return type == TokenTypes.DOUBLE ||
+        type == TokenTypes.INTEGER ||
+        type == TokenTypes.ASCII_STRING ||
+        type == TokenTypes.NON_ASCII_STRING ||
+        isLegalLinkLiteral() ||
+        type == TokenTypes.ESCAPED
+}
+
+private fun Token.isVariable(): Boolean {
+    return type == TokenTypes.VARIABLE
+}
+
+private fun Token.isAscii(): Boolean {
+    return type == TokenTypes.ASCII_STRING
+}
+
+private fun Token.isSpace(): Boolean {
+    return type == TokenTypes.WHITESPACE
+}
+
+private fun Token.isFunctionStart(): Boolean {
+    return type == TokenTypes.FUNCTION_START
+}
+
+private fun Token.isFunctionEnd(): Boolean {
+    return type == TokenTypes.FUNCTION_END
+}
+
+private fun Token.isLinkStart(): Boolean {
+    return type == TokenTypes.LINK_START
+}
+
+private fun Token.isLinkEnd(): Boolean {
+    return type == TokenTypes.LINK_END
+}
+
+private fun Token.isFreeLinkStart(): Boolean {
+    return value == "[" &&
+        type == TokenTypes.LITERAL
+}
+
+private fun Token.isFreeLinkEnd(): Boolean {
+    return value == "]" &&
+        type == TokenTypes.LITERAL
+}
+
+private fun Token.isUrl(): Boolean {
+    return type == TokenTypes.URL
+}
+
+private fun Token.isFunctionArgumentIndicator(): Boolean {
+    return value == ":" &&
+        type == TokenTypes.LITERAL
+}
+
+private fun Token.isDelimiter(): Boolean {
+    return type == TokenTypes.DELIMITER
+}
 
 internal class TopLevelParser(
     private val logger: BananaContract.Logger
 ) : BananaContract.TopLevelParser {
-    private fun Token.isLegalLinkLiteral(): Boolean {
-        return type == TokenTypes.LITERAL && !INVALID_LINK_LITERAL.contains(value)
-    }
-
-    private fun Token.isLinkText(): Boolean {
-        return type == TokenTypes.DOUBLE ||
-            type == TokenTypes.INTEGER ||
-            type == TokenTypes.ASCII_STRING ||
-            type == TokenTypes.NON_ASCII_STRING ||
-            isLegalLinkLiteral() ||
-            type == TokenTypes.ESCAPED
-    }
-
-    private fun Token.isVariable(): Boolean {
-        return type == TokenTypes.VARIABLE
-    }
-
-    private fun Token.isAscii(): Boolean {
-        return type == TokenTypes.ASCII_STRING
-    }
-
-    private fun Token.isSpace(): Boolean {
-        return type == TokenTypes.WHITESPACE
-    }
-
-    private fun Token.isFunctionStart(): Boolean {
-        return type == TokenTypes.FUNCTION_START
-    }
-
-    private fun Token.isFunctionEnd(): Boolean {
-        return type == TokenTypes.FUNCTION_END
-    }
-
-    private fun Token.isLinkStart(): Boolean {
-        return type == TokenTypes.LINK_START
-    }
-
-    private fun Token.isLinkEnd(): Boolean {
-        return type == TokenTypes.LINK_END
-    }
-
-    private fun Token.isFreeLinkStart(): Boolean {
-        return value == "[" &&
-            type == TokenTypes.LITERAL
-    }
-
-    private fun Token.isFreeLinkEnd(): Boolean {
-        return value == "]" &&
-            type == TokenTypes.LITERAL
-    }
-
-    private fun Token.isUrl(): Boolean {
-        return type == TokenTypes.URL
-    }
-
-    private fun Token.isFunctionArgumentIndicator(): Boolean {
-        return value == ":" &&
-            type == TokenTypes.LITERAL
-    }
-
-    private fun Token.isDelimiter(): Boolean {
-        return type == TokenTypes.DELIMITER
-    }
-
     private fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFunctionStart() &&
             (tokenizer.lookahead.isAscii() ||
@@ -134,6 +136,13 @@ internal class TopLevelParser(
             )
     }
 
+    private fun isEOF(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isEOF() ||
+            (tokenizer.currentToken.isSpace() &&
+                tokenizer.lookahead.isEOF()
+                )
+    }
+
     private fun isFunctionEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
         return isDelimiter(tokenizer) ||
             tokenizer.currentToken.isFunctionEnd() ||
@@ -143,20 +152,30 @@ internal class TopLevelParser(
             isEOF(tokenizer)
     }
 
-    private fun isLinkEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
-        return isDelimiter(tokenizer) ||
-            tokenizer.currentToken.isLinkEnd() ||
+    private fun isLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isLinkEnd() ||
             (tokenizer.currentToken.isSpace() &&
                 tokenizer.lookahead.isLinkEnd()
             ) ||
             isEOF(tokenizer)
     }
 
-    private fun isEOF(tokenizer: BananaContract.TokenStore): Boolean {
-        return tokenizer.currentToken.isEOF() ||
+    private fun isLinkEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
+        return isDelimiter(tokenizer) ||
+            isLinkEnd(tokenizer)
+    }
+
+    private fun isFreeLinkDisplay(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isSpace() &&
+            !tokenizer.lookahead.isFreeLinkEnd()
+    }
+
+    private fun isFreeLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isFreeLinkEnd() ||
             (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isEOF()
-            )
+                tokenizer.lookahead.isFreeLinkEnd()
+                ) ||
+            isEOF(tokenizer)
     }
 
     private fun shiftUntil(tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
@@ -217,7 +236,8 @@ internal class TopLevelParser(
     private fun nestedText(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
-            !isFunctionEndOrDelimiter(tokenizer)
+            !isFunctionEndOrDelimiter(tokenizer) &&
+            !tokenizer.currentToken.isVariable()
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -307,11 +327,47 @@ internal class TopLevelParser(
         return target
     }
 
+    private fun displayText(tokenizer: BananaContract.TokenStore): Node {
+        shiftUntil(tokenizer) {
+            !isFunction(tokenizer) &&
+            !isLinkEnd(tokenizer) &&
+            !tokenizer.currentToken.isVariable()
+        }
+
+        return TextNode(tokenizer.resolveValues())
+    }
+
+    private fun linkDisplay(tokenizer: BananaContract.TokenStore): List<Node> {
+        val linkDisplay = mutableListOf<Node>()
+
+        while (!isLinkEnd(tokenizer)) {
+            val part = when {
+                isFunction(tokenizer) -> function(tokenizer)
+                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                else -> displayText(tokenizer)
+            }
+
+            linkDisplay.add(part)
+        }
+
+        return linkDisplay
+    }
+
     private fun link(tokenizer: BananaContract.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
 
         val target = linkTarget(tokenizer)
+
+        val displayText = if (isDelimiter(tokenizer)) {
+            space(tokenizer)
+            tokenizer.consume()
+            space(tokenizer)
+
+            linkDisplay(tokenizer)
+        } else {
+            emptyList()
+        }
 
         space(tokenizer)
 
@@ -321,7 +377,33 @@ internal class TopLevelParser(
             else -> log("Error: Unexpected Token (${tokenizer.currentToken})!", LogLevel.ERROR)
         }
 
-        return HeadlessLinkNode(target)
+        return LinkNode(target, displayText)
+    }
+
+    private fun displayFreeText(tokenizer: BananaContract.TokenStore): Node {
+        shiftUntil(tokenizer) {
+            !isFunction(tokenizer) &&
+            !isFreeLinkEnd(tokenizer) &&
+            !tokenizer.currentToken.isVariable()
+        }
+
+        return TextNode(tokenizer.resolveValues())
+    }
+
+    private fun freeLinkDisplay(tokenizer: BananaContract.TokenStore): List<Node> {
+        val linkDisplay = mutableListOf<Node>()
+
+        while (!isFreeLinkEnd(tokenizer)) {
+            val part = when {
+                isFunction(tokenizer) -> function(tokenizer)
+                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                else -> displayFreeText(tokenizer)
+            }
+
+            linkDisplay.add(part)
+        }
+
+        return linkDisplay
     }
 
     private fun freeLink(tokenizer: BananaContract.TokenStore): Node {
@@ -329,6 +411,14 @@ internal class TopLevelParser(
         space(tokenizer)
         val url = tokenizer.currentToken.value
         tokenizer.consume()
+
+        val linkDisplay = if (isFreeLinkDisplay(tokenizer)) {
+            space(tokenizer)
+            freeLinkDisplay(tokenizer)
+        } else {
+            emptyList()
+        }
+
         space(tokenizer)
 
         if (!tokenizer.currentToken.isFreeLinkEnd()) {
@@ -337,7 +427,7 @@ internal class TopLevelParser(
             tokenizer.consume()
         }
 
-        return HeadlessFreeLinkNode(url)
+        return FreeLinkNode(url, linkDisplay)
     }
 
     private fun message(tokenizer: BananaContract.TokenStore): List<Node> {
@@ -366,9 +456,5 @@ internal class TopLevelParser(
         }
 
         return CompoundNode(tokens)
-    }
-
-    private companion object {
-        val INVALID_LINK_LITERAL = listOf("{", "[", "}", "]")
     }
 }

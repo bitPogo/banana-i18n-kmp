@@ -71,7 +71,7 @@ If the parser faces an unexpected Token (for example [[ A illegal character foll
 The reason is simply to avoid any unexpected behaviour in a consuming application (like app crashes) which could lead to bad user experience.
 
 == Up to discussion
-The following points are up to discussion and part of the parser core. They can and should be implemented once the need arises.
+The following points are up to discussion and part of the parser core. They can and should be implemented if the need arises.
 
 === Links
 * label extensions nor the redirect prefixes are not supported
