@@ -12,7 +12,7 @@ import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.HeadlessLinkNode
+import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
@@ -143,13 +143,17 @@ internal class TopLevelParser(
             isEOF(tokenizer)
     }
 
-    private fun isLinkEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
-        return isDelimiter(tokenizer) ||
-            tokenizer.currentToken.isLinkEnd() ||
+    private fun isLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
+        return tokenizer.currentToken.isLinkEnd() ||
             (tokenizer.currentToken.isSpace() &&
                 tokenizer.lookahead.isLinkEnd()
             ) ||
             isEOF(tokenizer)
+    }
+
+    private fun isLinkEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
+        return isDelimiter(tokenizer) ||
+            isLinkEnd(tokenizer)
     }
 
     private fun isEOF(tokenizer: BananaContract.TokenStore): Boolean {
@@ -217,7 +221,8 @@ internal class TopLevelParser(
     private fun nestedText(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
-            !isFunctionEndOrDelimiter(tokenizer)
+            !isFunctionEndOrDelimiter(tokenizer) &&
+            !tokenizer.currentToken.isVariable()
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -307,11 +312,47 @@ internal class TopLevelParser(
         return target
     }
 
+    private fun displayText(tokenizer: BananaContract.TokenStore): Node {
+        shiftUntil(tokenizer) {
+            !isFunction(tokenizer) &&
+            !isLinkEnd(tokenizer) &&
+            !tokenizer.currentToken.isVariable()
+        }
+
+        return TextNode(tokenizer.resolveValues())
+    }
+
+    private fun linkDisplay(tokenizer: BananaContract.TokenStore): List<Node> {
+        val linkDisplay = mutableListOf<Node>()
+
+        while (!isLinkEnd(tokenizer)) {
+            val part = when {
+                isFunction(tokenizer) -> function(tokenizer)
+                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                else -> displayText(tokenizer)
+            }
+
+            linkDisplay.add(part)
+        }
+
+        return linkDisplay
+    }
+
     private fun link(tokenizer: BananaContract.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
 
         val target = linkTarget(tokenizer)
+
+        val displayText = if (isDelimiter(tokenizer)) {
+            space(tokenizer)
+            tokenizer.consume()
+            space(tokenizer)
+
+            linkDisplay(tokenizer)
+        } else {
+            emptyList()
+        }
 
         space(tokenizer)
 
@@ -321,7 +362,7 @@ internal class TopLevelParser(
             else -> log("Error: Unexpected Token (${tokenizer.currentToken})!", LogLevel.ERROR)
         }
 
-        return HeadlessLinkNode(target)
+        return LinkNode(target, displayText)
     }
 
     private fun freeLink(tokenizer: BananaContract.TokenStore): Node {

@@ -516,6 +516,7 @@ class TopLevelParserFunctionSpec {
         val argumentPart1 = "name"
         val argumentPart2 = "something"
         val argumentPart3 = "somethingElse"
+        val argumentPart4 = "somethingMore"
 
         val tokens = createTokens(
             listOf(
@@ -523,12 +524,15 @@ class TopLevelParserFunctionSpec {
                 BananaContract.TokenTypes.ASCII_STRING to name,
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.LITERAL to ":",
-                BananaContract.TokenTypes.VARIABLE to argumentPart1,
                 BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to argumentPart2,
+                BananaContract.TokenTypes.ASCII_STRING to argumentPart1,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.VARIABLE to argumentPart2,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to argumentPart3,
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to argumentPart3,
+                BananaContract.TokenTypes.ASCII_STRING to argumentPart4,
                 BananaContract.TokenTypes.FUNCTION_END to "}}",
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.FUNCTION_END to "}}",
@@ -547,9 +551,10 @@ class TopLevelParserFunctionSpec {
             listOf(
                 CompoundNode(
                     listOf(
-                        VariableNode(argumentPart1),
-                        TextNode(listOf(" ", argumentPart2, " ")),
-                        FunctionNode(argumentPart3)
+                        TextNode(listOf(argumentPart1, " ")),
+                        VariableNode(argumentPart2),
+                        TextNode(listOf(" ", argumentPart3, " ")),
+                        FunctionNode(argumentPart4),
                     )
                 )
             )
