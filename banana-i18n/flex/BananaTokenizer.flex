@@ -29,14 +29,14 @@ import tech.antibytes.banana.BananaContract.TokenTypes;
           ).also { offset += yylength() };
     }
 
-    private Token createVariableToken() {
-          return new Token(
-               TokenTypes.VARIABLE,
-               yytext().drop(1),
-               yycolumn,
-               yyline
-          ).also { offset += yylength() };
-    }
+    private Token createCleanedToken(TokenTypes tokenType) {
+              return new Token(
+                   tokenType,
+                   yytext().drop(1),
+                   yycolumn,
+                   yyline
+              ).also { offset += yylength() };
+        }
 
     private Token rightMostBraceToken(TokenTypes tokenType) {
           String tokenValue = yytext();
@@ -80,14 +80,14 @@ url                 = {ascii} "://" {url_letter}+ | "//" {url_letter}+
 <YYINITIAL> {
     {whitespaces}       { return createToken(TokenTypes.WHITESPACE); }
 
-    {escaped}           { return createToken(TokenTypes.ESCAPED); }
+    {escaped}           { return createCleanedToken(TokenTypes.ESCAPED); }
 
     {double}            { return createToken(TokenTypes.DOUBLE); }
     {integer}           { return createToken(TokenTypes.INTEGER); }
     {ascii}             { return createToken(TokenTypes.ASCII_STRING); }
     {non_ascii}         { return createToken(TokenTypes.NON_ASCII_STRING); }
 
-    {variable}          { return createVariableToken(); }
+    {variable}          { return createCleanedToken(TokenTypes.VARIABLE); }
 
     {delimiter}         { return createToken(TokenTypes.DELIMITER); }
     {function_start}    { return rightMostBraceToken(TokenTypes.FUNCTION_START); }

@@ -146,7 +146,7 @@ class BananaTokenizerSpec {
             val result = tokenizer.next()
 
             // Then
-            result mustBe Token(TokenTypes.ESCAPED, "\\$char", idx, 0)
+            result mustBe Token(TokenTypes.ESCAPED, "$char", idx, 0)
             idx += 2
         }
     }

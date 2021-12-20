@@ -22,48 +22,30 @@ generic grammar:
 
 [source]
 ----
-<message>       := (<text> | <variable> | <function> | <link> | <freeLink>)*
-<text>          := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace
-<variable>      := variable
-<link>          := link_start <space> (<linkText> | <function>) <space> link_end
-<linkText>      := double | escaped | integer | ascii | nonascii | <linkLiteral> | whitespace | url
-<linkLiteral>   := ^"{" | ^"[" | ^"}" | ^"]"
-<freeLink>      := "[" <space> url <space> "]"
-<function>      := function_start <space> <identifier> <space> <arguments>? function_end
-<arguments>     := ":" <space> <argument> <space> (delimiter <space> <argument> <space>)*
-<argument>      := (<nestedText> | <variable> | <function>)+
-<nestedText>    := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | whitespace
-<space>         := whitespace*
-<identifier>    := ascii ( "_" ascii )*
+<message>           := (<text> | <variable> | <function> | <link> | <freeLink>)*
+<text>              := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace
+<variable>          := variable
+<link>              := link_start <space> <linkTarget> <space> (delimiter <space> <linkDisplay>)? link_end
+<linkTarget>        := (whitespace? <linkText> | <function> | <variable>)+
+<linkDisplay>       := (whitespace? <displayText> | <function> | <variable>)+
+<linkText>          := double | escaped | integer | ascii | nonascii | <linkLiteral>
+<displayText>       := double | escaped | integer | ascii | nonascii | <displayLiteral> | url | function_start | function_end | delimiter | link_start
+<freeLink>          := "[" <space> url (whitespace <linkDisplay>)? <space> "]"
+<function>          := function_start <space> <identifier> <space> <arguments>? function_end
+<arguments>         := ":" <space> <argument> <space> (delimiter <space> <argument> <space>)*
+<argument>          := (whitespace? <nestedText> | <variable> | <function>))+
+<nestedText>        := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start
+<space>             := whitespace*
+<identifier>        := ascii ( "_" ascii )*
+<linkLiteral>       := ^"{" | ^"[" | ^"}" | ^"]" | ^"<" | ^">"
+<displayLiteral>    := ^"]"
 
-
-
-<message>                       := <ruleOrText> <message> | <ruleOrText> | ε
-<ruleOrText>                    := <text> | <rule>
-<text>                          := <includeSpaceClose> <text> | <includeSpaceClose>
-<rule>                          := <simpleRule> | <complexRule>
-<simpleRule>                    := variable
-<complexRule>                   := ruleopnening <space> <ruleId> <space> <generic> <space> ruleclosure
-<ruleId>                        := identifier '_' <ruleId> | identifier
-<generic>                       := ':' <space> <argument> <space> <ruleOptions> | ε
-<argument>                      := <rule> | <nestedText>
-<optionGroup>                   := <option> <space> <optionGroup> | <option> | ε
-<option>                        := delimiter <space> <nestedRuleOrText>
-<nestedRuleOrText>              := <nestedTextWithSpace> <nestedRuleOrText> | <rule> <nestedRuleOrText> | <nestedTextWithSpace> | <rule>
-<nestedTextWithSpace>           := <mandatorySpace> <nestedTextWithSpace> | <nestedText> <nestedTextWithSpace> | <nestedText>
-<nestedText>                    := <exclusiveText> <nestedText> | <exclusiveText>
-<inclusiveSpaceCloseDelimiter>  := <exclusiveText> | ruleclosure | whitespace | delimiter
-<exclusiveText>                 := double | escaped | integer | ascii | nonascii | literal
-<space>                         := whitespace <space> | whitespace | ε
-<mandatorySpace>                := whitespace <mandatorySpace> | whitespace
-
-// PseudoToken
+// Token
 float               := {integer}? "." {integer}
 ascii_letter        := [A-Za-z]
 non_ascii_letter    := {::LETTER::--{ascii_letter}}
 url_letter          := {ascii_letter} | digit | "-" | "_" | "." | "~" | "!" | "*" | "'" | "(" | ")" | ";" | ":" | "@" | "&" | "=" | "+" | "$" | "," | "/" | "?" | "%" | "#" | "[" | "]"
 
-// Token
 illegal             := [\u0000-\u0008 \u000B \u000C \u000E-\u001F \u007F-\u009F]
 integer             := {::NUMBER::}+
 double              := {float} ( [eE] [-+]? {integer} )? | {integer} [eE] [-+]? {integer}
@@ -85,7 +67,7 @@ Please note, that `<generic>` will replaced by the following rules, if the speci
 Please note, `<text>` should accept any until a new parser rule kicks in making effectively accepting any token.
 
 == Error Handling
-If the parser faces an unexpected Token (for example [[ A illegal character follows me }]]), it should recover by assuming the expected Token was beforehand or producing a TextNode and log an Error.
+If the parser faces an unexpected Token (for example [[ A illegal character follows me }]]), it should recover by assuming the expected Token was beforehand or producing a ErrorNode and log an Error.
 The reason is simply to avoid any unexpected behaviour in a consuming application (like app crashes) which could lead to bad user experience.
 
 == Up to discussion

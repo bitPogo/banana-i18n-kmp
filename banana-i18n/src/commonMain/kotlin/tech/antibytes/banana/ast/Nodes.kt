@@ -13,16 +13,16 @@ internal data class TextNode(
 ) : Node
 
 internal data class VariableNode(
-    val name: String
+    val id: String
 ) : Node
 
 internal data class FunctionNode(
-    val name: String,
+    val id: String,
     val arguments: List<Node> = emptyList()
 ) : Node
 
 internal data class HeadlessLinkNode(
-    val identifier: String
+    val target: List<Node>
 ) : Node
 
 internal data class HeadlessFreeLinkNode(
