@@ -23,11 +23,12 @@ internal data class FunctionNode(
 
 internal data class LinkNode(
     val target: List<Node>,
-    val displayText: List<Node> = emptyList()
+    val display: List<Node> = emptyList()
 ) : Node
 
-internal data class HeadlessFreeLinkNode(
-    val identifier: String
+internal data class FreeLinkNode(
+    val url: String,
+    val display: List<Node> = emptyList()
 ) : Node
 
 internal data class CompoundNode(

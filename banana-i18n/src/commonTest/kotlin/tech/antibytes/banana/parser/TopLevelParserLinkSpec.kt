@@ -10,7 +10,6 @@ import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.FunctionNode
-import tech.antibytes.banana.ast.HeadlessFreeLinkNode
 import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
@@ -709,6 +708,42 @@ class TopLevelParserLinkSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts Link with Illegal Link Literals as DisplayText`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "abc"
+        val display = "["
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to "[[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word,
+                BananaContract.TokenTypes.DELIMITER to "|",
+                BananaContract.TokenTypes.LITERAL to display,
+                BananaContract.TokenTypes.LINK_END to "]]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe LinkNode(
+            listOf(
+                TextNode(listOf(word))
+            ),
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
     fun `Given parse is called it accepts Link with Variable as LinkDisplay`() {
         // Given
         val parser = TopLevelParser(logger)
@@ -878,7 +913,7 @@ class TopLevelParserLinkSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Link while, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
+    fun `Given parse is called it accepts Link, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "abc"
@@ -1024,165 +1059,21 @@ class TopLevelParserLinkSpec {
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
     }
 
-    // FreeLink
     @Test
-    fun `Given parse is called it accepts FreeLinks`() {
+    fun `Given parse is called it accepts Link with LinkDisplay, while it had not been closed`() {
         // Given
         val parser = TopLevelParser(logger)
-        val word = "https://example.org"
+        val word = "abc"
+        val display = "efg"
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.URL to word,
-                BananaContract.TokenTypes.LITERAL to "]",
-            )
-        )
-
-        tokenStore.tokens = tokens.toMutableList()
-
-        // When
-        val message = parser.parse(tokenStore)
-
-        // Then
-        message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
-        tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
-    }
-
-    @Test
-    fun `Given parse is called it accepts FreeLinks with additional spacing`() {
-        // Given
-        val parser = TopLevelParser(logger)
-        val word = "https://example.org"
-
-        val tokens = createTokens(
-            listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to word,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "]",
-            )
-        )
-
-        tokenStore.tokens = tokens.toMutableList()
-
-        // When
-        val message = parser.parse(tokenStore)
-
-        // Then
-        message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
-        tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
-    }
-
-    @Test
-    fun `Given parse is called it accepts FreeLinks, while it had not been closed with its Literal, if it is locatated at the End of the Message and reports a warning`() {
-        // Given
-        val parser = TopLevelParser(logger)
-        val word = "https://example.org"
-
-        val tokens = createTokens(
-            listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to word,
-                BananaContract.TokenTypes.ESCAPED to "]",
-            )
-        )
-
-        tokenStore.tokens = tokens.toMutableList()
-
-        // When
-        val message = parser.parse(tokenStore)
-
-        // Then
-        message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
-        tokenStore.tokens.isEmpty() mustBe true
-        logger.warning[0] mustBe Pair(
-            BananaContract.Tag.PARSER,
-            "Warning: FreeLink ($word) had not been closed!"
-        )
-    }
-
-    @Test
-    fun `Given parse is called it accepts FreeLinks, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
-        // Given
-        val parser = TopLevelParser(logger)
-        val word = "https://example.org"
-
-        val tokens = createTokens(
-            listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to word,
-                BananaContract.TokenTypes.LITERAL to "%",
-            )
-        )
-
-        tokenStore.tokens = tokens.toMutableList()
-
-        // When
-        val message = parser.parse(tokenStore)
-
-        // Then
-        message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe HeadlessFreeLinkNode(word)
-        tokenStore.tokens.isEmpty() mustBe true
-        logger.warning[0] mustBe Pair(
-            BananaContract.Tag.PARSER,
-            "Warning: FreeLink ($word) had not been closed!"
-        )
-    }
-
-    @Test
-    fun `Given parse is called it accepts FreeLinks like as Text`() {
-        // Given
-        val parser = TopLevelParser(logger)
-        val word = "https://example.org"
-
-        val tokens = createTokens(
-            listOf(
-                BananaContract.TokenTypes.ESCAPED to "[",
-                BananaContract.TokenTypes.URL to word,
-                BananaContract.TokenTypes.ESCAPED to "]",
-            )
-        )
-
-        tokenStore.tokens = tokens.toMutableList()
-
-        // When
-        val message = parser.parse(tokenStore)
-
-        // Then
-        message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", word, "]"))
-        tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
-    }
-
-    @Test
-    fun `Given parse is called it accepts FreeLinks wiht Spaces like as Text`() {
-        // Given
-        val parser = TopLevelParser(logger)
-        val word = "something"
-
-        val tokens = createTokens(
-            listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.LINK_START to "[[",
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.ASCII_STRING to word,
+                BananaContract.TokenTypes.DELIMITER to "|",
+                BananaContract.TokenTypes.ASCII_STRING to display,
                 BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -1193,9 +1084,19 @@ class TopLevelParserLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " " , word, " ", "]"))
+        (message as CompoundNode).children[0] mustBe LinkNode(
+            listOf(
+                TextNode(listOf(word))
+            ),
+            listOf(
+                TextNode(listOf(display)),
+            )
+        )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning[0] mustBe Pair(
+            BananaContract.Tag.PARSER,
+            "Warning: Link had not been closed!"
+        )
     }
 }
