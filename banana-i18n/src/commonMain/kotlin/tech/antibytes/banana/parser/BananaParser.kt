@@ -7,16 +7,12 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
 import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.LinkNode
-import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.TextNode
-import tech.antibytes.banana.ast.VariableNode
-import tech.antibytes.banana.BananaContract.Tag
 import tech.antibytes.banana.ast.FreeLinkNode
 
 val INVALID_LINK_LITERAL = listOf("{", "[", "}", "]")
@@ -50,10 +46,6 @@ private fun Token.isFunctionStart(): Boolean {
     return type == TokenTypes.FUNCTION_START
 }
 
-private fun Token.isFunctionEnd(): Boolean {
-    return type == TokenTypes.FUNCTION_END
-}
-
 private fun Token.isLinkStart(): Boolean {
     return type == TokenTypes.LINK_START
 }
@@ -76,35 +68,9 @@ private fun Token.isUrl(): Boolean {
     return type == TokenTypes.URL
 }
 
-private fun Token.isFunctionArgumentIndicator(): Boolean {
-    return value == ":" &&
-        type == TokenTypes.LITERAL
-}
-
-private fun Token.isDelimiter(): Boolean {
-    return type == TokenTypes.DELIMITER
-}
-
-internal class TopLevelParser(
-    private val logger: BananaContract.Logger
-) : BananaContract.TopLevelParser {
-    private fun logOrConsume(rule: String, tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
-        when {
-            condition() -> tokenizer.consume()
-            tokenizer.currentToken == EOF -> logger.warning(Tag.PARSER, "Warning: $rule had not been closed!")
-            else -> logger.error(Tag.PARSER,"Error: Unexpected Token (${tokenizer.currentToken})!")
-        }
-    }
-
-    private fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
-        return tokenizer.currentToken.isFunctionStart() &&
-            (tokenizer.lookahead.isAscii() ||
-                (tokenizer.lookahead.isSpace() &&
-                    tokenizer.lookahead(2).isAscii()
-                )
-            )
-    }
-
+internal class BananaParser(
+    logger: BananaContract.Logger
+) : BananaContract.TopLevelParser, SharedParserRules(logger) {
     private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkStart() &&
             (tokenizer.lookahead.isLinkText() ||
@@ -137,29 +103,6 @@ internal class TopLevelParser(
             )
     }
 
-    private fun isDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
-        return tokenizer.currentToken.isDelimiter() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isDelimiter()
-            )
-    }
-
-    private fun isEOF(tokenizer: BananaContract.TokenStore): Boolean {
-        return tokenizer.currentToken.isEOF() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isEOF()
-                )
-    }
-
-    private fun isFunctionEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
-        return isDelimiter(tokenizer) ||
-            tokenizer.currentToken.isFunctionEnd() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isFunctionEnd()
-            ) ||
-            isEOF(tokenizer)
-    }
-
     private fun isLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkEnd() ||
             (tokenizer.currentToken.isSpace() &&
@@ -186,12 +129,6 @@ internal class TopLevelParser(
             isEOF(tokenizer)
     }
 
-    private fun shiftUntil(tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
-        do {
-            tokenizer.shift()
-        } while (condition())
-    }
-
     private fun text(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !tokenizer.currentToken.isEOF() &&
@@ -201,95 +138,6 @@ internal class TopLevelParser(
         }
 
         return TextNode(tokenizer.resolveValues())
-    }
-
-    private fun variable(tokenizer: BananaContract.TokenStore): Node {
-        return VariableNode(
-            tokenizer.currentToken.value
-        ).also { tokenizer.consume() }
-    }
-
-    private fun identifier(tokenizer: BananaContract.TokenStore): String {
-        do {
-            tokenizer.shift()
-
-            if (tokenizer.currentToken.value == "_") {
-                tokenizer.shift()
-            }
-        } while (tokenizer.currentToken.isAscii())
-
-        return tokenizer.resolveValues().joinToString("")
-    }
-
-    private fun space(tokenizer: BananaContract.TokenStore) {
-        if (tokenizer.currentToken.isSpace()) {
-            tokenizer.consume()
-        }
-    }
-
-    private fun nestedText(tokenizer: BananaContract.TokenStore): Node {
-        shiftUntil(tokenizer) {
-            !isFunction(tokenizer) &&
-            !isFunctionEndOrDelimiter(tokenizer) &&
-            !tokenizer.currentToken.isVariable()
-        }
-
-        return TextNode(tokenizer.resolveValues())
-    }
-
-    private fun argument(tokenizer: BananaContract.TokenStore): Node {
-        val argument = mutableListOf<Node>()
-
-        while (!isFunctionEndOrDelimiter(tokenizer)) {
-            val partialArgument = when {
-                isFunction(tokenizer) -> function(tokenizer)
-                tokenizer.currentToken.isVariable() -> variable(tokenizer)
-                else -> nestedText(tokenizer)
-            }
-
-            argument.add(partialArgument)
-        }
-
-        return CompoundNode(argument)
-    }
-
-    private fun arguments(tokenizer: BananaContract.TokenStore): List<Node> {
-        tokenizer.consume()
-        space(tokenizer)
-
-        val arguments = mutableListOf(argument(tokenizer))
-
-        while (isDelimiter(tokenizer)) {
-            space(tokenizer)
-            tokenizer.consume()
-            space(tokenizer)
-
-            arguments.add(argument(tokenizer))
-        }
-
-        space(tokenizer)
-        return arguments
-    }
-
-    private fun function(tokenizer: BananaContract.TokenStore): Node {
-        tokenizer.consume()
-        space(tokenizer)
-
-        val functionName = identifier(tokenizer)
-
-        space(tokenizer)
-
-        val arguments = if (tokenizer.currentToken.isFunctionArgumentIndicator()) {
-            arguments(tokenizer)
-        } else {
-            emptyList()
-        }
-
-        logOrConsume("Function", tokenizer) {
-            tokenizer.currentToken.isFunctionEnd()
-        }
-
-        return FunctionNode(functionName, arguments)
     }
 
     private fun linkText(tokenizer: BananaContract.TokenStore): Node {
@@ -309,7 +157,7 @@ internal class TopLevelParser(
         while (!isLinkEndOrDelimiter(tokenizer)) {
             val part = when {
                 isFunction(tokenizer) -> function(tokenizer)
-                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                isVariable(tokenizer) -> variable(tokenizer)
                 tokenizer.currentToken.isLinkText() || tokenizer.currentToken.isSpace() -> linkText(tokenizer)
                 else -> break // Illegal Literal
             }
@@ -323,7 +171,7 @@ internal class TopLevelParser(
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
             !isLinkEnd(tokenizer) &&
-            !tokenizer.currentToken.isVariable()
+            !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -335,7 +183,7 @@ internal class TopLevelParser(
         while (!isLinkEnd(tokenizer)) {
             val part = when {
                 isFunction(tokenizer) -> function(tokenizer)
-                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                isVariable(tokenizer)  -> variable(tokenizer)
                 else -> displayText(tokenizer)
             }
 
@@ -374,7 +222,7 @@ internal class TopLevelParser(
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
             !isFreeLinkEnd(tokenizer) &&
-            !tokenizer.currentToken.isVariable()
+            !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -386,7 +234,7 @@ internal class TopLevelParser(
         while (!isFreeLinkEnd(tokenizer)) {
             val part = when {
                 isFunction(tokenizer) -> function(tokenizer)
-                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                isVariable(tokenizer)  -> variable(tokenizer)
                 else -> displayFreeText(tokenizer)
             }
 
@@ -423,7 +271,7 @@ internal class TopLevelParser(
 
         while (!tokenizer.currentToken.isEOF()) {
             val node = when {
-                tokenizer.currentToken.isVariable() -> variable(tokenizer)
+                isVariable(tokenizer) -> variable(tokenizer)
                 isFunction(tokenizer) -> function(tokenizer)
                 isLink(tokenizer) -> link(tokenizer)
                 isFreeLink(tokenizer) -> freeLink(tokenizer)

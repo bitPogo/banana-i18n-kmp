@@ -21,7 +21,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-class TopLevelParserLinkSpec {
+class BananaParserLinkSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
@@ -35,7 +35,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Links`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -65,7 +65,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Links with Identifiers`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word1 = "WORD1"
         val word2 = "WORD2"
 
@@ -98,7 +98,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Links which contain additional spaces`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -130,7 +130,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts DOUBLE as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = fixture<Double>().toString()
 
         val tokens = createTokens(
@@ -162,7 +162,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts INTEGER as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = fixture<Int>().toString()
 
         val tokens = createTokens(
@@ -194,7 +194,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts NON_ASCII as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -226,7 +226,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts LITERAL as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "!"
 
         val tokens = createTokens(
@@ -258,7 +258,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts ESCAPED as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "{"
 
         val tokens = createTokens(
@@ -290,7 +290,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts VARIABLE as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -320,7 +320,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts VARIABLE with additional spaces as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -352,7 +352,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -383,7 +383,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions with additional space as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -416,7 +416,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions like with inner additional space as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -451,7 +451,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions like with spacing as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -487,7 +487,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions with inner additional space as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -520,7 +520,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions like with all out additional space as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
 
         val tokens = createTokens(
@@ -557,7 +557,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Functions with all out additional space as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "word"
         val tokens = createTokens(
             listOf(
@@ -591,7 +591,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts mixed Values as Link`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word1 = "word1"
         val word2 = "word2"
         val word3 = "word3"
@@ -637,7 +637,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with ASCII as DisplayText`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "efg"
 
@@ -673,7 +673,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with DisplayText with additional spaces`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "efg"
 
@@ -711,7 +711,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with Illegal Link Literals as DisplayText`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "["
 
@@ -747,7 +747,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with Variable as LinkDisplay`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "efg"
 
@@ -783,7 +783,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with Function as LinkDisplay`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "efg"
 
@@ -821,7 +821,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with spaced Function as LinkDisplay`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "efg"
 
@@ -861,7 +861,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with mixed values as LinkDisplay`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val displayPart1 = "efg"
         val displayPart2 = "efg"
@@ -916,7 +916,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
 
         val tokens = createTokens(
@@ -949,7 +949,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link while it encountered an unexpected token and reports an error`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
 
         listOf("{", "[", "}", "]").forEach { invalidLiteral ->
@@ -990,7 +990,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with escaped illegal Link Literals`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
 
         listOf("{", "[", "}", "]").forEach { illegal ->
@@ -1027,7 +1027,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link like with nested Function like as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "23"
 
         val tokens = createTokens(
@@ -1063,7 +1063,7 @@ class TopLevelParserLinkSpec {
     @Test
     fun `Given parse is called it accepts Link with LinkDisplay, while it had not been closed`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
         val display = "efg"
 
