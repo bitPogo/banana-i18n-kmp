@@ -29,6 +29,7 @@ class TopLevelParserLinkSpec {
     @AfterTest
     fun tearDown() {
         tokenStore.clear()
+        logger.clear()
     }
 
     @Test

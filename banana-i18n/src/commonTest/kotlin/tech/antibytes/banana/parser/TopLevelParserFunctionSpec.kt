@@ -28,6 +28,7 @@ class TopLevelParserFunctionSpec {
     @AfterTest
     fun tearDown() {
         tokenStore.clear()
+        logger.clear()
     }
 
     @Test
@@ -649,7 +650,7 @@ class TopLevelParserFunctionSpec {
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             BananaContract.Tag.PARSER,
-            "Warning: Function ($name) had not been closed!"
+            "Warning: Function had not been closed!"
         )
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
     }
@@ -735,7 +736,7 @@ class TopLevelParserFunctionSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts Functions while it had not been closed and reports a warning`() {
+    fun `Given parse is called it accepts Functions while it had not been closed and reports a warning if it occures at the end of the message`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "abc"
@@ -761,12 +762,12 @@ class TopLevelParserFunctionSpec {
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             BananaContract.Tag.PARSER,
-            "Warning: Function ($word) had not been closed!"
+            "Warning: Function had not been closed!"
         )
     }
 
     @Test
-    fun `Given parse is called it accepts Error if the Grammar was incorrect`() {
+    fun `Given parse is called it accepts Functions if the Grammar was incorrect while reporting an Error`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "abc"
@@ -776,10 +777,9 @@ class TopLevelParserFunctionSpec {
                 BananaContract.TokenTypes.FUNCTION_START to "{{",
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.ASCII_STRING to word,
-                BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.ESCAPED to ":",
-                BananaContract.TokenTypes.ASCII_STRING to word,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to word
             )
         )
 
@@ -793,9 +793,10 @@ class TopLevelParserFunctionSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(word)
 
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning[0] mustBe Pair(
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error[0] mustBe Pair(
             BananaContract.Tag.PARSER,
-            "Warning: Function ($word) had not been closed!"
+            "Error: Unexpected Token (${tokens[3]})!"
         )
     }
 }
