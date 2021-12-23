@@ -72,7 +72,7 @@ internal abstract class BananaFlexTokenizer(
             yytext(),
             yycolumn,
             yyline
-        ).also{ offset += yylength() }
+        ).also { offset += yylength() }
     }
 
     private fun createCleanedToken(tokenType: BananaContract.TokenTypes): BananaContract.Token {
@@ -81,7 +81,7 @@ internal abstract class BananaFlexTokenizer(
             yytext().drop(1),
             yycolumn,
             yyline
-        ).also{ offset += yylength() }
+        ).also { offset += yylength() }
     }
 
     private fun rightMostBraceToken(tokenType: BananaContract.TokenTypes): BananaContract.Token {
@@ -96,7 +96,7 @@ internal abstract class BananaFlexTokenizer(
                 yytext(),
                 yycolumn,
                 yyline
-            ).also{ offset += 2 }
+            ).also { offset += 2 }
         }
     }
 
@@ -117,7 +117,8 @@ internal abstract class BananaFlexTokenizer(
                 destination = zzBuffer,
                 destinationOffset = 0,
                 startIndex = zzStartRead,
-                endIndex = zzEndRead            )
+                endIndex = zzEndRead
+            )
 
             /* translate stored positions */zzEndRead -= zzStartRead
             zzCurrentPos -= zzStartRead

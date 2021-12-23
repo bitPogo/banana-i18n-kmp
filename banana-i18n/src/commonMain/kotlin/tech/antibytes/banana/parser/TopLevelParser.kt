@@ -88,6 +88,14 @@ private fun Token.isDelimiter(): Boolean {
 internal class TopLevelParser(
     private val logger: BananaContract.Logger
 ) : BananaContract.TopLevelParser {
+    private fun logOrConsume(rule: String, tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
+        when {
+            condition() -> tokenizer.consume()
+            tokenizer.currentToken == EOF -> logger.warning(Tag.PARSER, "Warning: $rule had not been closed!")
+            else -> logger.error(Tag.PARSER,"Error: Unexpected Token (${tokenizer.currentToken})!")
+        }
+    }
+
     private fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFunctionStart() &&
             (tokenizer.lookahead.isAscii() ||
@@ -184,20 +192,6 @@ internal class TopLevelParser(
         } while (condition())
     }
 
-    private enum class LogLevel {
-        INFO,
-        WARNING,
-        ERROR
-    }
-
-    private fun log(message: String, level: LogLevel = LogLevel.WARNING) {
-        when (level) {
-            LogLevel.INFO -> logger.info(Tag.PARSER, message)
-            LogLevel.WARNING -> logger.warning(Tag.PARSER, message)
-            else -> logger.error(Tag.PARSER, message)
-        }
-    }
-
     private fun text(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !tokenizer.currentToken.isEOF() &&
@@ -291,10 +285,8 @@ internal class TopLevelParser(
             emptyList()
         }
 
-        if (!tokenizer.currentToken.isFunctionEnd()) {
-            log("Warning: Function ($functionName) had not been closed!")
-        } else {
-            tokenizer.consume()
+        logOrConsume("Function", tokenizer) {
+            tokenizer.currentToken.isFunctionEnd()
         }
 
         return FunctionNode(functionName, arguments)
@@ -371,10 +363,8 @@ internal class TopLevelParser(
 
         space(tokenizer)
 
-        when {
-            tokenizer.currentToken.isLinkEnd() -> tokenizer.consume()
-            tokenizer.currentToken == EOF -> log("Warning: Link had not been closed!")
-            else -> log("Error: Unexpected Token (${tokenizer.currentToken})!", LogLevel.ERROR)
+        logOrConsume("Link", tokenizer) {
+            tokenizer.currentToken.isLinkEnd()
         }
 
         return LinkNode(target, displayText)
@@ -421,10 +411,8 @@ internal class TopLevelParser(
 
         space(tokenizer)
 
-        if (!tokenizer.currentToken.isFreeLinkEnd()) {
-            log("Warning: FreeLink ($url) had not been closed!")
-        } else {
-            tokenizer.consume()
+        logOrConsume("FreeLink", tokenizer) {
+            tokenizer.currentToken.isFreeLinkEnd()
         }
 
         return FreeLinkNode(url, linkDisplay)
