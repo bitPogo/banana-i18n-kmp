@@ -71,7 +71,6 @@ internal interface BananaContract {
     }
 
     interface Logger {
-        fun info(tag: Tag, message: String)
         fun warning(tag: Tag, message: String)
         fun error(tag: Tag, message: String)
     }

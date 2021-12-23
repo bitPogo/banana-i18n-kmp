@@ -30,6 +30,7 @@ class TopLevelParserFreeLinkSpec {
     @AfterTest
     fun tearDown() {
         tokenStore.clear()
+        logger.clear()
     }
 
     @Test
@@ -91,7 +92,7 @@ class TopLevelParserFreeLinkSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts FreeLinks, while it had not been closed with its Literal, if it is locatated at the End of the Message and reports a warning`() {
+    fun `Given parse is called it accepts FreeLinks, while it had not been closed with its Literal and reports an error`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "https://example.org"
@@ -114,14 +115,15 @@ class TopLevelParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(word)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning[0] mustBe Pair(
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error[0] mustBe Pair(
             BananaContract.Tag.PARSER,
-            "Warning: FreeLink ($word) had not been closed!"
+            "Error: Unexpected Token (${tokens[3]})!"
         )
     }
 
     @Test
-    fun `Given parse is called it accepts FreeLinks, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
+    fun `Given parse is called it accepts FreeLinks, while it had not been closed and reports an error`() {
         // Given
         val parser = TopLevelParser(logger)
         val word = "https://example.org"
@@ -144,9 +146,10 @@ class TopLevelParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(word)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning[0] mustBe Pair(
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error[0] mustBe Pair(
             BananaContract.Tag.PARSER,
-            "Warning: FreeLink ($word) had not been closed!"
+            "Error: Unexpected Token (${tokens[3]})!"
         )
     }
 
@@ -469,7 +472,45 @@ class TopLevelParserFreeLinkSpec {
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             BananaContract.Tag.PARSER,
-            "Warning: FreeLink ($word) had not been closed!"
+            "Warning: FreeLink had not been closed!"
         )
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLink while it encountered an unexpected token and reports an error`() {
+        // Given
+        val parser = TopLevelParser(logger)
+        val word = "https://example.org"
+
+        listOf("{", "[", "}").forEach { invalidLiteral ->
+            val tokens = createTokens(
+                listOf(
+                    BananaContract.TokenTypes.LITERAL to "[",
+                    BananaContract.TokenTypes.WHITESPACE to " ",
+                    BananaContract.TokenTypes.URL to word,
+                    BananaContract.TokenTypes.LITERAL to invalidLiteral,
+                    BananaContract.TokenTypes.ASCII_STRING to "not important",
+                    BananaContract.TokenTypes.LINK_END to "]",
+                )
+            )
+
+            tokenStore.tokens = tokens.toMutableList()
+
+            // When
+            val message = parser.parse(tokenStore)
+
+            // Then
+            message fulfils CompoundNode::class
+            message as CompoundNode
+            message.children[0] mustBe FreeLinkNode(word)
+            message.children[1] fulfils TextNode::class
+            tokenStore.tokens.isEmpty() mustBe true
+            logger.error[0] mustBe Pair(
+                BananaContract.Tag.PARSER,
+                "Error: Unexpected Token (${tokens[3]})!"
+            )
+
+            logger.clear()
+        }
     }
 }
