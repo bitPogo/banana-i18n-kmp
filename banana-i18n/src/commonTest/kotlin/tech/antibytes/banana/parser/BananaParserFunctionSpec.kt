@@ -20,7 +20,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-class TopLevelParserFunctionSpec {
+class BananaParserFunctionSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
@@ -34,7 +34,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts VARIABLE as Variable`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val variable = "1"
 
         val tokens = createTokens(
@@ -57,7 +57,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -85,7 +85,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with Identifiers`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word1 = "WORD1"
         val word2 = "WORD2"
 
@@ -116,7 +116,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions which contain additional spaces`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "WORD"
 
         val tokens = createTokens(
@@ -146,7 +146,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with ASCII as single Argument as Text which contain additional spacing`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "WORD2"
 
@@ -188,7 +188,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with NON_ASCII as single Argument as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "ηὕρηκα"
 
@@ -228,7 +228,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with DOUBLE as single Argument as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = fixture<Double>().toString()
 
@@ -268,7 +268,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with INTEGER as single Argument as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = fixture<Int>().toString()
 
@@ -308,7 +308,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with ESCAPED as single Argument as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "\\{"
 
@@ -348,7 +348,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with LITERAL as single Argument as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "{"
 
@@ -388,7 +388,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with WHITESPACES as single Argument as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "{"
         val space = " "
@@ -431,7 +431,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with VARIABLE as single Argument as Variable`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "var"
 
@@ -471,7 +471,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with a nested Function as single Argument as Variable`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument = "name"
 
@@ -512,7 +512,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with mixed values as single Argument as Variable`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argumentPart1 = "name"
         val argumentPart2 = "something"
@@ -568,7 +568,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with multible Arguments`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument1 = "name"
         val argument2 = "something"
@@ -612,7 +612,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with Arguments, which are not closed`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument1 = "name"
         val argument2 = "something"
@@ -658,7 +658,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions with multible spaced Arguments`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val name = "WORD1"
         val argument1 = "name"
         val argument2 = "something"
@@ -706,7 +706,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions like syntax as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -738,7 +738,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions while it had not been closed and reports a warning if it occures at the end of the message`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
 
         val tokens = createTokens(
@@ -769,7 +769,7 @@ class TopLevelParserFunctionSpec {
     @Test
     fun `Given parse is called it accepts Functions if the Grammar was incorrect while reporting an Error`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "abc"
 
         val tokens = createTokens(

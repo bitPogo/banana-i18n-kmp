@@ -23,7 +23,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-class TopLevelParserSpec {
+class BananaParserSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
@@ -35,7 +35,7 @@ class TopLevelParserSpec {
 
     @Test
     fun `It fulfils TopLevelParser`() {
-        val parser: Any = TopLevelParser(logger)
+        val parser: Any = BananaParser(logger)
 
         parser fulfils BananaContract.TopLevelParser::class
     }
@@ -43,7 +43,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts Empty Messages`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         tokenStore.tokens.addAll(listOf(EOF, EOF))
 
         // When
@@ -57,7 +57,7 @@ class TopLevelParserSpec {
     @Test
     fun `Given parse is called it accepts mixed values`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word1 = "abc"
         val word2 = "def"
         val word3 = "ghi"

@@ -18,7 +18,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-class TopLevelParserTextSpec {
+class BananaParserTextSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
@@ -31,7 +31,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts DOUBLE as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val double = fixture<Double>().toString()
 
         val tokens = createTokens(
@@ -54,7 +54,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts INTEGER as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val integer = fixture<Int>().toString()
 
         val tokens = createTokens(
@@ -77,7 +77,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts ESCAPED as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val escaped = "\\$"
 
         val tokens = createTokens(
@@ -100,7 +100,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts ASCII as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
         val tokens = createTokens(
@@ -123,7 +123,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts NON_ASCII as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val nonAscii = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -146,7 +146,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts LITERAL as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val literal = "%"
 
         val tokens = createTokens(
@@ -169,7 +169,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts WHITESPACE as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val space = " "
 
         val tokens = createTokens(
@@ -192,7 +192,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts DELIMITER as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val delimiter = "|"
 
         val tokens = createTokens(
@@ -215,7 +215,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts FUNCTION_END as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val end = "}}"
 
         val tokens = createTokens(
@@ -238,7 +238,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts LINK_END as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val end = "]]"
 
         val tokens = createTokens(
@@ -261,7 +261,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts URL as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val url = "https://example.org"
 
         val tokens = createTokens(
@@ -286,7 +286,7 @@ class TopLevelParserTextSpec {
     @Test
     fun `Given parse is called it accepts multiple specified Tokens as one Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         val space = " "
         val nonAscii = "ηὕρηκα"

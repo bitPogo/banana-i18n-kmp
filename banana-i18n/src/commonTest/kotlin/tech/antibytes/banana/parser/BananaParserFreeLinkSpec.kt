@@ -11,7 +11,6 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.FreeLinkNode
 import tech.antibytes.banana.ast.FunctionNode
-import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
@@ -22,7 +21,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-class TopLevelParserFreeLinkSpec {
+class BananaParserFreeLinkSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
@@ -36,7 +35,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
 
         val tokens = createTokens(
@@ -64,7 +63,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with additional spacing`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
 
         val tokens = createTokens(
@@ -94,7 +93,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks, while it had not been closed with its Literal and reports an error`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
 
         val tokens = createTokens(
@@ -125,7 +124,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks, while it had not been closed and reports an error`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
 
         val tokens = createTokens(
@@ -156,7 +155,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks like as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
 
         val tokens = createTokens(
@@ -183,7 +182,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with Spaces like as Text`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "something"
 
         val tokens = createTokens(
@@ -212,7 +211,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with ASCII as DisplayText`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val display = "efg"
 
@@ -246,7 +245,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with DisplayText and extra spaces`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val display = "efg"
 
@@ -281,7 +280,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with Variable as DisplayText`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val display = "efg"
 
@@ -315,7 +314,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with Function as DisplayText`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val display = "efg"
 
@@ -351,7 +350,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLinks with Function which contains extra spaceing as DisplayText`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val display = "efg"
 
@@ -389,7 +388,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLink with mixed values as LinkDisplay`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val displayPart1 = "efg"
         val displayPart2 = "efg"
@@ -442,7 +441,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLink with DisplayText, while it had not been closed, if it is locatated at the End of the Message and reports a warning`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
         val display = "efg"
 
@@ -479,7 +478,7 @@ class TopLevelParserFreeLinkSpec {
     @Test
     fun `Given parse is called it accepts FreeLink while it encountered an unexpected token and reports an error`() {
         // Given
-        val parser = TopLevelParser(logger)
+        val parser = BananaParser(logger)
         val word = "https://example.org"
 
         listOf("{", "[", "}").forEach { invalidLiteral ->

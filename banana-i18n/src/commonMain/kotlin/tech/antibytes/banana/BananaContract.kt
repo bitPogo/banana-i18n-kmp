@@ -8,7 +8,7 @@ package tech.antibytes.banana
 
 import tech.antibytes.banana.tokenizer.TokenizerContract
 
-internal interface BananaContract {
+interface BananaContract {
     enum class TokenTypes {
         DOUBLE,
         INTEGER,
