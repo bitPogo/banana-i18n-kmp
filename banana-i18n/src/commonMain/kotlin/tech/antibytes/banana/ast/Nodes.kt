@@ -6,6 +6,7 @@
 
 package tech.antibytes.banana.ast
 
+import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Node
 
 internal data class TextNode(
@@ -33,4 +34,8 @@ internal data class FreeLinkNode(
 
 internal data class CompoundNode(
     val children: List<Node>
-) : Node
+) : Node {
+    companion object : BananaContract.ArgumentsNodeFactory {
+        override fun createNode(children: List<Node>): Node = CompoundNode(children)
+    }
+}
