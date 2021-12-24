@@ -7,9 +7,7 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.TokenTypes
 import tech.antibytes.banana.BananaContract.Node
-import tech.antibytes.banana.BananaContract.Token
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.TextNode

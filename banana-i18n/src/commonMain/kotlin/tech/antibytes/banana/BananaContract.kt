@@ -56,7 +56,7 @@ interface BananaContract {
 
     interface Node
 
-    fun interface ArgumentsNodeFactory {
+    fun interface NodeFactory {
         fun createNode(children: List<Node>): Node
     }
 
@@ -67,7 +67,7 @@ interface BananaContract {
     interface TopLevelParser : ParserPlugin
 
     interface ParserPluginController {
-        fun resolvePlugin(name: String): Pair<ParserPlugin, ArgumentsNodeFactory>
+        fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory>
     }
 
     enum class Tag {

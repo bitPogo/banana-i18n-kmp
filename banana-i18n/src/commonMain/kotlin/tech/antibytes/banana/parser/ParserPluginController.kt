@@ -7,9 +7,14 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.BananaContract.NodeFactory
+import tech.antibytes.banana.BananaContract.ParserPlugin
 
-internal class ParserPluginController : BananaContract.ParserPluginController {
-    override fun resolvePlugin(name: String): Pair<BananaContract.ParserPlugin, BananaContract.ArgumentsNodeFactory> {
-        TODO("Not yet implemented")
-    }
+internal class ParserPluginController(
+    defaultParserPlugin: Pair<ParserPlugin, NodeFactory>,
+    customPlugins: Map<String, Pair<ParserPlugin, NodeFactory>> = emptyMap()
+) : BananaContract.ParserPluginController {
+    private val plugins = customPlugins.withDefault { defaultParserPlugin }
+
+    override fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory> = plugins.getValue(name)
 }
