@@ -12,36 +12,9 @@ import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 
-private fun BananaContract.Token.isVariable(): Boolean {
-    return type == BananaContract.TokenTypes.VARIABLE
-}
-
-private fun BananaContract.Token.isAscii(): Boolean {
-    return type == BananaContract.TokenTypes.ASCII_STRING
-}
-
-private fun BananaContract.Token.isSpace(): Boolean {
-    return type == BananaContract.TokenTypes.WHITESPACE
-}
-
-private fun BananaContract.Token.isFunctionStart(): Boolean {
-    return type == BananaContract.TokenTypes.FUNCTION_START
-}
-
-private fun BananaContract.Token.isFunctionEnd(): Boolean {
-    return type == BananaContract.TokenTypes.FUNCTION_END
-}
-
-private fun BananaContract.Token.isFunctionArgumentIndicator(): Boolean {
-    return value == ":" &&
-        type == BananaContract.TokenTypes.LITERAL
-}
-
-private fun BananaContract.Token.isDelimiter(): Boolean {
-    return type == BananaContract.TokenTypes.DELIMITER
-}
-
-abstract class SharedParserRules(protected val logger: BananaContract.Logger) {
+abstract class SharedParserRules(
+    protected val logger: BananaContract.Logger
+) {
     protected fun logOrConsume(rule: String, tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
         when {
             condition() -> tokenizer.consume()

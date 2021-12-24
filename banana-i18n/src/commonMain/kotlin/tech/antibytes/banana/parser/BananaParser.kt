@@ -15,59 +15,6 @@ import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.FreeLinkNode
 
-val INVALID_LINK_LITERAL = listOf("{", "[", "}", "]")
-
-private fun Token.isLegalLinkLiteral(): Boolean {
-    return type == TokenTypes.LITERAL && !INVALID_LINK_LITERAL.contains(value)
-}
-
-private fun Token.isLinkText(): Boolean {
-    return type == TokenTypes.DOUBLE ||
-        type == TokenTypes.INTEGER ||
-        type == TokenTypes.ASCII_STRING ||
-        type == TokenTypes.NON_ASCII_STRING ||
-        isLegalLinkLiteral() ||
-        type == TokenTypes.ESCAPED
-}
-
-private fun Token.isVariable(): Boolean {
-    return type == TokenTypes.VARIABLE
-}
-
-private fun Token.isAscii(): Boolean {
-    return type == TokenTypes.ASCII_STRING
-}
-
-private fun Token.isSpace(): Boolean {
-    return type == TokenTypes.WHITESPACE
-}
-
-private fun Token.isFunctionStart(): Boolean {
-    return type == TokenTypes.FUNCTION_START
-}
-
-private fun Token.isLinkStart(): Boolean {
-    return type == TokenTypes.LINK_START
-}
-
-private fun Token.isLinkEnd(): Boolean {
-    return type == TokenTypes.LINK_END
-}
-
-private fun Token.isFreeLinkStart(): Boolean {
-    return value == "[" &&
-        type == TokenTypes.LITERAL
-}
-
-private fun Token.isFreeLinkEnd(): Boolean {
-    return value == "]" &&
-        type == TokenTypes.LITERAL
-}
-
-private fun Token.isUrl(): Boolean {
-    return type == TokenTypes.URL
-}
-
 internal class BananaParser(
     logger: BananaContract.Logger
 ) : BananaContract.TopLevelParser, SharedParserRules(logger) {
