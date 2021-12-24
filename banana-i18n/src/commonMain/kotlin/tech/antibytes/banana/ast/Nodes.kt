@@ -35,7 +35,7 @@ internal data class FreeLinkNode(
 internal data class CompoundNode(
     val children: List<Node>
 ) : Node {
-    companion object : BananaContract.ArgumentsNodeFactory {
+    companion object : BananaContract.NodeFactory {
         override fun createNode(children: List<Node>): Node = CompoundNode(children)
     }
 }

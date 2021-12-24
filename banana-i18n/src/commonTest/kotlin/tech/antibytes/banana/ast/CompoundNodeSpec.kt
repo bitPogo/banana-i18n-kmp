@@ -14,7 +14,7 @@ import kotlin.test.Test
 class CompoundNodeSpec {
     @Test
     fun `It fulfils ArgumentsNodeFactory`() {
-        CompoundNode fulfils BananaContract.ArgumentsNodeFactory::class
+        CompoundNode fulfils BananaContract.NodeFactory::class
     }
 
     @Test
