@@ -63,15 +63,14 @@ space               := [\s\t\n\r]+
 ----
 
 Please note, `{::SOME_NAME::}` refers to the unicode definition of the Name.See link:https://www.unicode.org/reports/tr18/#General_Category_Property[here] for more.
-Please note, that `<generic>` will replaced by the following rules, if the specific requirement matches.
-Please note, `<text>` should accept any until a new parser rule kicks in making effectively accepting any token.
+Please note, that `<argument>` can be replaced by the invoked rules, if the specific function name matches.
 
 == Error Handling
 If the parser faces an unexpected Token (for example [[ A illegal character follows me }]]), it should recover by assuming the expected Token was beforehand or producing a ErrorNode and log an Error.
 The reason is simply to avoid any unexpected behaviour in a consuming application (like app crashes) which could lead to bad user experience.
 
 == Up to discussion
-The following points are up to discussion and part of the parser core. They can and should be implemented if the need arises.
+The following points are up to discussion and part of the parser core.
 
 === Links
 * label extensions nor the redirect prefixes are not supported
