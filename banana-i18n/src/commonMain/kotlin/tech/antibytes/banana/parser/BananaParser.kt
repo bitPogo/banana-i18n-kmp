@@ -14,8 +14,9 @@ import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.FreeLinkNode
 
 internal class BananaParser(
-    logger: BananaContract.Logger
-) : BananaContract.TopLevelParser, SharedParserRules(logger) {
+    logger: BananaContract.Logger,
+    parserPluginController: BananaContract.ParserPluginController
+) : BananaContract.TopLevelParser, SharedParserRules(logger, parserPluginController) {
     private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkStart() &&
             (tokenizer.lookahead.isLinkText() ||
@@ -70,7 +71,7 @@ internal class BananaParser(
         return tokenizer.currentToken.isFreeLinkEnd() ||
             (tokenizer.currentToken.isSpace() &&
                 tokenizer.lookahead.isFreeLinkEnd()
-                ) ||
+            ) ||
             isEOF(tokenizer)
     }
 
@@ -128,7 +129,7 @@ internal class BananaParser(
         while (!isLinkEnd(tokenizer)) {
             val part = when {
                 isFunction(tokenizer) -> function(tokenizer)
-                isVariable(tokenizer)  -> variable(tokenizer)
+                isVariable(tokenizer) -> variable(tokenizer)
                 else -> displayText(tokenizer)
             }
 
@@ -179,7 +180,7 @@ internal class BananaParser(
         while (!isFreeLinkEnd(tokenizer)) {
             val part = when {
                 isFunction(tokenizer) -> function(tokenizer)
-                isVariable(tokenizer)  -> variable(tokenizer)
+                isVariable(tokenizer) -> variable(tokenizer)
                 else -> displayFreeText(tokenizer)
             }
 

@@ -9,6 +9,8 @@ package tech.antibytes.banana.ast
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Node
 
+private val voidFunctionArguments = CompoundNode(emptyList())
+
 internal data class TextNode(
     val chunks: List<String>
 ) : Node
@@ -19,7 +21,7 @@ internal data class VariableNode(
 
 internal data class FunctionNode(
     val id: String,
-    val arguments: List<Node> = emptyList()
+    val arguments: Node = voidFunctionArguments
 ) : Node
 
 internal data class LinkNode(

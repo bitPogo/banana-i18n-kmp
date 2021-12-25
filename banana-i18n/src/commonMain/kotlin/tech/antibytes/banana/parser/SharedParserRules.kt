@@ -7,13 +7,13 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 
 abstract class SharedParserRules(
-    protected val logger: BananaContract.Logger
+    protected val logger: BananaContract.Logger,
+    private val plugins: BananaContract.ParserPluginController
 ) {
     protected fun logOrConsume(rule: String, tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
         when {
@@ -95,65 +95,59 @@ abstract class SharedParserRules(
     protected fun nestedText(tokenizer: BananaContract.TokenStore): BananaContract.Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
-                !isFunctionEndOrDelimiter(tokenizer) &&
-                !isVariable(tokenizer)
+            !isFunctionEndOrDelimiter(tokenizer) &&
+            !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
     }
 
-    private fun argument(tokenizer: BananaContract.TokenStore): BananaContract.Node {
-        val argument = mutableListOf<BananaContract.Node>()
-
-        while (!isFunctionEndOrDelimiter(tokenizer)) {
-            val partialArgument = when {
-                isFunction(tokenizer) -> function(tokenizer)
-                isVariable(tokenizer) -> variable(tokenizer)
-                else -> nestedText(tokenizer)
-            }
-
-            argument.add(partialArgument)
-        }
-
-        return CompoundNode(argument)
-    }
-
-    private fun arguments(tokenizer: BananaContract.TokenStore): List<BananaContract.Node> {
+    private fun arguments(
+        functionId: String,
+        tokenizer: BananaContract.TokenStore
+    ): BananaContract.Node {
         tokenizer.consume()
         space(tokenizer)
 
-        val arguments = mutableListOf(argument(tokenizer))
+        val (argument, factory) = plugins.resolvePlugin(functionId)
+
+        val arguments = mutableListOf(argument.parse(tokenizer))
 
         while (isDelimiter(tokenizer)) {
             space(tokenizer)
             tokenizer.consume()
             space(tokenizer)
 
-            arguments.add(argument(tokenizer))
+            arguments.add(
+                argument.parse(tokenizer)
+            )
         }
 
         space(tokenizer)
-        return arguments
+        return factory.createNode(arguments)
     }
 
     protected fun function(tokenizer: BananaContract.TokenStore): BananaContract.Node {
         tokenizer.consume()
         space(tokenizer)
 
-        val functionName = identifier(tokenizer)
+        val functionId = identifier(tokenizer)
 
         space(tokenizer)
 
-        val arguments = if (tokenizer.currentToken.isFunctionArgumentIndicator()) {
-            arguments(tokenizer)
+        val function = if (tokenizer.currentToken.isFunctionArgumentIndicator()) {
+            FunctionNode(
+                functionId,
+                arguments(functionId, tokenizer)
+            )
         } else {
-            emptyList()
+            FunctionNode(functionId)
         }
 
         logOrConsume("Function", tokenizer) {
             tokenizer.currentToken.isFunctionEnd()
         }
 
-        return FunctionNode(functionName, arguments)
+        return function
     }
 }

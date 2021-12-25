@@ -16,6 +16,7 @@ import tech.antibytes.banana.ast.LinkNode
 import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.ast.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
@@ -27,6 +28,7 @@ class BananaParserSpec {
     private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
+    private val pluginController = ParserPluginControllerStub()
 
     @AfterTest
     fun tearDown() {
@@ -35,7 +37,7 @@ class BananaParserSpec {
 
     @Test
     fun `It fulfils TopLevelParser`() {
-        val parser: Any = BananaParser(logger)
+        val parser: Any = BananaParser(logger, pluginController)
 
         parser fulfils BananaContract.TopLevelParser::class
     }
@@ -43,7 +45,7 @@ class BananaParserSpec {
     @Test
     fun `Given parse is called it accepts Empty Messages`() {
         // Given
-        val parser = BananaParser(logger)
+        val parser = BananaParser(logger, pluginController)
         tokenStore.tokens.addAll(listOf(EOF, EOF))
 
         // When
@@ -54,10 +56,35 @@ class BananaParserSpec {
         (message as CompoundNode).children.isEmpty() mustBe true
     }
 
+
+
+    @Test
+    fun `Given parse is called it accepts VARIABLE as Variable`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val variable = "1"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.VARIABLE to variable,
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe VariableNode(variable)
+        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+    }
+
     @Test
     fun `Given parse is called it accepts mixed values`() {
         // Given
-        val parser = BananaParser(logger)
+        val parser = BananaParser(logger, pluginController)
         val word1 = "abc"
         val word2 = "def"
         val word3 = "ghi"

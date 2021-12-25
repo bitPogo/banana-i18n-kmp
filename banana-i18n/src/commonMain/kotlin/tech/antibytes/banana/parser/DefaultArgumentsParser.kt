@@ -10,8 +10,9 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CompoundNode
 
 internal class DefaultArgumentsParser(
-    logger: BananaContract.Logger
-) : BananaContract.ParserPlugin, SharedParserRules(logger) {
+    logger: BananaContract.Logger,
+    parserPluginController: BananaContract.ParserPluginController
+) : BananaContract.ParserPlugin, SharedParserRules(logger, parserPluginController) {
     private fun argument(tokenizer: BananaContract.TokenStore): BananaContract.Node {
         val argument = mutableListOf<BananaContract.Node>()
 
