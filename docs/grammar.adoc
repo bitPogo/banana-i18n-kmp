@@ -22,23 +22,24 @@ generic grammar:
 
 [source]
 ----
-<message>           := (<text> | <variable> | <function> | <link> | <freeLink>)*
-<text>              := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace
-<variable>          := variable
-<link>              := link_start <space> <linkTarget> <space> (delimiter <space> <linkDisplay>)? link_end
-<linkTarget>        := (whitespace? <linkText> | <function> | <variable>)+
-<linkDisplay>       := (whitespace? <displayText> | <function> | <variable>)+
-<linkText>          := double | escaped | integer | ascii | nonascii | <linkLiteral>
-<displayText>       := double | escaped | integer | ascii | nonascii | <displayLiteral> | url | function_start | function_end | delimiter | link_start
-<freeLink>          := "[" <space> url (whitespace <linkDisplay>)? <space> "]"
-<function>          := function_start <space> <identifier> <space> <arguments>? function_end
-<arguments>         := ":" <space> <argument> <space> (delimiter <space> <argument> <space>)*
-<argument>          := (whitespace? <nestedText> | <variable> | <function>))+
-<nestedText>        := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start
-<space>             := whitespace*
-<identifier>        := ascii ( "_" ascii )*
-<linkLiteral>       := ^"{" | ^"[" | ^"}" | ^"]" | ^"<" | ^">"
-<displayLiteral>    := ^"]"
+<message>               := (<text> | <variable> | <function> | <link> | <freeLink>)*
+<text>                  := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start | function_end | delimiter | whitespace
+<variable>              := variable
+<link>                  := link_start <space> <linkTarget> <space> (delimiter <space> <linkDisplay>)? link_end
+<linkTarget>            := (whitespace? <linkText> | <function> | <variable>)+
+<linkDisplay>           := (whitespace? <displayText> | <function> | <variable>)+
+<linkText>              := double | escaped | integer | ascii | nonascii | <linkLiteral>
+<linkDisplayText>       := double | escaped | integer | ascii | nonascii | url | function_start | function_end | delimiter | link_start
+<freeLinkDisplayText>   := <linkDisplayText> | link_end
+<freeLink>              := "[" <space> url (whitespace <freeLinkDisplayText>)? <space> "]"
+<function>              := function_start <space> <identifier> <space> <arguments>? function_end
+<arguments>             := ":" <space> <argument> <space> (delimiter <space> <argument> <space>)*
+<argument>              := (whitespace? <nestedText> | <variable> | <function>))+
+<nestedText>            := double | escaped | integer | ascii | nonascii | literal | link_start | link_end | function_start
+<space>                 := whitespace*
+<identifier>            := ascii ( "_" ascii )*
+<linkLiteral>           := ^"{" | ^"[" | ^"}" | ^"]" | ^"<" | ^">"
+<displayLiteral>        := ^"]"
 
 // Token
 float               := {integer}? "." {integer}

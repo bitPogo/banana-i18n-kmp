@@ -185,13 +185,13 @@ class BananaParserFreeLinkSpec {
     fun `Given parse is called it accepts FreeLinks with Spaces like as Text`() {
         // Given
         val parser = BananaParser(logger, pluginController)
-        val url = "something"
+        val string = "something"
 
         val tokens = createTokens(
             listOf(
                 BananaContract.TokenTypes.LITERAL to "[",
                 BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to url,
+                BananaContract.TokenTypes.ASCII_STRING to string,
                 BananaContract.TokenTypes.WHITESPACE to " ",
                 BananaContract.TokenTypes.LITERAL to "]",
             )
@@ -204,7 +204,7 @@ class BananaParserFreeLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " " , url, " ", "]"))
+        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " " , string, " ", "]"))
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -238,6 +238,416 @@ class BananaParserFreeLinkSpec {
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
             url,
             listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with NonAscii as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "ηὕρηκα"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.NON_ASCII_STRING to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with Double as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = fixture<Double>().toString()
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.DOUBLE to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with Integer as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = fixture<Int>().toString()
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.INTEGER to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with Escaped as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "]"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ESCAPED to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with Literal as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = ":"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with URL as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to url,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(url)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with FunctionStart as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "{{"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_START to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with FunctionEnd as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "}}"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.FUNCTION_END to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with LinkStart as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "[["
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LINK_START to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with LinkEnd as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "]]"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LINK_END to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with Delimiter as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val display = "|"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.DELIMITER to display,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(display)))
+        )
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks with Space separated as DisplayText`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val url = "https://example.org"
+        val displayPart1 = "Hello"
+        val displayPart2 = "World"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.URL to url,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to displayPart1,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.ASCII_STRING to displayPart2,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(
+            url,
+            listOf(TextNode(listOf(displayPart1, " ", displayPart2)))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
