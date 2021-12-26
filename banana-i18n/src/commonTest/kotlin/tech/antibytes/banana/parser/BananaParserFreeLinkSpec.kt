@@ -35,7 +35,7 @@ class BananaParserFreeLinkSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts FreeLinks`() {
+    fun `Given parse is called it accepts FreeLinks with URL`() {
         // Given
         val parser = BananaParser(logger, pluginController)
         val url = "https://example.org"
@@ -55,7 +55,7 @@ class BananaParserFreeLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FreeLinkNode(url)
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
         tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -63,7 +63,35 @@ class BananaParserFreeLinkSpec {
     }
 
     @Test
-    fun `Given parse is called it accepts FreeLinks with additional spacing`() {
+    fun `Given parse is called it accepts FreeLinks with Variable`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val variable = "url"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.VARIABLE to variable,
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(VariableNode(variable))
+        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks by Url with additional spacing`() {
         // Given
         val parser = BananaParser(logger, pluginController)
         val url = "https://example.org"
@@ -85,7 +113,37 @@ class BananaParserFreeLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FreeLinkNode(url)
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
+        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.tokens.isEmpty() mustBe true
+        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+    }
+
+    @Test
+    fun `Given parse is called it accepts FreeLinks by Variable with additional spacing`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val variable = "name"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LITERAL to "[",
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.VARIABLE to variable,
+                BananaContract.TokenTypes.WHITESPACE to " ",
+                BananaContract.TokenTypes.LITERAL to "]",
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(VariableNode(variable))
         tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -114,7 +172,7 @@ class BananaParserFreeLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FreeLinkNode(url)
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error[0] mustBe Pair(
@@ -145,7 +203,7 @@ class BananaParserFreeLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FreeLinkNode(url)
+        (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error[0] mustBe Pair(
@@ -204,7 +262,7 @@ class BananaParserFreeLinkSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " " , string, " ", "]"))
+        (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " ", string, " ", "]"))
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
         logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
@@ -236,7 +294,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -270,7 +328,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -304,7 +362,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -338,7 +396,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -372,7 +430,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -406,7 +464,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -439,7 +497,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(url)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -473,7 +531,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -507,7 +565,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -541,7 +599,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -575,7 +633,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -609,7 +667,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -646,7 +704,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(displayPart1, " ", displayPart2)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -681,7 +739,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -715,7 +773,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(VariableNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -751,7 +809,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(FunctionNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -789,7 +847,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(FunctionNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
@@ -836,7 +894,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(
                 TextNode(listOf(displayPart1, " ")),
                 FunctionNode(displayPart2),
@@ -876,7 +934,7 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
-            url,
+            TextNode(listOf(url)),
             listOf(TextNode(listOf(display)))
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[4])
@@ -913,7 +971,7 @@ class BananaParserFreeLinkSpec {
             // Then
             message fulfils CompoundNode::class
             message as CompoundNode
-            message.children[0] mustBe FreeLinkNode(url)
+            message.children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
             message.children[1] fulfils TextNode::class
             tokenStore.tokens.isEmpty() mustBe true
             logger.error[0] mustBe Pair(

@@ -129,7 +129,7 @@ class BananaParserSpec {
         message.children[0] mustBe TextNode(listOf(word1, " "))
         message.children[1] mustBe FunctionNode(word2)
         message.children[2] mustBe TextNode(listOf(" "))
-        message.children[3] mustBe FreeLinkNode(word3)
+        message.children[3] mustBe FreeLinkNode(TextNode(listOf(word3)))
         message.children[4] mustBe TextNode(
             listOf(" ", "{{", " ", "{{", "}}",)
         )

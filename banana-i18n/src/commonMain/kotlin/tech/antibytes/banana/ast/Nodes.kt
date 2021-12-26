@@ -30,7 +30,7 @@ internal data class LinkNode(
 ) : Node
 
 internal data class FreeLinkNode(
-    val url: String,
+    val url: Node,
     val display: List<Node> = emptyList()
 ) : Node
 

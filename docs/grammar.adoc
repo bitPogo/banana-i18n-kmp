@@ -30,8 +30,9 @@ generic grammar:
 <linkDisplay>           := (whitespace? <displayText> | <function> | <variable>)+
 <linkText>              := double | escaped | integer | ascii | nonascii | <linkLiteral>
 <linkDisplayText>       := double | escaped | integer | ascii | nonascii | url | function_start | function_end | delimiter | link_start
-<freeLinkDisplayText>   := <linkDisplayText> | link_end
 <freeLink>              := "[" <space> url (whitespace <freeLinkDisplayText>)? <space> "]"
+<freeLinkUrl>           := url | <variable>
+<freeLinkDisplayText>   := <linkDisplayText> | link_end
 <function>              := function_start <space> <identifier> <space> <arguments>? function_end
 <arguments>             := ":" <space> <argument> <space> (delimiter <space> <argument> <space>)*
 <argument>              := (whitespace? <nestedText> | <variable> | <function>))+
