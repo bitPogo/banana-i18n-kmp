@@ -42,9 +42,10 @@ internal class BananaParser(
 
     private fun isFreeLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFreeLinkStart() &&
-            (tokenizer.lookahead.isUrl() ||
+            (
+                (tokenizer.lookahead.isUrl() || tokenizer.lookahead.isVariable()) ||
                 (tokenizer.lookahead.isSpace() &&
-                    tokenizer.lookahead(2).isUrl()
+                    (tokenizer.lookahead(2).isUrl() || tokenizer.lookahead(2).isVariable())
                 )
             )
     }
@@ -190,11 +191,20 @@ internal class BananaParser(
         return linkDisplay
     }
 
+    private fun freeLinkUrl(tokenizer: BananaContract.TokenStore): Node {
+        return if (tokenizer.currentToken.isVariable()) {
+            variable(tokenizer)
+        } else {
+            TextNode(
+                listOf(tokenizer.currentToken.value)
+            ).also { tokenizer.consume() }
+        }
+    }
+
     private fun freeLink(tokenizer: BananaContract.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
-        val url = tokenizer.currentToken.value
-        tokenizer.consume()
+        val url = freeLinkUrl(tokenizer)
 
         val linkDisplay = if (isFreeLinkDisplay(tokenizer)) {
             space(tokenizer)
