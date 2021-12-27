@@ -577,9 +577,9 @@ class BananaTokenizerSpec {
         val tokenizer = BananaTokenizer.getInstance(reader)
 
         // When
-        tokenizer.setReader(StringReader(""))
+        tokenizer.setReader(StringReader("abc"))
 
         // Then
-        tokenizer.next() mustBe EOF
+        tokenizer.next() mustBe Token(type = TokenTypes.ASCII_STRING, value = "abc", column = 0, line = 0)
     }
 }

@@ -215,6 +215,29 @@ class BananaParserTextSpec {
     }
 
     @Test
+    fun `Given parse is called it accepts FUNCTION_START as Text`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val start = "{{"
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.FUNCTION_START to start,
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(listOf(start))
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[0])
+    }
+
+    @Test
     fun `Given parse is called it accepts FUNCTION_END as Text`() {
         // Given
         val parser = BananaParser(logger, pluginController)
@@ -234,6 +257,29 @@ class BananaParserTextSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(listOf(end))
+        tokenStore.capturedShiftedTokens mustBe listOf(tokens[0])
+    }
+
+    @Test
+    fun `Given parse is called it accepts LINK_START as Text`() {
+        // Given
+        val parser = BananaParser(logger, pluginController)
+        val start = "[["
+
+        val tokens = createTokens(
+            listOf(
+                BananaContract.TokenTypes.LINK_START to start,
+            )
+        )
+
+        tokenStore.tokens = tokens.toMutableList()
+
+        // When
+        val message = parser.parse(tokenStore)
+
+        // Then
+        message fulfils CompoundNode::class
+        (message as CompoundNode).children[0] mustBe TextNode(listOf(start))
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[0])
     }
 
@@ -282,8 +328,6 @@ class BananaParserTextSpec {
         (message as CompoundNode).children[0] mustBe TextNode(listOf(url))
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[0])
     }
-
-    // TODO FUNCTION_START && FUNCTION_END
 
     @Test
     fun `Given parse is called it accepts multiple specified Tokens as one Text`() {

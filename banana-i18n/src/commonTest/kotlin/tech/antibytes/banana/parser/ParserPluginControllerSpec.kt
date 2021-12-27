@@ -7,6 +7,7 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginStub
 import tech.antibytes.util.test.fulfils
@@ -14,24 +15,35 @@ import tech.antibytes.util.test.sameAs
 import kotlin.test.Test
 
 class ParserPluginControllerSpec {
+    private val logger = LoggerStub()
+
     @Test
     fun `It fulfils ParserPluginController`() {
         ParserPluginController(
-            Pair(ParserPluginStub(), NodeFactoryStub())
+            logger,
+            Pair(
+                ParserPluginStub,
+                NodeFactoryStub()
+            )
         ) fulfils BananaContract.ParserPluginController::class
     }
 
     @Test
     fun `Given resolvePlugin is called with a String, it resolves the given DefaultParser and its NodeFactory if the name matches no Plugin`() {
         // Given
-        val default = Pair(ParserPluginStub(), NodeFactoryStub())
-        val controller = ParserPluginController(default)
+        val factory = NodeFactoryStub()
+        val default = Pair(
+            ParserPluginStub,
+            factory
+        )
+        val controller = ParserPluginController(logger, default)
 
         // When
         val plugin = controller.resolvePlugin("plugin")
 
         // Then
-        plugin sameAs default
+        plugin.first sameAs ParserPluginStub.lastInstance
+        plugin.second sameAs factory
     }
 
     @Test
@@ -44,7 +56,11 @@ class ParserPluginControllerSpec {
         )
 
         val controller = ParserPluginController(
-            defaultParserPlugin = Pair(ParserPluginStub(), NodeFactoryStub()),
+            logger,
+            defaultParserPlugin = Pair(
+                ParserPluginStub,
+                NodeFactoryStub()
+            ),
             customPlugins = customPlugins
         )
 

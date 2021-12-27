@@ -38,14 +38,19 @@ class DefaultArgumentsParserSpec {
     }
 
     @Test
-    fun `It fulfils ParserPlugin`() {
-        DefaultArgumentsParser(logger, pluginController) fulfils BananaContract.ParserPlugin::class
+    fun `It fulfils ParserPluginFactory`() {
+        DefaultArgumentsParser fulfils BananaContract.ParserPluginFactory::class
+    }
+
+    @Test
+    fun `Given createPlugin is called with a Logger and PluginController it creates a ParserPlugin`() {
+        DefaultArgumentsParser.createPlugin(logger, pluginController) fulfils BananaContract.ParserPlugin::class
     }
 
     @Test
     fun `Given parse is called it accepts Variables`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val variable = "1"
 
         val tokens = createTokens(
@@ -68,7 +73,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Functions`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val functionName = "name"
 
         val tokens = createTokens(
@@ -93,7 +98,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Functions with Identifiers`() {
         // Given
-        val parser = BananaParser(logger, pluginController)
+        val parser = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val functionNamePart1 = "WORD1"
         val functionNamePart2 = "WORD2"
 
@@ -123,7 +128,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts spaced Functions`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val functionName = "name"
 
         val tokens = createTokens(
@@ -153,7 +158,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Functions with a Argument`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val functionName = "name"
         val nestedArgumentId = "argument"
         val nestedArgument = TestArgumentNode()
@@ -196,7 +201,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Functions with multiple Arguments`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val functionName = "name"
         val nestedArgumentId1 = "argument1"
         val nestedArgumentId2 = "argument2"
@@ -244,7 +249,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Functions with multiple Arguments which contain additional spaces`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val functionName = "name"
         val nestedArgumentId1 = "argument1"
         val nestedArgumentId2 = "argument2"
@@ -297,7 +302,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Ascii`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "name"
 
         val tokens = createTokens(
@@ -323,7 +328,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts NonAscii`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "ηὕρηκα"
 
         val tokens = createTokens(
@@ -349,7 +354,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts URL`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "http://example.org"
 
         val tokens = createTokens(
@@ -375,7 +380,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Ingeger`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = fixture<Int>().toString()
 
         val tokens = createTokens(
@@ -401,7 +406,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Double`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = fixture<Double>().toString()
 
         val tokens = createTokens(
@@ -427,7 +432,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Escaped`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "&"
 
         val tokens = createTokens(
@@ -453,7 +458,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts FunctionStart`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "{{"
 
         val tokens = createTokens(
@@ -479,7 +484,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts LinkStart`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "[["
 
         val tokens = createTokens(
@@ -505,7 +510,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts LinkEnd`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "]]"
 
         val tokens = createTokens(
@@ -531,7 +536,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Literal`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "]"
 
         val tokens = createTokens(
@@ -557,7 +562,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it accepts Text separated by Whitespaces`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "abc"
 
         val tokens = createTokens(
@@ -585,7 +590,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse is called it ignores trailing Whitespaces`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "abc"
 
         val tokens = createTokens(
@@ -612,7 +617,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse it called it reads until Delimiter`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "abc"
 
         val tokens = createTokens(
@@ -639,7 +644,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse it called it reads until Delimiter while ignoring trailing Whitespaces`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "abc"
 
         val tokens = createTokens(
@@ -667,7 +672,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse it called it reads until FunctionEnd`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "abc"
 
         val tokens = createTokens(
@@ -694,7 +699,7 @@ class DefaultArgumentsParserSpec {
     @Test
     fun `Given parse it called it reads until FunctionEnd while ignoring trailing Whitespaces`() {
         // Given
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val value = "abc"
 
         val tokens = createTokens(
@@ -721,7 +726,7 @@ class DefaultArgumentsParserSpec {
 
     @Test
     fun `Given parse is called, it accepts mixed values`() {
-        val plugin = DefaultArgumentsParser(logger, pluginController)
+        val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
         val variable = "1"
         val string = "something"
         val functionName = "name"

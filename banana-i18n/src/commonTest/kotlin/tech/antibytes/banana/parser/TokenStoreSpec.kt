@@ -32,6 +32,13 @@ class TokenStoreSpec {
     }
 
     @Test
+    fun `It fulfils TokenStoreResetter`() {
+        val store: Any = TokenStore(tokenizer.also { it.next = { EOF } })
+
+        store fulfils BananaContract.TokenStoreResetter::class
+    }
+
+    @Test
     fun `It points to the current Token and its first follower`() {
         val tokens = listOf(
             BananaContract.Token(
@@ -606,5 +613,56 @@ class TokenStoreSpec {
         // Then
         store.currentToken mustBe tokens[3]
         store.lookahead mustBe tokens[4]
+    }
+
+    @Test
+    fun `Given reset is called, it resets the storage to current and lookahead `() {
+        val tokens = listOf(
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            BananaContract.Token(
+                BananaContract.TokenTypes.INTEGER,
+                fixture<Int>().toString(),
+                -1,
+                -1,
+            ),
+            EOF
+        )
+        val consumableTokens = tokens.toMutableList()
+
+        tokenizer.next = { consumableTokens.removeAt(0) }
+
+        val store = TokenStore(tokenizer)
+
+        // When
+        store.shift()
+        store.reset()
+
+        // Then
+        store.currentToken mustBe tokens[3]
+        store.lookahead mustBe tokens[4]
+        store.resolveValues().isEmpty() mustBe true
     }
 }

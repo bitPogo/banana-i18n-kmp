@@ -43,11 +43,15 @@ interface BananaContract {
         fun getInstance(reader: TokenizerContract.Reader): Tokenizer
     }
 
+    interface TokenStoreResetter {
+        val tokenizer: Tokenizer
+
+        fun reset()
+    }
+
     interface TokenStore {
         val currentToken: Token
         val lookahead: Token
-        val tokenizer: Tokenizer
-
         fun shift()
         fun resolveValues(): List<String>
         fun consume()
@@ -62,6 +66,13 @@ interface BananaContract {
 
     fun interface ParserPlugin {
         fun parse(tokenizer: TokenStore): Node
+    }
+
+    fun interface ParserPluginFactory {
+        fun createPlugin(
+            logger: Logger,
+            plugins: ParserPluginController,
+        ): ParserPlugin
     }
 
     interface TopLevelParser : ParserPlugin

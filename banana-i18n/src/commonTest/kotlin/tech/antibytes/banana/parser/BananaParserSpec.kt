@@ -90,6 +90,7 @@ class BananaParserSpec {
         val word3 = "ghi"
         val word4 = "lop"
         val word5 = "lop"
+        val word6 = "qrs"
 
         val tokens = createTokens(
             listOf(
@@ -113,7 +114,8 @@ class BananaParserSpec {
                 BananaContract.TokenTypes.VARIABLE to word4,
                 BananaContract.TokenTypes.LINK_END to "]]",
                 BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to word5
+                BananaContract.TokenTypes.ASCII_STRING to word5,
+                BananaContract.TokenTypes.VARIABLE to word6,
             )
         )
 
@@ -137,5 +139,6 @@ class BananaParserSpec {
             listOf(VariableNode(word4))
         )
         message.children[6] mustBe TextNode(listOf(" ", word5))
+        message.children[7] mustBe VariableNode(word6)
     }
 }

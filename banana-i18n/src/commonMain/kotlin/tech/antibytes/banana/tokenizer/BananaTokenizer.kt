@@ -9,7 +9,7 @@ package tech.antibytes.banana.tokenizer
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Token
 
-internal class BananaTokenizer private constructor(
+internal class BananaTokenizer(
     reader: TokenizerContract.Reader
 ) : BananaContract.Tokenizer, BananaFlexTokenizer(reader) {
     override fun setReader(reader: TokenizerContract.Reader) {
