@@ -8,7 +8,7 @@ package tech.antibytes.banana
 
 import tech.antibytes.banana.tokenizer.TokenizerContract
 
-internal interface BananaContract {
+interface BananaContract {
     enum class TokenTypes {
         DOUBLE,
         INTEGER,
@@ -56,14 +56,18 @@ internal interface BananaContract {
 
     interface Node
 
+    fun interface NodeFactory {
+        fun createNode(children: List<Node>): Node
+    }
+
     fun interface ParserPlugin {
         fun parse(tokenizer: TokenStore): Node
     }
 
     interface TopLevelParser : ParserPlugin
 
-    interface ParserController {
-        fun resolveParserPlugin(name: String)
+    interface ParserPluginController {
+        fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory>
     }
 
     enum class Tag {

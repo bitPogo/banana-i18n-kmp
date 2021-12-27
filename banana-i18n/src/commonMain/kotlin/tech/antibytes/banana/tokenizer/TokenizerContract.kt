@@ -6,7 +6,7 @@
 
 package tech.antibytes.banana.tokenizer
 
-internal interface TokenizerContract {
+interface TokenizerContract {
     interface Reader {
         @Throws(Exception::class)
         fun read(buffer: CharArray, offset: Int, limit: Int): Int
