@@ -81,7 +81,8 @@ internal class BananaParser(
             !tokenizer.currentToken.isEOF() &&
             !isFunction(tokenizer) &&
             !isLink(tokenizer) &&
-            !isFreeLink(tokenizer)
+            !isFreeLink(tokenizer) &&
+            !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())

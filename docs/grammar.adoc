@@ -77,6 +77,7 @@ The following points are up to discussion and part of the parser core.
 === Links
 * label extensions nor the redirect prefixes are not supported
 * free links without braces are not supported
+* links are not nestable in Functions by the default, since it can be error prone. However plugins can decide to unlock that.
 
 == Shared rules
 `<argument>`, `<rule>`, `<simpleRule>`, `<option>`, `<nestedRuleOrText>`, `<nestedText>`, `<exclusiveText>`, `<space>` and `<mandatorySpace>` are shared rules. That means each of those rules can be used in a parser component. (see PluralRule for example)

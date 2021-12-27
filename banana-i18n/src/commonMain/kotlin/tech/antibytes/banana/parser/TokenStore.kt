@@ -11,7 +11,7 @@ import tech.antibytes.banana.BananaContract.Companion.EOF
 
 internal class TokenStore(
     override val tokenizer: BananaContract.Tokenizer
-) : BananaContract.TokenStore {
+) : BananaContract.TokenStore, BananaContract.TokenStoreResetter {
     override val currentToken: BananaContract.Token
         get() = _currentToken
     override val lookahead: BananaContract.Token
@@ -19,7 +19,7 @@ internal class TokenStore(
 
     private var _currentToken: BananaContract.Token = tokenizer.next()
     private val tokenBuffer = mutableListOf(tokenizer.next())
-    private var stringBuffer: MutableList<String> = mutableListOf()
+    private val stringBuffer: MutableList<String> = mutableListOf()
 
     private fun next() {
         _currentToken = tokenBuffer.removeAt(0)
@@ -60,5 +60,12 @@ internal class TokenStore(
             k <= 0 -> _currentToken
             else -> tokenBuffer[idx]
         }
+    }
+
+    override fun reset() {
+        _currentToken = tokenizer.next()
+        tokenBuffer.clear()
+        tokenBuffer.add(tokenizer.next())
+        stringBuffer.clear()
     }
 }

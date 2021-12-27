@@ -9,7 +9,7 @@ package tech.antibytes.banana.parser
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CompoundNode
 
-internal class DefaultArgumentsParser(
+internal class DefaultArgumentsParser private constructor(
     logger: BananaContract.Logger,
     parserPluginController: BananaContract.ParserPluginController
 ) : BananaContract.ParserPlugin, SharedParserRules(logger, parserPluginController) {
@@ -30,4 +30,11 @@ internal class DefaultArgumentsParser(
     }
 
     override fun parse(tokenizer: BananaContract.TokenStore): BananaContract.Node = argument(tokenizer)
+
+    companion object : BananaContract.ParserPluginFactory {
+        override fun createPlugin(
+            logger: BananaContract.Logger,
+            plugins: BananaContract.ParserPluginController
+        ): BananaContract.ParserPlugin = DefaultArgumentsParser(logger, plugins)
+    }
 }

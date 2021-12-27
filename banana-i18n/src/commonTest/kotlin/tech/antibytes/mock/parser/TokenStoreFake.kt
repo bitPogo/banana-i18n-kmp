@@ -9,7 +9,6 @@ package tech.antibytes.mock.parser
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.util.test.MockContract
-import tech.antibytes.util.test.MockError
 
 internal class TokenStoreFake(
     private var _tokens: MutableList<BananaContract.Token> = mutableListOf(EOF, EOF),
@@ -30,9 +29,6 @@ internal class TokenStoreFake(
         get() = _currentToken
     override val lookahead: BananaContract.Token
         get() = _lookahead
-
-    override val tokenizer: BananaContract.Tokenizer
-        get() = tokenizerStub ?: throw MockError.MissingStub("Missing property tokenizerStub.")
 
     private var _currentToken: BananaContract.Token = tokens.removeAt(0)
     private var _lookahead: BananaContract.Token = tokens.removeAt(0)
