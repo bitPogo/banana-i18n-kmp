@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
@@ -32,7 +32,7 @@ class LinkInterpreterSpec {
 
     @Test
     fun `It fulfils ParameterizedInterpreterPlugin`() {
-        LinkInterpreter(concatenator, formatter) fulfils BananaContract.ParameterizedInterpreterPlugin::class
+        LinkInterpreter(concatenator, formatter) fulfils PublicApi.ParameterizedInterpreterPlugin::class
     }
 
     @Test
@@ -46,8 +46,8 @@ class LinkInterpreterSpec {
             )
         )
 
-        val capturedNodes: MutableList<BananaContract.Node> = mutableListOf()
-        var capturedController: BananaContract.InterpreterController? = null
+        val capturedNodes: MutableList<PublicApi.Node> = mutableListOf()
+        var capturedController: PublicApi.InterpreterController? = null
 
         concatenator.concatenate = { givenNodes, givenController ->
             capturedNodes.addAll(givenNodes)
@@ -75,8 +75,8 @@ class LinkInterpreterSpec {
             )
         )
 
-        var capturedNodes: List<BananaContract.Node> = emptyList()
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNodes: List<PublicApi.Node> = emptyList()
+        var capturedController: PublicApi.InterpreterController? = null
 
         concatenator.concatenate = { givenNodes, givenController ->
             capturedNodes = givenNodes

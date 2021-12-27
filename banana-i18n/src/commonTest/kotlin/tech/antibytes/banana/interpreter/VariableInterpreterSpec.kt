@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.util.test.fulfils
@@ -26,7 +26,7 @@ class VariableInterpreterSpec {
 
     @Test
     fun `It fulfils ParameterizedInterpreterPlugin`() {
-        VariableInterpreter(logger) fulfils BananaContract.ParameterizedInterpreterPlugin::class
+        VariableInterpreter(logger) fulfils PublicApi.ParameterizedInterpreterPlugin::class
     }
 
     @Test
@@ -62,7 +62,7 @@ class VariableInterpreterSpec {
         result mustBe "\$$id"
         logger.error.isEmpty() mustBe false
         logger.error[0] mustBe Pair(
-            BananaContract.Tag.INTERPRETER,
+            PublicApi.Tag.INTERPRETER,
             "Error: Unknown variable ($id)."
         )
     }

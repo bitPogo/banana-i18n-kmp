@@ -7,14 +7,15 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 
 internal class DefaultFunctionInterpreter(
-    private val logger: BananaContract.Logger
+    private val logger: PublicApi.Logger
 ) : BananaContract.InterpreterPlugin<FunctionNode> {
     override fun interpret(node: FunctionNode): String {
         logger.error(
-            BananaContract.Tag.INTERPRETER,
+            PublicApi.Tag.INTERPRETER,
             "Error: Unknown function ${node.id} in use."
         )
 

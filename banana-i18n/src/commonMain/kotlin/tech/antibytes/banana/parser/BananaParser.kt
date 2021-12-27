@@ -7,17 +7,18 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.Node
+import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.PublicApi.Node
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FreeLinkNode
 import tech.antibytes.banana.ast.CoreNode.LinkNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 
 internal class BananaParser(
-    logger: BananaContract.Logger,
-    parserPluginController: BananaContract.ParserPluginController
+    logger: PublicApi.Logger,
+    parserPluginController: PublicApi.ParserPluginController
 ) : BananaContract.TopLevelParser, SharedParserRules(logger, parserPluginController) {
-    private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
+    private fun isLink(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkStart() &&
             (
                 tokenizer.lookahead.isLinkText() ||
@@ -46,7 +47,7 @@ internal class BananaParser(
                 )
     }
 
-    private fun isFreeLink(tokenizer: BananaContract.TokenStore): Boolean {
+    private fun isFreeLink(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isFreeLinkStart() &&
             (
                 (tokenizer.lookahead.isUrl() || tokenizer.lookahead.isVariable()) ||
@@ -57,7 +58,7 @@ internal class BananaParser(
                 )
     }
 
-    private fun isLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
+    private fun isLinkEnd(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkEnd() ||
             (
                 tokenizer.currentToken.isSpace() &&
@@ -66,17 +67,17 @@ internal class BananaParser(
             isEOF(tokenizer)
     }
 
-    private fun isLinkEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
+    private fun isLinkEndOrDelimiter(tokenizer: PublicApi.TokenStore): Boolean {
         return isDelimiter(tokenizer) ||
             isLinkEnd(tokenizer)
     }
 
-    private fun isFreeLinkDisplay(tokenizer: BananaContract.TokenStore): Boolean {
+    private fun isFreeLinkDisplay(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isSpace() &&
             !tokenizer.lookahead.isFreeLinkEnd()
     }
 
-    private fun isFreeLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
+    private fun isFreeLinkEnd(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isFreeLinkEnd() ||
             (
                 tokenizer.currentToken.isSpace() &&
@@ -85,7 +86,7 @@ internal class BananaParser(
             isEOF(tokenizer)
     }
 
-    private fun text(tokenizer: BananaContract.TokenStore): Node {
+    private fun text(tokenizer: PublicApi.TokenStore): Node {
         shiftUntil(tokenizer) {
             !tokenizer.currentToken.isEOF() &&
                 !isFunction(tokenizer) &&
@@ -97,7 +98,7 @@ internal class BananaParser(
         return TextNode(tokenizer.resolveValues())
     }
 
-    private fun linkText(tokenizer: BananaContract.TokenStore): Node {
+    private fun linkText(tokenizer: PublicApi.TokenStore): Node {
         shiftUntil(tokenizer) {
             (tokenizer.currentToken.isLinkText() || tokenizer.currentToken.isSpace()) &&
                 !isLinkEndOrDelimiter(tokenizer)
@@ -108,7 +109,7 @@ internal class BananaParser(
         return TextNode(linkText)
     }
 
-    private fun linkTarget(tokenizer: BananaContract.TokenStore): List<Node> {
+    private fun linkTarget(tokenizer: PublicApi.TokenStore): List<Node> {
         val target = mutableListOf<Node>()
 
         while (!isLinkEndOrDelimiter(tokenizer)) {
@@ -124,7 +125,7 @@ internal class BananaParser(
         return target
     }
 
-    private fun displayText(tokenizer: BananaContract.TokenStore): Node {
+    private fun displayText(tokenizer: PublicApi.TokenStore): Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
                 !isLinkEnd(tokenizer) &&
@@ -134,7 +135,7 @@ internal class BananaParser(
         return TextNode(tokenizer.resolveValues())
     }
 
-    private fun linkDisplay(tokenizer: BananaContract.TokenStore): List<Node> {
+    private fun linkDisplay(tokenizer: PublicApi.TokenStore): List<Node> {
         val linkDisplay = mutableListOf<Node>()
 
         while (!isLinkEnd(tokenizer)) {
@@ -150,7 +151,7 @@ internal class BananaParser(
         return linkDisplay
     }
 
-    private fun link(tokenizer: BananaContract.TokenStore): Node {
+    private fun link(tokenizer: PublicApi.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
 
@@ -175,7 +176,7 @@ internal class BananaParser(
         return LinkNode(target, displayText)
     }
 
-    private fun displayFreeText(tokenizer: BananaContract.TokenStore): Node {
+    private fun displayFreeText(tokenizer: PublicApi.TokenStore): Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
                 !isFreeLinkEnd(tokenizer) &&
@@ -185,7 +186,7 @@ internal class BananaParser(
         return TextNode(tokenizer.resolveValues())
     }
 
-    private fun freeLinkDisplay(tokenizer: BananaContract.TokenStore): List<Node> {
+    private fun freeLinkDisplay(tokenizer: PublicApi.TokenStore): List<Node> {
         val linkDisplay = mutableListOf<Node>()
 
         while (!isFreeLinkEnd(tokenizer)) {
@@ -201,7 +202,7 @@ internal class BananaParser(
         return linkDisplay
     }
 
-    private fun freeLinkUrl(tokenizer: BananaContract.TokenStore): Node {
+    private fun freeLinkUrl(tokenizer: PublicApi.TokenStore): Node {
         return if (tokenizer.currentToken.isVariable()) {
             variable(tokenizer)
         } else {
@@ -211,7 +212,7 @@ internal class BananaParser(
         }
     }
 
-    private fun freeLink(tokenizer: BananaContract.TokenStore): Node {
+    private fun freeLink(tokenizer: PublicApi.TokenStore): Node {
         tokenizer.consume()
         space(tokenizer)
         val url = freeLinkUrl(tokenizer)
@@ -232,7 +233,7 @@ internal class BananaParser(
         return FreeLinkNode(url, linkDisplay)
     }
 
-    private fun message(tokenizer: BananaContract.TokenStore): List<Node> {
+    private fun message(tokenizer: PublicApi.TokenStore): List<Node> {
         val nodes: MutableList<Node> = mutableListOf()
 
         while (!tokenizer.currentToken.isEOF()) {
@@ -250,7 +251,7 @@ internal class BananaParser(
         return nodes
     }
 
-    override fun parse(tokenizer: BananaContract.TokenStore): Node {
+    override fun parse(tokenizer: PublicApi.TokenStore): Node {
         val tokens = if (tokenizer.currentToken.isEOF()) {
             emptyList()
         } else {

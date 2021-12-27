@@ -6,8 +6,8 @@
 
 package tech.antibytes.banana.interpreter
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 
-class DefaultTextInterceptor : BananaContract.TextInterceptor {
+class DefaultTextInterceptor : PublicApi.TextInterceptor {
     override fun intercept(chunk: String): String = chunk
 }

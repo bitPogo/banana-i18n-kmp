@@ -6,9 +6,9 @@
 
 package tech.antibytes.banana.interpreter
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 
-class XMLInterceptor : BananaContract.TextInterceptor {
+class XMLInterceptor : PublicApi.TextInterceptor {
     override fun intercept(chunk: String): String {
         return when (chunk) {
             "<" -> "&lt;"

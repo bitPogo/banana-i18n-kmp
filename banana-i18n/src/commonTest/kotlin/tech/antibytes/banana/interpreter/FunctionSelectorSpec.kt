@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
 import tech.antibytes.mock.interpreter.FunctionInterpreterStub
@@ -25,7 +25,7 @@ class FunctionSelectorSpec {
         FunctionSelector(
             FunctionInterpreterStub(),
             emptyMap()
-        ) fulfils BananaContract.ParameterizedInterpreterPlugin::class
+        ) fulfils PublicApi.ParameterizedInterpreterPlugin::class
     }
 
     @Test
@@ -49,8 +49,8 @@ class FunctionSelectorSpec {
     @Test
     fun `Given interpret is called with a FunctionNode it uses a given Plugin if the name matches`() {
         // Given
-        var capturedNode: BananaContract.Node? = null
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNode: PublicApi.Node? = null
+        var capturedController: PublicApi.InterpreterController? = null
 
         val controller = InterpreterControllerStub()
         val plugin = CustomFunctionInterpreterStub { givenNode, givenController ->

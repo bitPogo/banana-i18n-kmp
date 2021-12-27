@@ -9,6 +9,7 @@ package tech.antibytes.banana.parser
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.parser.TokenizerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -28,7 +29,7 @@ class TokenStoreSpec {
     fun `It fulfils TokenStore`() {
         val store: Any = TokenStore(tokenizer.also { it.next = { EOF } })
 
-        store fulfils BananaContract.TokenStore::class
+        store fulfils PublicApi.TokenStore::class
     }
 
     @Test
@@ -41,20 +42,20 @@ class TokenStoreSpec {
     @Test
     fun `It points to the current Token and its first follower`() {
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -74,20 +75,20 @@ class TokenStoreSpec {
     fun `Given consume is called, it sets a new lookahead and sets the old lookahead as currentToken`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -112,20 +113,20 @@ class TokenStoreSpec {
     fun `Given shift is called, it sets a new lookahead and sets the old lookahead as currentToken`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -164,20 +165,20 @@ class TokenStoreSpec {
     fun `Given shift is called and resolveValues afterwards, it shifts the values of the currentTokens returns the shifted values`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -204,32 +205,32 @@ class TokenStoreSpec {
     fun `Given shift is called and resolveValues afterwards, it clears the buffer on resolveValues`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -260,20 +261,20 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int, it returns EOF if no Token is available on the given position`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -297,20 +298,20 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int, it returns the Token if available on the given position`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -334,32 +335,32 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int, it returns the Token if available on the given position, while using the TokenBuffer`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -384,32 +385,32 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int, it returns the Token if available on the given position, while extending the TokenBuffer`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -434,8 +435,8 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int which is zero, it returns current Token`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -459,8 +460,8 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int which is negative, it returns current Token`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -484,8 +485,8 @@ class TokenStoreSpec {
     fun `Given lookahead is called with an Int which is one, it returns lookahead Token`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -509,32 +510,32 @@ class TokenStoreSpec {
     fun `Given is shift called, it reads from the token buffer until it is cleared`() {
         // Given
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -566,32 +567,32 @@ class TokenStoreSpec {
     @Test
     fun `Given consume is called, it reads from the token buffer until it is cleared`() {
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
@@ -618,32 +619,32 @@ class TokenStoreSpec {
     @Test
     fun `Given reset is called, it resets the storage to current and lookahead `() {
         val tokens = listOf(
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,
             ),
-            BananaContract.Token(
-                BananaContract.TokenTypes.INTEGER,
+            PublicApi.Token(
+                PublicApi.TokenTypes.INTEGER,
                 fixture<Int>().toString(),
                 -1,
                 -1,

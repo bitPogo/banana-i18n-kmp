@@ -7,12 +7,13 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.InterpreterController
+import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.PublicApi.InterpreterController
 import tech.antibytes.banana.ast.CoreNode
 
 internal class CompoundInterpreter(
     private val concatenator: BananaContract.NodeConcatenator
-) : BananaContract.ParameterizedInterpreterPlugin<CoreNode.CompoundNode, InterpreterController> {
+) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode, InterpreterController> {
     override fun interpret(
         node: CoreNode.CompoundNode,
         parameter: InterpreterController

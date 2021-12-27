@@ -8,6 +8,7 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
@@ -43,7 +44,7 @@ class DefaultFunctionInterpreterSpec {
         // Then
         result mustBe "{{$functionName}}"
         logger.error[0] mustBe Pair(
-            BananaContract.Tag.INTERPRETER,
+            PublicApi.Tag.INTERPRETER,
             "Error: Unknown function $functionName in use."
         )
     }

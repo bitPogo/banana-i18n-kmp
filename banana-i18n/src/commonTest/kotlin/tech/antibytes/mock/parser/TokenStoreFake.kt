@@ -8,16 +8,17 @@ package tech.antibytes.mock.parser
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 
 internal class TokenStoreFake(
-    private var _tokens: MutableList<BananaContract.Token> = mutableListOf(EOF, EOF),
+    private var _tokens: MutableList<PublicApi.Token> = mutableListOf(EOF, EOF),
     var tokenizerStub: BananaContract.Tokenizer? = null
-) : BananaContract.TokenStore, MockContract.Mock {
-    val capturedShiftedTokens = mutableListOf<BananaContract.Token>()
+) : PublicApi.TokenStore, MockContract.Mock {
+    val capturedShiftedTokens = mutableListOf<PublicApi.Token>()
     private val stringBuffer: MutableList<String> = mutableListOf()
 
-    var tokens: MutableList<BananaContract.Token>
+    var tokens: MutableList<PublicApi.Token>
         get() = _tokens
         set(newValues) {
             _tokens = newValues
@@ -25,13 +26,13 @@ internal class TokenStoreFake(
             _lookahead = tokens.removeFirstOrNull() ?: EOF
         }
 
-    override val currentToken: BananaContract.Token
+    override val currentToken: PublicApi.Token
         get() = _currentToken
-    override val lookahead: BananaContract.Token
+    override val lookahead: PublicApi.Token
         get() = _lookahead
 
-    private var _currentToken: BananaContract.Token = tokens.removeAt(0)
-    private var _lookahead: BananaContract.Token = tokens.removeAt(0)
+    private var _currentToken: PublicApi.Token = tokens.removeAt(0)
+    private var _lookahead: PublicApi.Token = tokens.removeAt(0)
 
     private fun nextToken() {
         _currentToken = _lookahead
@@ -52,7 +53,7 @@ internal class TokenStoreFake(
 
     override fun consume() = nextToken()
 
-    override fun lookahead(k: Int): BananaContract.Token {
+    override fun lookahead(k: Int): PublicApi.Token {
         return if (k > 1) {
             tokens.getOrElse(k - 2) { EOF }
         } else {

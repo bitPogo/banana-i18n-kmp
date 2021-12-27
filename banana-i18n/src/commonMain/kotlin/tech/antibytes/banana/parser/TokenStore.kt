@@ -8,16 +8,17 @@ package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
+import tech.antibytes.banana.PublicApi
 
 internal class TokenStore(
     override val tokenizer: BananaContract.Tokenizer
-) : BananaContract.TokenStore, BananaContract.TokenStoreResetter {
-    override val currentToken: BananaContract.Token
+) : PublicApi.TokenStore, BananaContract.TokenStoreResetter {
+    override val currentToken: PublicApi.Token
         get() = _currentToken
-    override val lookahead: BananaContract.Token
+    override val lookahead: PublicApi.Token
         get() = tokenBuffer[0]
 
-    private var _currentToken: BananaContract.Token = tokenizer.next()
+    private var _currentToken: PublicApi.Token = tokenizer.next()
     private val tokenBuffer = mutableListOf(tokenizer.next())
     private val stringBuffer: MutableList<String> = mutableListOf()
 
@@ -51,7 +52,7 @@ internal class TokenStore(
         }
     }
 
-    override fun lookahead(k: Int): BananaContract.Token {
+    override fun lookahead(k: Int): PublicApi.Token {
         val idx = k - 1
         fillTokenBuffer(k)
 

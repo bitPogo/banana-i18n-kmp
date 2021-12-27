@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
@@ -32,7 +32,7 @@ class FreeLinkInterpreterSpec {
 
     @Test
     fun `It fulfils ParameterizedInterpreterPlugin`() {
-        FreeLinkInterpreter(concatenator, formatter) fulfils BananaContract.ParameterizedInterpreterPlugin::class
+        FreeLinkInterpreter(concatenator, formatter) fulfils PublicApi.ParameterizedInterpreterPlugin::class
     }
 
     @Test
@@ -42,7 +42,7 @@ class FreeLinkInterpreterSpec {
             url = CoreNode.TextNode(fixture())
         )
 
-        var capturedNode: BananaContract.Node? = null
+        var capturedNode: PublicApi.Node? = null
 
         controller.interpret = { givenNode ->
             capturedNode = givenNode
@@ -68,8 +68,8 @@ class FreeLinkInterpreterSpec {
             )
         )
 
-        var capturedNodes: List<BananaContract.Node> = emptyList()
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNodes: List<PublicApi.Node> = emptyList()
+        var capturedController: PublicApi.InterpreterController? = null
 
         controller.interpret = { _ -> "" }
         concatenator.concatenate = { givenNodes, givenController ->

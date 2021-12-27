@@ -7,11 +7,12 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 
 internal class NodeConcatenator : BananaContract.NodeConcatenator {
     override fun concatenate(
-        nodes: List<BananaContract.Node>,
-        controller: BananaContract.InterpreterController
+        nodes: List<PublicApi.Node>,
+        controller: PublicApi.InterpreterController
     ): String {
         val output = StringBuilder(nodes.size)
 

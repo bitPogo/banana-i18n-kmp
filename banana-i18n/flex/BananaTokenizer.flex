@@ -5,9 +5,8 @@
  */
 package tech.antibytes.banana.tokenizer;
 
-import tech.antibytes.banana.BananaRuntimeError;
-import tech.antibytes.banana.BananaContract.Token;
-import tech.antibytes.banana.BananaContract.TokenTypes;
+import tech.antibytes.banana.PublicApi.Token;
+import tech.antibytes.banana.PublicApi.TokenTypes;
 
 %%
 

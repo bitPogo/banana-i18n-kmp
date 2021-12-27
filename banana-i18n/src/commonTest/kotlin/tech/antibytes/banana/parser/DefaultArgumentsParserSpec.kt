@@ -7,7 +7,7 @@
 package tech.antibytes.banana.parser
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
@@ -39,12 +39,12 @@ class DefaultArgumentsParserSpec {
 
     @Test
     fun `It fulfils ParserPluginFactory`() {
-        DefaultArgumentsParser fulfils BananaContract.ParserPluginFactory::class
+        DefaultArgumentsParser fulfils PublicApi.ParserPluginFactory::class
     }
 
     @Test
     fun `Given createPlugin is called with a Logger and PluginController it creates a ParserPlugin`() {
-        DefaultArgumentsParser.createPlugin(logger, pluginController) fulfils BananaContract.ParserPlugin::class
+        DefaultArgumentsParser.createPlugin(logger, pluginController) fulfils PublicApi.ParserPlugin::class
     }
 
     @Test
@@ -55,7 +55,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.VARIABLE to variable,
+                PublicApi.TokenTypes.VARIABLE to variable,
             )
         )
 
@@ -78,9 +78,9 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to functionName,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to functionName,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -104,11 +104,11 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to functionNamePart1,
-                BananaContract.TokenTypes.LITERAL to "_",
-                BananaContract.TokenTypes.ASCII_STRING to functionNamePart2,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to functionNamePart1,
+                PublicApi.TokenTypes.LITERAL to "_",
+                PublicApi.TokenTypes.ASCII_STRING to functionNamePart2,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -121,8 +121,8 @@ class DefaultArgumentsParserSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FunctionNode("${functionNamePart1}_$functionNamePart2")
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -133,11 +133,11 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to functionName,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to functionName,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -151,8 +151,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe FunctionNode(functionName)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -175,11 +175,11 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to functionName,
-                BananaContract.TokenTypes.LITERAL to ":",
-                BananaContract.TokenTypes.ASCII_STRING to nestedArgumentId,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to functionName,
+                PublicApi.TokenTypes.LITERAL to ":",
+                PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -194,8 +194,8 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe listOf(nestedArgument)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -205,7 +205,7 @@ class DefaultArgumentsParserSpec {
         val functionName = "name"
         val nestedArgumentId1 = "argument1"
         val nestedArgumentId2 = "argument2"
-        val nestedArguments = mutableListOf<BananaContract.Node>()
+        val nestedArguments = mutableListOf<PublicApi.Node>()
 
         val nestedPlugin = ParserPluginStub { tokenizer ->
             if (tokenizer.currentToken.value != nestedArgumentId1 && tokenizer.currentToken.value != nestedArgumentId2) {
@@ -221,13 +221,13 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to functionName,
-                BananaContract.TokenTypes.LITERAL to ":",
-                BananaContract.TokenTypes.ASCII_STRING to nestedArgumentId1,
-                BananaContract.TokenTypes.DELIMITER to "|",
-                BananaContract.TokenTypes.ASCII_STRING to nestedArgumentId2,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to functionName,
+                PublicApi.TokenTypes.LITERAL to ":",
+                PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId1,
+                PublicApi.TokenTypes.DELIMITER to "|",
+                PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId2,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -242,8 +242,8 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -253,7 +253,7 @@ class DefaultArgumentsParserSpec {
         val functionName = "name"
         val nestedArgumentId1 = "argument1"
         val nestedArgumentId2 = "argument2"
-        val nestedArguments = mutableListOf<BananaContract.Node>()
+        val nestedArguments = mutableListOf<PublicApi.Node>()
 
         val nestedPlugin = ParserPluginStub { tokenizer ->
             if (tokenizer.currentToken.value != nestedArgumentId1 && tokenizer.currentToken.value != nestedArgumentId2) {
@@ -269,18 +269,18 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to functionName,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to ":",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to nestedArgumentId1,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.DELIMITER to "|",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to nestedArgumentId2,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to functionName,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to ":",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId1,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.DELIMITER to "|",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId2,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -295,8 +295,8 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -307,7 +307,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value
+                PublicApi.TokenTypes.ASCII_STRING to value
             )
         )
 
@@ -321,8 +321,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -333,7 +333,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.NON_ASCII_STRING to value
+                PublicApi.TokenTypes.NON_ASCII_STRING to value
             )
         )
 
@@ -347,8 +347,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -359,7 +359,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.URL to value
+                PublicApi.TokenTypes.URL to value
             )
         )
 
@@ -373,8 +373,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -385,7 +385,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.INTEGER to value
+                PublicApi.TokenTypes.INTEGER to value
             )
         )
 
@@ -399,8 +399,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -411,7 +411,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.DOUBLE to value
+                PublicApi.TokenTypes.DOUBLE to value
             )
         )
 
@@ -425,8 +425,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -437,7 +437,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ESCAPED to value
+                PublicApi.TokenTypes.ESCAPED to value
             )
         )
 
@@ -451,8 +451,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -463,7 +463,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to value
+                PublicApi.TokenTypes.FUNCTION_START to value
             )
         )
 
@@ -477,8 +477,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -489,7 +489,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LINK_START to value
+                PublicApi.TokenTypes.LINK_START to value
             )
         )
 
@@ -503,8 +503,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -515,7 +515,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LINK_END to value
+                PublicApi.TokenTypes.LINK_END to value
             )
         )
 
@@ -529,8 +529,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -541,7 +541,7 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to value
+                PublicApi.TokenTypes.LITERAL to value
             )
         )
 
@@ -555,8 +555,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -567,9 +567,9 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to value
+                PublicApi.TokenTypes.ASCII_STRING to value,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to value
             )
         )
 
@@ -583,8 +583,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value, " ", value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -595,8 +595,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value,
-                BananaContract.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to value,
+                PublicApi.TokenTypes.WHITESPACE to " ",
             )
         )
 
@@ -610,8 +610,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -622,8 +622,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value,
-                BananaContract.TokenTypes.DELIMITER to "|",
+                PublicApi.TokenTypes.ASCII_STRING to value,
+                PublicApi.TokenTypes.DELIMITER to "|",
             )
         )
 
@@ -637,8 +637,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -649,9 +649,9 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.DELIMITER to "|",
+                PublicApi.TokenTypes.ASCII_STRING to value,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.DELIMITER to "|",
             )
         )
 
@@ -665,8 +665,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -677,8 +677,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.ASCII_STRING to value,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -692,8 +692,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -704,9 +704,9 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to value,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.ASCII_STRING to value,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -720,8 +720,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -733,13 +733,13 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to string,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.VARIABLE to variable,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to functionName,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.ASCII_STRING to string,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.VARIABLE to variable,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to functionName,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
             )
         )
 
@@ -756,7 +756,7 @@ class DefaultArgumentsParserSpec {
         argument.children[2] mustBe TextNode(listOf(" "))
         argument.children[3] mustBe FunctionNode(functionName)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 }

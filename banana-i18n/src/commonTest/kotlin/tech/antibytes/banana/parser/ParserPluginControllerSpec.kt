@@ -6,7 +6,7 @@
 
 package tech.antibytes.banana.parser
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginStub
@@ -25,7 +25,7 @@ class ParserPluginControllerSpec {
                 ParserPluginStub,
                 NodeFactoryStub()
             )
-        ) fulfils BananaContract.ParserPluginController::class
+        ) fulfils PublicApi.ParserPluginController::class
     }
 
     @Test

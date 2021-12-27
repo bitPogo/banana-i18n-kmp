@@ -7,7 +7,7 @@
 package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.Token
+import tech.antibytes.banana.PublicApi.Token
 
 internal class BananaTokenizer(
     reader: TokenizerContract.Reader

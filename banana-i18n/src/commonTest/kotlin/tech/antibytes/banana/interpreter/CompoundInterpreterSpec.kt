@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
@@ -20,7 +20,7 @@ class CompoundInterpreterSpec {
 
     @Test
     fun `It fulfils ParameterizedInterpreterPlugin`() {
-        CompoundInterpreter(NodeConcatenatorStub()) fulfils BananaContract.ParameterizedInterpreterPlugin::class
+        CompoundInterpreter(NodeConcatenatorStub()) fulfils PublicApi.ParameterizedInterpreterPlugin::class
     }
 
     @Test
@@ -38,8 +38,8 @@ class CompoundInterpreterSpec {
         )
 
         val expected: String = fixture()
-        var capturedNodes: List<BananaContract.Node> = emptyList()
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNodes: List<PublicApi.Node> = emptyList()
+        var capturedController: PublicApi.InterpreterController? = null
 
         concatenator.concatenate = { givenNodes, givenController ->
             capturedNodes = givenNodes

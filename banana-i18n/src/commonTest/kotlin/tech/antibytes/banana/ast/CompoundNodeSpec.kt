@@ -6,7 +6,7 @@
 
 package tech.antibytes.banana.ast
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.util.test.fulfils
@@ -16,7 +16,7 @@ import kotlin.test.Test
 class CompoundNodeSpec {
     @Test
     fun `It fulfils ArgumentsNodeFactory`() {
-        CompoundNode fulfils BananaContract.NodeFactory::class
+        CompoundNode fulfils PublicApi.NodeFactory::class
     }
 
     @Test
