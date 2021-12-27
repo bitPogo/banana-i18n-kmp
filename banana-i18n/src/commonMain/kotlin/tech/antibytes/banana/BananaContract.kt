@@ -81,6 +81,14 @@ interface BananaContract {
         fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory>
     }
 
+    interface InterpreterPlugin<T : Node> {
+        fun interpret(Node: T): String
+    }
+
+    fun interface TextInterceptor {
+        fun intercept(chunk: String): String
+    }
+
     enum class Tag {
         PARSER
     }
