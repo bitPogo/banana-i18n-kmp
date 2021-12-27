@@ -197,7 +197,7 @@ internal abstract class BananaFlexTokenizer(
         zzEOFDone = false
         yyResetPosition()
         zzLexicalState = YYINITIAL
-        if (zzBuffer.size > ZZ_BUFFERSIZE) {
+        if (zzBuffer.size < ZZ_BUFFERSIZE) {
             zzBuffer = CharArray(ZZ_BUFFERSIZE)
         }
     }
