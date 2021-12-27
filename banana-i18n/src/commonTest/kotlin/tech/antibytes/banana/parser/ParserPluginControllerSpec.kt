@@ -57,11 +57,11 @@ class ParserPluginControllerSpec {
 
         val controller = ParserPluginController(
             logger,
-            defaultParserPlugin = Pair(
+            defaultPlugin = Pair(
                 ParserPluginStub,
                 NodeFactoryStub()
             ),
-            customPlugins = customPlugins
+            registeredPlugins = customPlugins
         )
 
         // When

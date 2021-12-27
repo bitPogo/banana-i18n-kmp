@@ -6,6 +6,7 @@
 
 package tech.antibytes.banana
 
+import tech.antibytes.banana.ast.TextNode
 import tech.antibytes.banana.tokenizer.TokenizerContract
 
 interface BananaContract {
@@ -82,7 +83,7 @@ interface BananaContract {
     }
 
     interface InterpreterPlugin<T : Node> {
-        fun interpret(Node: T): String
+        fun interpret(node: T): String
     }
 
     fun interface TextInterceptor {
@@ -90,7 +91,8 @@ interface BananaContract {
     }
 
     enum class Tag {
-        PARSER
+        PARSER,
+        INTERPRETER
     }
 
     interface Logger {
