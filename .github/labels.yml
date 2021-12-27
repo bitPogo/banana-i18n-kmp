@@ -72,6 +72,10 @@
   description: The core Parser of Banana-i18n-kmp
   color: f21d32
 
+- name: interpreter
+  description: The core Interpreter of Banana-i18n-kmp
+  color: f21d32
+
 # Sample Apps
 - name: sample-android
   description: Sample App Android

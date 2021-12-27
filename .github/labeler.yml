@@ -29,6 +29,9 @@ tokenizer:
 parser:
   - banana-i18n/**/parser/*
 
+interpreter:
+  - banana-i18n/**/interpreter/*
+
 # Sample Apps
 sample-android:
   - sample-android/**/*
