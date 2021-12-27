@@ -6,7 +6,6 @@
 
 package tech.antibytes.integration
 
-import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.CompoundNode
 import tech.antibytes.banana.ast.FunctionNode
 import tech.antibytes.banana.ast.LinkNode
@@ -154,7 +153,7 @@ class BananaFrontendSpec {
             logger,
             ParserPluginController(
                 logger,
-                defaultParserPlugin = Pair(
+                defaultPlugin = Pair(
                     DefaultArgumentsParser,
                     CompoundNode
                 )

@@ -12,13 +12,13 @@ import tech.antibytes.banana.BananaContract.ParserPlugin
 
 internal class ParserPluginController(
     logger: BananaContract.Logger,
-    defaultParserPlugin: Pair<BananaContract.ParserPluginFactory, NodeFactory>,
-    customPlugins: Map<String, Pair<ParserPlugin, NodeFactory>> = emptyMap()
+    defaultPlugin: Pair<BananaContract.ParserPluginFactory, NodeFactory>,
+    registeredPlugins: Map<String, Pair<ParserPlugin, NodeFactory>> = emptyMap()
 ) : BananaContract.ParserPluginController {
-    private val plugins = customPlugins.withDefault {
+    private val plugins = registeredPlugins.withDefault {
         Pair(
-            defaultParserPlugin.first.createPlugin(logger, this),
-            defaultParserPlugin.second
+            defaultPlugin.first.createPlugin(logger, this),
+            defaultPlugin.second
         )
     }
 
