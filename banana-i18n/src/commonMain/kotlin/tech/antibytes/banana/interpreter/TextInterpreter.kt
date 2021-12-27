@@ -12,8 +12,8 @@ import tech.antibytes.banana.ast.TextNode
 internal class TextInterpreter(
     private val textInterceptor: BananaContract.TextInterceptor
 ) : BananaContract.InterpreterPlugin<TextNode> {
-    override fun interpret(Node: TextNode): String {
-        return Node.chunks
+    override fun interpret(node: TextNode): String {
+        return node.chunks
             .map { chunk -> textInterceptor.intercept(chunk) }
             .joinToString("")
     }
