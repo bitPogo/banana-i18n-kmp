@@ -8,11 +8,11 @@ package tech.antibytes.banana.parser
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.FunctionNode
-import tech.antibytes.banana.ast.LinkNode
-import tech.antibytes.banana.ast.TextNode
-import tech.antibytes.banana.ast.VariableNode
+import tech.antibytes.banana.ast.InternalNodes.CompoundNode
+import tech.antibytes.banana.ast.InternalNodes.FunctionNode
+import tech.antibytes.banana.ast.InternalNodes.LinkNode
+import tech.antibytes.banana.ast.InternalNodes.TextNode
+import tech.antibytes.banana.ast.InternalNodes.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
