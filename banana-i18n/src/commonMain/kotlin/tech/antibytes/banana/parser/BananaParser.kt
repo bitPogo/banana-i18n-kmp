@@ -8,10 +8,10 @@ package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Node
-import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.LinkNode
-import tech.antibytes.banana.ast.TextNode
-import tech.antibytes.banana.ast.FreeLinkNode
+import tech.antibytes.banana.ast.InternalNodes.CompoundNode
+import tech.antibytes.banana.ast.InternalNodes.LinkNode
+import tech.antibytes.banana.ast.InternalNodes.TextNode
+import tech.antibytes.banana.ast.InternalNodes.FreeLinkNode
 
 internal class BananaParser(
     logger: BananaContract.Logger,
