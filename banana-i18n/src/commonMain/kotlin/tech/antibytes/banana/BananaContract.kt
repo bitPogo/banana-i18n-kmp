@@ -82,8 +82,14 @@ interface BananaContract {
         fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory>
     }
 
-    interface InterpreterPlugin<T : Node> {
+    interface Interpreter<T : Node>
+
+    interface InterpreterPlugin<T : Node> : Interpreter<T> {
         fun interpret(node: T): String
+    }
+
+    interface ParameterizedInterpreterPlugin<T : Node, P : Any>: Interpreter<T> {
+        fun interpret(node: T, parameter: P): String
     }
 
     fun interface TextInterceptor {
