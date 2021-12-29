@@ -24,7 +24,8 @@ class InterpreterControllerSpec {
             emptyMap(),
             ParameterizedInterpreterPluginStub(),
             InterpreterPluginStub(),
-            ParameterizedInterpreterPluginStub()
+            ParameterizedInterpreterPluginStub(),
+            compoundInterpreter = ParameterizedInterpreterPluginStub()
         ) fulfils BananaContract.InterpreterController::class
     }
 
@@ -46,7 +47,8 @@ class InterpreterControllerSpec {
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = nestedInterpreter,
-            functionSelector = ParameterizedInterpreterPluginStub()
+            functionSelector = ParameterizedInterpreterPluginStub(),
+            compoundInterpreter = ParameterizedInterpreterPluginStub()
         ).interpret(node)
 
         // Then
@@ -75,7 +77,8 @@ class InterpreterControllerSpec {
             parameter = parameter,
             variableInterpreter = nestedInterpreter,
             textInterpreter = InterpreterPluginStub(),
-            functionSelector = ParameterizedInterpreterPluginStub()
+            functionSelector = ParameterizedInterpreterPluginStub(),
+            compoundInterpreter = ParameterizedInterpreterPluginStub()
         ).interpret(node)
 
         // Then
@@ -94,10 +97,44 @@ class InterpreterControllerSpec {
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = InterpreterPluginStub(),
             functionSelector = nestedInterpreter,
+            compoundInterpreter = ParameterizedInterpreterPluginStub()
         )
 
         val expected: String = fixture()
         val node = CoreNodes.FunctionNode(fixture())
+        var capturedNode: BananaContract.Node? = null
+        var capturedController: BananaContract.InterpreterController? = null
+
+        nestedInterpreter.interpret = { givenNode, givenParameter ->
+            capturedController = givenParameter
+            capturedNode = givenNode
+            expected
+        }
+
+        // When
+        val actual = controller.interpret(node)
+
+        // Then
+        actual mustBe expected
+        capturedNode!! mustBe node
+        capturedController!! mustBe controller
+    }
+
+    @Test
+    fun `Given interpret is called with a CompoundNode it delegates it to the CompoundInterpreter`() {
+        // Given
+        val nestedInterpreter =
+            ParameterizedInterpreterPluginStub<CoreNodes.CompoundNode, BananaContract.InterpreterController>()
+        val controller = InterpreterController(
+            parameter = emptyMap(),
+            variableInterpreter = ParameterizedInterpreterPluginStub(),
+            textInterpreter = InterpreterPluginStub(),
+            functionSelector = ParameterizedInterpreterPluginStub(),
+            compoundInterpreter = nestedInterpreter
+        )
+
+        val expected: String = fixture()
+        val node = CoreNodes.CompoundNode(emptyList())
         var capturedNode: BananaContract.Node? = null
         var capturedController: BananaContract.InterpreterController? = null
 
