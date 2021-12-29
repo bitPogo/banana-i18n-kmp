@@ -9,7 +9,9 @@ package tech.antibytes.banana.interpreter
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CoreNodes.FunctionNode
+import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
 import tech.antibytes.mock.interpreter.FunctionInterpreterStub
+import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import tech.antibytes.util.test.sameAs
@@ -20,33 +22,41 @@ class FunctionSelectorSpec {
 
     @Test
     fun `It fulfils InterpreterPlugin`() {
-        FunctionSelector(FunctionInterpreterStub(), emptyMap()) fulfils BananaContract.InterpreterPlugin::class
+        FunctionSelector(
+            FunctionInterpreterStub(),
+            emptyMap()
+        ) fulfils BananaContract.ParameterizedInterpreterPlugin::class
     }
 
     @Test
     fun `Given interpret is called with a FunctionNode it uses the given DefaultInterpreter if the name does not match`() {
         // Given
-        val captured = mutableListOf<FunctionNode>()
-        val default = FunctionInterpreterStub { node ->
-            node.id.also { captured.add(node) }
+        var capturedNode: FunctionNode? = null
+        val default = FunctionInterpreterStub { givenNode ->
+            givenNode.id.also { capturedNode = givenNode }
         }
         val functionName: String = fixture()
         val node = FunctionNode(functionName)
 
         // When
-        FunctionSelector(default, emptyMap()).interpret(node)
+        val actual = FunctionSelector(default, emptyMap()).interpret(node, InterpreterControllerStub())
 
         // Then
-        captured.isEmpty() mustBe false
-        captured[0] sameAs node
+        actual mustBe node.id
+        capturedNode!! sameAs node
     }
 
     @Test
     fun `Given interpret is called with a FunctionNode it uses a given Plugin if the name matches`() {
         // Given
-        val captured = mutableListOf<FunctionNode>()
-        val plugin = FunctionInterpreterStub { node ->
-            node.id.also { captured.add(node) }
+        var capturedNode: BananaContract.Node? = null
+        var capturedController: BananaContract.InterpreterController? = null
+
+        val controller = InterpreterControllerStub()
+        val plugin = CustomFunctionInterpreterStub { givenNode, givenController ->
+            capturedNode = givenNode
+            capturedController = givenController
+            givenNode.id
         }
         val functionName: String = fixture()
         val node = FunctionNode(functionName)
@@ -56,13 +66,14 @@ class FunctionSelectorSpec {
         )
 
         // When
-        FunctionSelector(
+        val actual = FunctionSelector(
             FunctionInterpreterStub(),
             plugins
-        ).interpret(node)
+        ).interpret(node, controller)
 
         // Then
-        captured.isEmpty() mustBe false
-        captured[0] sameAs node
+        actual mustBe node.id
+        capturedNode!! sameAs node
+        capturedController!! sameAs controller
     }
 }
