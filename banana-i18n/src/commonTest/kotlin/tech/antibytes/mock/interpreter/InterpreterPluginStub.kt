@@ -14,7 +14,7 @@ class InterpreterPluginStub<T : BananaContract.Node>(
     var interpret: ((node: T) -> String)? = null
 ) : BananaContract.InterpreterPlugin<T>, MockContract.Mock {
     override fun interpret(node: T): String {
-        return interpret?.invoke(node) ?: throw MockError.MissingStub("No nested interpreter were given!")
+        return interpret?.invoke(node) ?: throw MockError.MissingStub("No interpreter was given!")
     }
 
     override fun clear() {
