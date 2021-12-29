@@ -91,6 +91,10 @@ interface BananaContract {
         fun interpret(node: T, parameter: P): String
     }
 
+    interface NodeConcatenator {
+        fun concatenate(nodes: List<Node>, controller: InterpreterController): String
+    }
+
     interface TextInterceptor {
         fun intercept(chunk: String): String
     }
