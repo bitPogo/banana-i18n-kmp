@@ -10,9 +10,9 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
-class InterpreterPluginStub<T: BananaContract.Node>(
+class InterpreterPluginStub<T : BananaContract.Node>(
     var interpret: ((node: T) -> String)? = null
-): BananaContract.InterpreterPlugin<T>, MockContract.Mock {
+) : BananaContract.InterpreterPlugin<T>, MockContract.Mock {
     override fun interpret(node: T): String {
         return interpret?.invoke(node) ?: throw MockError.MissingStub("No nested interpreter were given!")
     }

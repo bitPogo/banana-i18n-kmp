@@ -11,7 +11,7 @@ import tech.antibytes.util.test.MockContract
 
 internal class TextInterceptorSpy(
     var intercept: (String) -> String = { chunk -> chunk },
-): BananaContract.TextInterceptor, MockContract.Mock {
+) : BananaContract.TextInterceptor, MockContract.Mock {
 
     override fun intercept(chunk: String): String {
         return intercept.invoke(chunk)

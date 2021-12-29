@@ -6,9 +6,9 @@
 
 package tech.antibytes.banana.ast
 
+import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.InternalNodes.CompoundNode
 import tech.antibytes.banana.ast.InternalNodes.TextNode
-import tech.antibytes.banana.BananaContract
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
