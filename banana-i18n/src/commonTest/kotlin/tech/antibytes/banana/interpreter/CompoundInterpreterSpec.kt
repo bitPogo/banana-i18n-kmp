@@ -10,6 +10,7 @@ import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CoreNodes
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
+import tech.antibytes.mock.interpreter.NodeConcatenatorStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -19,14 +20,14 @@ class CompoundInterpreterSpec {
 
     @Test
     fun `It fulfils ParameterizedInterpreterPlugin`() {
-        CompoundInterpreter() fulfils BananaContract.ParameterizedInterpreterPlugin::class
+        CompoundInterpreter(NodeConcatenatorStub()) fulfils BananaContract.ParameterizedInterpreterPlugin::class
     }
 
     @Test
-    fun `Given interpret is called with a CompoundNode and a InterpreterController, it delegates the Children to the Controller`() {
+    fun `Given interpret is called with a CompoundNode and a InterpreterController, it delegates the Children and the Controller to Concatrinator and returns its output`() {
         // Given
         val controller = InterpreterControllerStub()
-        val capturedNodes: MutableList<BananaContract.Node> = mutableListOf()
+        val concatenator = NodeConcatenatorStub()
 
         val node = CoreNodes.CompoundNode(
             listOf(
@@ -36,44 +37,22 @@ class CompoundInterpreterSpec {
             )
         )
 
-        controller.interpret = { givenNode ->
-            capturedNodes.add(givenNode)
-            fixture()
+        val expected: String = fixture()
+        var capturedNodes: List<BananaContract.Node> = emptyList()
+        var capturedController: BananaContract.InterpreterController? = null
+
+        concatenator.concatenate = { givenNodes, givenController ->
+            capturedNodes = givenNodes
+            capturedController = givenController
+            expected
         }
 
         // When
-        CompoundInterpreter().interpret(node, controller)
+        val actual = CompoundInterpreter(concatenator).interpret(node, controller)
 
         // Then
         capturedNodes mustBe node.children
-    }
-
-    @Test
-    fun `Given interpret is called with a CompoundNode and a InterpreterController, it concartinates the Controllers Output`() {
-        // Given
-        val controller = InterpreterControllerStub()
-        val output: MutableList<String> = mutableListOf(
-            fixture(),
-            fixture(),
-            fixture()
-        )
-
-        val expected = output.joinToString("")
-
-        val node = CoreNodes.CompoundNode(
-            listOf(
-                CoreNodes.TextNode(fixture()),
-                CoreNodes.VariableNode(fixture()),
-                CoreNodes.FunctionNode(fixture())
-            )
-        )
-
-        controller.interpret = { output.removeFirst() }
-
-        // When
-        val actual = CompoundInterpreter().interpret(node, controller)
-
-        // Then
+        capturedController!! mustBe controller
         actual mustBe expected
     }
 }
