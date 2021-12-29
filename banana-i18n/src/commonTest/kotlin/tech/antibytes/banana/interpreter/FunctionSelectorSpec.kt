@@ -21,7 +21,7 @@ class FunctionSelectorSpec {
     private val fixture = kotlinFixture()
 
     @Test
-    fun `It fulfils InterpreterPlugin`() {
+    fun `It fulfils ParameterizedInterpreterPlugin`() {
         FunctionSelector(
             FunctionInterpreterStub(),
             emptyMap()
