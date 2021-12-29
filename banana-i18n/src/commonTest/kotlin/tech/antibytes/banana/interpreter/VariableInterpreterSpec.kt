@@ -59,7 +59,7 @@ class VariableInterpreterSpec {
         val result = VariableInterpreter(logger).interpret(node, parameter)
 
         // Then
-        result mustBe "\$${id}"
+        result mustBe "\$$id"
         logger.error.isEmpty() mustBe false
         logger.error[0] mustBe Pair(
             BananaContract.Tag.INTERPRETER,

@@ -6,9 +6,9 @@
 
 package tech.antibytes.banana.interpreter
 
+import tech.antibytes.banana.BananaContract.InterpreterController
 import tech.antibytes.banana.BananaContract.InterpreterPlugin
 import tech.antibytes.banana.BananaContract.ParameterizedInterpreterPlugin
-import tech.antibytes.banana.BananaContract.InterpreterController
 import tech.antibytes.banana.ast.CoreNodes.FunctionNode
 
 internal class FunctionSelector(
