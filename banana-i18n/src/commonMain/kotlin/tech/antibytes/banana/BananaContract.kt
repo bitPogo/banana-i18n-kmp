@@ -95,6 +95,11 @@ interface BananaContract {
         fun intercept(chunk: String): String
     }
 
+    interface LinkFormatter {
+        fun formatLink(target: String, displayText: String): String
+        fun formatFreeLink(url: String, displayText: String): String
+    }
+
     interface InterpreterController {
         fun interpret(node: Node): String
     }
