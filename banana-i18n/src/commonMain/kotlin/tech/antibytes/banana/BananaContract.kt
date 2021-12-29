@@ -87,7 +87,7 @@ interface BananaContract {
         fun interpret(node: T): String
     }
 
-    interface ParameterizedInterpreterPlugin<T : Node, P : Any>: Interpreter<T> {
+    interface ParameterizedInterpreterPlugin<T : Node, P : Any> : Interpreter<T> {
         fun interpret(node: T, parameter: P): String
     }
 
