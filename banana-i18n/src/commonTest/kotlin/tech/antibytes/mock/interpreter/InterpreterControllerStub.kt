@@ -10,11 +10,11 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
-class InterpreterPluginStub<T : BananaContract.Node>(
-    var interpret: ((node: T) -> String)? = null
-) : BananaContract.InterpreterPlugin<T>, MockContract.Mock {
-    override fun interpret(node: T): String {
-        return interpret?.invoke(node) ?: throw MockError.MissingStub("No interpreter sideeffect was given!")
+class InterpreterControllerStub(
+    var interpret: ((node: BananaContract.Node) -> String)? = null
+) : BananaContract.InterpreterController, MockContract.Mock {
+    override fun interpret(node: BananaContract.Node): String {
+        return interpret?.invoke(node) ?: throw MockError.MissingStub("No interpret sideeffect was given!")
     }
 
     override fun clear() {
