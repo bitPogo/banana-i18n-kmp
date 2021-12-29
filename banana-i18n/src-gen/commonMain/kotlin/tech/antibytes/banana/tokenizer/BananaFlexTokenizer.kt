@@ -3,8 +3,8 @@
 package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState
 import tech.antibytes.banana.BananaRuntimeError
+import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState
 
 // See https://github.com/jflex-de/jflex/issues/222
 internal abstract class BananaFlexTokenizer(
@@ -150,7 +150,7 @@ internal abstract class BananaFlexTokenizer(
                 if (numRead == requested) { // We requested too few chars to encode a full Unicode character
                     --zzEndRead
                     zzFinalHighSurrogate = 1
-                } else {                    // There is room in the buffer for at least one more char
+                } else { // There is room in the buffer for at least one more char
                     val c = zzReader.read() // Expecting to read a paired low surrogate char
                     if (c == -1) {
                         return true

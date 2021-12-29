@@ -9,12 +9,12 @@ package tech.antibytes.banana.parser
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
-import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.FunctionNode
-import tech.antibytes.banana.ast.FreeLinkNode
-import tech.antibytes.banana.ast.LinkNode
-import tech.antibytes.banana.ast.TextNode
-import tech.antibytes.banana.ast.VariableNode
+import tech.antibytes.banana.ast.CoreNodes.CompoundNode
+import tech.antibytes.banana.ast.CoreNodes.FreeLinkNode
+import tech.antibytes.banana.ast.CoreNodes.FunctionNode
+import tech.antibytes.banana.ast.CoreNodes.LinkNode
+import tech.antibytes.banana.ast.CoreNodes.TextNode
+import tech.antibytes.banana.ast.CoreNodes.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
@@ -55,8 +55,6 @@ class BananaParserSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children.isEmpty() mustBe true
     }
-
-
 
     @Test
     fun `Given parse is called it accepts VARIABLE as Variable`() {

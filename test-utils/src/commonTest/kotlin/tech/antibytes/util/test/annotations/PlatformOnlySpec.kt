@@ -9,7 +9,7 @@ package tech.antibytes.util.test.annotations
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class PlatformOnlyTest {
+class PlatformOnlySpec {
     @Test
     @AndroidOnly
     fun `Given it is AndroidOnly annotated it runs only on Android`() {

@@ -9,7 +9,7 @@ package tech.antibytes.util.test.annotations
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class IgnorePlatformTest {
+class IgnorePlatformSpec {
     @Test
     @IgnoreAndroid
     fun `Given it is IgnoreAndroid annotated it ignores only Android`() {

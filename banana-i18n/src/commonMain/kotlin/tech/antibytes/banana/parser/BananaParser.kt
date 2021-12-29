@@ -8,10 +8,10 @@ package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Node
-import tech.antibytes.banana.ast.CompoundNode
-import tech.antibytes.banana.ast.LinkNode
-import tech.antibytes.banana.ast.TextNode
-import tech.antibytes.banana.ast.FreeLinkNode
+import tech.antibytes.banana.ast.CoreNodes.CompoundNode
+import tech.antibytes.banana.ast.CoreNodes.FreeLinkNode
+import tech.antibytes.banana.ast.CoreNodes.LinkNode
+import tech.antibytes.banana.ast.CoreNodes.TextNode
 
 internal class BananaParser(
     logger: BananaContract.Logger,
@@ -19,42 +19,50 @@ internal class BananaParser(
 ) : BananaContract.TopLevelParser, SharedParserRules(logger, parserPluginController) {
     private fun isLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkStart() &&
-            (tokenizer.lookahead.isLinkText() ||
-                tokenizer.lookahead.isVariable() ||
-                (tokenizer.lookahead.isFunctionStart() &&
-                    tokenizer.lookahead(2).isAscii() ||
-                    (tokenizer.lookahead(2).isSpace() &&
-                        tokenizer.lookahead(3).isAscii()
-                    )
-                ) ||
-                tokenizer.lookahead.isSpace() &&
-                (tokenizer.lookahead(2).isLinkText() ||
-                    tokenizer.lookahead(2).isVariable() ||
-                    (tokenizer.lookahead(2).isFunctionStart() &&
-                        tokenizer.lookahead(3).isAscii() ||
-                        (tokenizer.lookahead(3).isSpace() &&
-                            tokenizer.lookahead(4).isAscii()
+            (
+                tokenizer.lookahead.isLinkText() ||
+                    tokenizer.lookahead.isVariable() ||
+                    (
+                        tokenizer.lookahead.isFunctionStart() &&
+                            tokenizer.lookahead(2).isAscii() ||
+                            (
+                                tokenizer.lookahead(2).isSpace() &&
+                                    tokenizer.lookahead(3).isAscii()
+                                )
+                        ) ||
+                    tokenizer.lookahead.isSpace() &&
+                    (
+                        tokenizer.lookahead(2).isLinkText() ||
+                            tokenizer.lookahead(2).isVariable() ||
+                            (
+                                tokenizer.lookahead(2).isFunctionStart() &&
+                                    tokenizer.lookahead(3).isAscii() ||
+                                    (
+                                        tokenizer.lookahead(3).isSpace() &&
+                                            tokenizer.lookahead(4).isAscii()
+                                        )
+                                )
                         )
-                    )
                 )
-            )
     }
 
     private fun isFreeLink(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFreeLinkStart() &&
             (
                 (tokenizer.lookahead.isUrl() || tokenizer.lookahead.isVariable()) ||
-                (tokenizer.lookahead.isSpace() &&
-                    (tokenizer.lookahead(2).isUrl() || tokenizer.lookahead(2).isVariable())
+                    (
+                        tokenizer.lookahead.isSpace() &&
+                            (tokenizer.lookahead(2).isUrl() || tokenizer.lookahead(2).isVariable())
+                        )
                 )
-            )
     }
 
     private fun isLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isLinkEnd() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isLinkEnd()
-            ) ||
+            (
+                tokenizer.currentToken.isSpace() &&
+                    tokenizer.lookahead.isLinkEnd()
+                ) ||
             isEOF(tokenizer)
     }
 
@@ -70,19 +78,20 @@ internal class BananaParser(
 
     private fun isFreeLinkEnd(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFreeLinkEnd() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isFreeLinkEnd()
-            ) ||
+            (
+                tokenizer.currentToken.isSpace() &&
+                    tokenizer.lookahead.isFreeLinkEnd()
+                ) ||
             isEOF(tokenizer)
     }
 
     private fun text(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !tokenizer.currentToken.isEOF() &&
-            !isFunction(tokenizer) &&
-            !isLink(tokenizer) &&
-            !isFreeLink(tokenizer) &&
-            !isVariable(tokenizer)
+                !isFunction(tokenizer) &&
+                !isLink(tokenizer) &&
+                !isFreeLink(tokenizer) &&
+                !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -91,7 +100,7 @@ internal class BananaParser(
     private fun linkText(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             (tokenizer.currentToken.isLinkText() || tokenizer.currentToken.isSpace()) &&
-            !isLinkEndOrDelimiter(tokenizer)
+                !isLinkEndOrDelimiter(tokenizer)
         }
 
         val linkText = tokenizer.resolveValues()
@@ -118,8 +127,8 @@ internal class BananaParser(
     private fun displayText(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
-            !isLinkEnd(tokenizer) &&
-            !isVariable(tokenizer)
+                !isLinkEnd(tokenizer) &&
+                !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
@@ -169,8 +178,8 @@ internal class BananaParser(
     private fun displayFreeText(tokenizer: BananaContract.TokenStore): Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
-            !isFreeLinkEnd(tokenizer) &&
-            !isVariable(tokenizer)
+                !isFreeLinkEnd(tokenizer) &&
+                !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())

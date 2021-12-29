@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.FunctionNode
+import tech.antibytes.banana.ast.CoreNodes.FunctionNode
 
 internal class DefaultFunctionInterpreter(
     private val logger: BananaContract.Logger
