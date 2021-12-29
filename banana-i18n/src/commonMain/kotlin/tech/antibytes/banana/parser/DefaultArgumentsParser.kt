@@ -7,7 +7,7 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.InternalNodes.CompoundNode
+import tech.antibytes.banana.ast.CoreNodes.CompoundNode
 
 internal class DefaultArgumentsParser private constructor(
     logger: BananaContract.Logger,

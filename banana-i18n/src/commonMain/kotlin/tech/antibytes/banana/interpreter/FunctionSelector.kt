@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.InternalNodes.FunctionNode
+import tech.antibytes.banana.ast.CoreNodes.FunctionNode
 
 internal class FunctionSelector(
     defaultInterpreter: BananaContract.InterpreterPlugin<FunctionNode>,
