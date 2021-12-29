@@ -7,8 +7,8 @@
 package tech.antibytes.mock.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.ParserPlugin
 import tech.antibytes.banana.BananaContract.NodeFactory
+import tech.antibytes.banana.BananaContract.ParserPlugin
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 

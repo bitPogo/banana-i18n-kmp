@@ -10,8 +10,8 @@ import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.ast.InternalNodes.CompoundNode
-import tech.antibytes.banana.ast.InternalNodes.FunctionNode
 import tech.antibytes.banana.ast.InternalNodes.FreeLinkNode
+import tech.antibytes.banana.ast.InternalNodes.FunctionNode
 import tech.antibytes.banana.ast.InternalNodes.LinkNode
 import tech.antibytes.banana.ast.InternalNodes.TextNode
 import tech.antibytes.banana.ast.InternalNodes.VariableNode
@@ -55,8 +55,6 @@ class BananaParserSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children.isEmpty() mustBe true
     }
-
-
 
     @Test
     fun `Given parse is called it accepts VARIABLE as Variable`() {

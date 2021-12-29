@@ -32,25 +32,29 @@ abstract class SharedParserRules(
 
     protected fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isFunctionStart() &&
-            (tokenizer.lookahead.isAscii() ||
-                (tokenizer.lookahead.isSpace() &&
-                    tokenizer.lookahead(2).isAscii()
+            (
+                tokenizer.lookahead.isAscii() ||
+                    (
+                        tokenizer.lookahead.isSpace() &&
+                            tokenizer.lookahead(2).isAscii()
+                        )
                 )
-            )
     }
 
     protected fun isDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isDelimiter() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isDelimiter()
-            )
+            (
+                tokenizer.currentToken.isSpace() &&
+                    tokenizer.lookahead.isDelimiter()
+                )
     }
 
     protected fun isEOF(tokenizer: BananaContract.TokenStore): Boolean {
         return tokenizer.currentToken.isEOF() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isEOF()
-            )
+            (
+                tokenizer.currentToken.isSpace() &&
+                    tokenizer.lookahead.isEOF()
+                )
     }
 
     protected fun shiftUntil(tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
@@ -62,9 +66,10 @@ abstract class SharedParserRules(
     protected fun isFunctionEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
         return isDelimiter(tokenizer) ||
             tokenizer.currentToken.isFunctionEnd() ||
-            (tokenizer.currentToken.isSpace() &&
-                tokenizer.lookahead.isFunctionEnd()
-            ) ||
+            (
+                tokenizer.currentToken.isSpace() &&
+                    tokenizer.lookahead.isFunctionEnd()
+                ) ||
             isEOF(tokenizer)
     }
 
@@ -95,8 +100,8 @@ abstract class SharedParserRules(
     protected fun nestedText(tokenizer: BananaContract.TokenStore): BananaContract.Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
-            !isFunctionEndOrDelimiter(tokenizer) &&
-            !isVariable(tokenizer)
+                !isFunctionEndOrDelimiter(tokenizer) &&
+                !isVariable(tokenizer)
         }
 
         return TextNode(tokenizer.resolveValues())
