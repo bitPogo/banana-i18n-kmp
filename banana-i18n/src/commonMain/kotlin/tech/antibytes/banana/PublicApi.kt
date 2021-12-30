@@ -71,7 +71,7 @@ interface PublicApi {
         fun intercept(chunk: String): String
     }
 
-    interface InterpreterController: Interpreter<Node> {
+    interface InterpreterController : Interpreter<Node> {
         fun interpret(node: Node): String
     }
 

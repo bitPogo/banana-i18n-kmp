@@ -17,20 +17,21 @@ internal class ParserPluginStub(
         return parse?.invoke(tokenizer)
             ?: throw MockError.MissingStub("Missing sideeffect for parse")
     }
+}
 
-    companion object : PublicApi.ParserPluginFactory, MockContract.Mock {
-        var parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null
-        val lastInstance: PublicApi.ParserPlugin
-            get() = capturedInstance
-        lateinit var capturedInstance: PublicApi.ParserPlugin
+internal class ParserPluginFactoryStub(
+    var parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null
+) : PublicApi.ParserPluginFactory, MockContract.Mock {
+    val lastInstances: List<PublicApi.ParserPlugin>
+        get() = capturedInstance
+    private val capturedInstance: MutableList<PublicApi.ParserPlugin> = mutableListOf()
 
-        override fun createPlugin(
-            logger: PublicApi.Logger,
-            plugins: PublicApi.ParserPluginController
-        ): PublicApi.ParserPlugin = ParserPluginStub(parse).also { capturedInstance = it }
+    override fun createPlugin(
+        logger: PublicApi.Logger,
+        plugins: PublicApi.ParserPluginController
+    ): PublicApi.ParserPlugin = ParserPluginStub(parse).also { capturedInstance.add(it) }
 
-        override fun clear() {
-            parse = null
-        }
+    override fun clear() {
+        parse = null
     }
 }
