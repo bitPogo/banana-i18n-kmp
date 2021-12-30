@@ -34,11 +34,6 @@ internal interface BananaContract {
         fun concatenate(nodes: List<PublicApi.Node>, controller: PublicApi.InterpreterController): String
     }
 
-    interface LinkFormatter {
-        fun formatLink(target: String, displayText: String): String
-        fun formatFreeLink(url: String, displayText: String): String
-    }
-
     companion object {
         val EOF = PublicApi.Token(PublicApi.TokenTypes.EOF, "", -1, -1)
     }

@@ -6,9 +6,9 @@
 
 package tech.antibytes.banana.interpreter
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 
-internal class DefaultLinkFormatter : BananaContract.LinkFormatter {
+internal class DefaultLinkFormatter : PublicApi.LinkFormatter {
     private fun format(urlOrMagicWord: String, displayText: String): String {
         return if (displayText.isEmpty()) {
             urlOrMagicWord

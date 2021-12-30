@@ -75,13 +75,50 @@ interface PublicApi {
         fun interpret(node: Node): String
     }
 
+    interface InterpreterFactory {
+        fun getInstance(logger: Logger, locale: Locale): Interpreter<out Node>
+    }
+
+    interface LinkFormatter {
+        fun formatLink(target: String, displayText: String): String
+        fun formatFreeLink(url: String, displayText: String): String
+    }
+
     interface Logger {
         fun warning(tag: Tag, message: String)
         fun error(tag: Tag, message: String)
     }
 
+    interface Cache<T : Any> {
+        fun contains(key: String): Boolean
+        fun getValue(key: String): T
+        fun store(key: String, value: T)
+    }
+
     enum class Tag {
         PARSER,
         INTERPRETER
+    }
+
+    data class Plugin(
+        val name: String,
+        val interpreter: InterpreterFactory,
+        val parser: Pair<ParserPluginFactory, NodeFactory>? = null,
+    )
+
+    interface BananaBuilder {
+        fun setLanguage(locale: Locale): BananaBuilder
+        fun setTextInterceptor(interceptor: TextInterceptor): BananaBuilder
+        fun setLinkFormatter(formatter: LinkFormatter): BananaBuilder
+        fun setParserCache(cache: Cache<out Node>): BananaBuilder
+        fun setMessageCache(cache: Cache<String>): BananaBuilder
+        fun setLogger(logger: Logger): BananaBuilder
+        fun registerPlugin(plugin: Plugin): BananaBuilder
+        fun clearPlugins(): BananaBuilder
+    }
+
+    interface BananaI18n {
+        fun i18n(message: String): String
+        fun toBuilder(): BananaBuilder
     }
 }
