@@ -7,8 +7,8 @@
 package tech.antibytes.mock.interpreter
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.InterpreterController
-import tech.antibytes.banana.BananaContract.Node
+import tech.antibytes.banana.PublicApi.InterpreterController
+import tech.antibytes.banana.PublicApi.Node
 import tech.antibytes.util.test.MockContract
 
 internal class NodeConcatenatorStub(

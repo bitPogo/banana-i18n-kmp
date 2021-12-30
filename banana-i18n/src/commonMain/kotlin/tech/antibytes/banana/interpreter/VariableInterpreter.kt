@@ -6,15 +6,15 @@
 
 package tech.antibytes.banana.interpreter
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 internal class VariableInterpreter(
-    private val logger: BananaContract.Logger
-) : BananaContract.ParameterizedInterpreterPlugin<VariableNode, Map<String, String>> {
+    private val logger: PublicApi.Logger
+) : PublicApi.ParameterizedInterpreterPlugin<VariableNode, Map<String, String>> {
     override fun interpret(node: VariableNode, parameter: Map<String, String>): String {
         return parameter.getOrElse(node.id) {
-            logger.error(BananaContract.Tag.INTERPRETER, "Error: Unknown variable (${node.id}).")
+            logger.error(PublicApi.Tag.INTERPRETER, "Error: Unknown variable (${node.id}).")
             "\$${node.id}"
         }
     }

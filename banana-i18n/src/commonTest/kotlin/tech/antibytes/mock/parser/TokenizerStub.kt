@@ -7,20 +7,21 @@
 package tech.antibytes.mock.parser
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.tokenizer.TokenizerContract.Reader
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
 internal class TokenizerStub(
     var setReader: ((reader: Reader) -> Unit)? = null,
-    var next: (() -> BananaContract.Token)? = null
+    var next: (() -> PublicApi.Token)? = null
 ) : BananaContract.Tokenizer, MockContract.Mock {
     override fun setReader(reader: Reader) {
         return setReader?.invoke(reader)
             ?: throw MockError.MissingStub("Missing sideeffect for setReader")
     }
 
-    override fun next(): BananaContract.Token {
+    override fun next(): PublicApi.Token {
         return next?.invoke()
             ?: throw MockError.MissingStub("Missing next for setReader")
     }

@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -17,7 +17,7 @@ class XMLInterceptorSpec {
 
     @Test
     fun `It fulfils TextInterceptor`() {
-        XMLInterceptor() fulfils BananaContract.TextInterceptor::class
+        XMLInterceptor() fulfils PublicApi.TextInterceptor::class
     }
 
     @Test

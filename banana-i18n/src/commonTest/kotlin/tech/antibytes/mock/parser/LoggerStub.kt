@@ -6,18 +6,18 @@
 
 package tech.antibytes.mock.parser
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 
-internal class LoggerStub : MockContract.Mock, BananaContract.Logger {
-    val warning: MutableList<Pair<BananaContract.Tag, String>> = mutableListOf()
-    val error: MutableList<Pair<BananaContract.Tag, String>> = mutableListOf()
+internal class LoggerStub : MockContract.Mock, PublicApi.Logger {
+    val warning: MutableList<Pair<PublicApi.Tag, String>> = mutableListOf()
+    val error: MutableList<Pair<PublicApi.Tag, String>> = mutableListOf()
 
-    override fun warning(tag: BananaContract.Tag, message: String) {
+    override fun warning(tag: PublicApi.Tag, message: String) {
         warning.add(tag to message)
     }
 
-    override fun error(tag: BananaContract.Tag, message: String) {
+    override fun error(tag: PublicApi.Tag, message: String) {
         error.add(tag to message)
     }
 

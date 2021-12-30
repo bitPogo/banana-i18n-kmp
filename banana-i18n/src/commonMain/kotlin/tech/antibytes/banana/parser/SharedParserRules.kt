@@ -7,30 +7,31 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 abstract class SharedParserRules(
-    protected val logger: BananaContract.Logger,
-    private val plugins: BananaContract.ParserPluginController
+    protected val logger: PublicApi.Logger,
+    private val plugins: PublicApi.ParserPluginController
 ) {
-    protected fun logOrConsume(rule: String, tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
+    protected fun logOrConsume(rule: String, tokenizer: PublicApi.TokenStore, condition: () -> Boolean) {
         when {
             condition() -> tokenizer.consume()
             tokenizer.currentToken == BananaContract.EOF -> logger.warning(
-                BananaContract.Tag.PARSER,
+                PublicApi.Tag.PARSER,
                 "Warning: $rule had not been closed!"
             )
-            else -> logger.error(BananaContract.Tag.PARSER, "Error: Unexpected Token (${tokenizer.currentToken})!")
+            else -> logger.error(PublicApi.Tag.PARSER, "Error: Unexpected Token (${tokenizer.currentToken})!")
         }
     }
 
-    protected fun isVariable(tokenizer: BananaContract.TokenStore): Boolean {
+    protected fun isVariable(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isVariable()
     }
 
-    protected fun isFunction(tokenizer: BananaContract.TokenStore): Boolean {
+    protected fun isFunction(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isFunctionStart() &&
             (
                 tokenizer.lookahead.isAscii() ||
@@ -41,7 +42,7 @@ abstract class SharedParserRules(
                 )
     }
 
-    protected fun isDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
+    protected fun isDelimiter(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isDelimiter() ||
             (
                 tokenizer.currentToken.isSpace() &&
@@ -49,7 +50,7 @@ abstract class SharedParserRules(
                 )
     }
 
-    protected fun isEOF(tokenizer: BananaContract.TokenStore): Boolean {
+    protected fun isEOF(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isEOF() ||
             (
                 tokenizer.currentToken.isSpace() &&
@@ -57,13 +58,13 @@ abstract class SharedParserRules(
                 )
     }
 
-    protected fun shiftUntil(tokenizer: BananaContract.TokenStore, condition: () -> Boolean) {
+    protected fun shiftUntil(tokenizer: PublicApi.TokenStore, condition: () -> Boolean) {
         do {
             tokenizer.shift()
         } while (condition())
     }
 
-    protected fun isFunctionEndOrDelimiter(tokenizer: BananaContract.TokenStore): Boolean {
+    protected fun isFunctionEndOrDelimiter(tokenizer: PublicApi.TokenStore): Boolean {
         return isDelimiter(tokenizer) ||
             tokenizer.currentToken.isFunctionEnd() ||
             (
@@ -73,13 +74,13 @@ abstract class SharedParserRules(
             isEOF(tokenizer)
     }
 
-    protected fun variable(tokenizer: BananaContract.TokenStore): BananaContract.Node {
+    protected fun variable(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         return VariableNode(
             tokenizer.currentToken.value
         ).also { tokenizer.consume() }
     }
 
-    private fun identifier(tokenizer: BananaContract.TokenStore): String {
+    private fun identifier(tokenizer: PublicApi.TokenStore): String {
         do {
             tokenizer.shift()
 
@@ -91,13 +92,13 @@ abstract class SharedParserRules(
         return tokenizer.resolveValues().joinToString("")
     }
 
-    protected fun space(tokenizer: BananaContract.TokenStore) {
+    protected fun space(tokenizer: PublicApi.TokenStore) {
         if (tokenizer.currentToken.isSpace()) {
             tokenizer.consume()
         }
     }
 
-    protected fun nestedText(tokenizer: BananaContract.TokenStore): BananaContract.Node {
+    protected fun nestedText(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
                 !isFunctionEndOrDelimiter(tokenizer) &&
@@ -109,8 +110,8 @@ abstract class SharedParserRules(
 
     private fun arguments(
         functionId: String,
-        tokenizer: BananaContract.TokenStore
-    ): BananaContract.Node {
+        tokenizer: PublicApi.TokenStore
+    ): PublicApi.Node {
         tokenizer.consume()
         space(tokenizer)
 
@@ -132,7 +133,7 @@ abstract class SharedParserRules(
         return factory.createNode(arguments)
     }
 
-    protected fun function(tokenizer: BananaContract.TokenStore): BananaContract.Node {
+    protected fun function(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         tokenizer.consume()
         space(tokenizer)
 

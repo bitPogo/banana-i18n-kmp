@@ -6,14 +6,14 @@
 
 package tech.antibytes.mock.parser
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
 internal class NodeFactoryStub(
-    var createNode: ((children: List<BananaContract.Node>) -> BananaContract.Node)? = null
-) : BananaContract.NodeFactory, MockContract.Mock {
-    override fun createNode(children: List<BananaContract.Node>): BananaContract.Node {
+    var createNode: ((children: List<PublicApi.Node>) -> PublicApi.Node)? = null
+) : PublicApi.NodeFactory, MockContract.Mock {
+    override fun createNode(children: List<PublicApi.Node>): PublicApi.Node {
         return createNode?.invoke(children)
             ?: throw MockError.MissingStub("Missing sideeffect for createNode")
     }

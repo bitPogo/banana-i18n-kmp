@@ -6,21 +6,21 @@
 
 package tech.antibytes.banana.interpreter
 
-import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.InterpreterPlugin
-import tech.antibytes.banana.BananaContract.ParameterizedInterpreterPlugin
+import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.PublicApi.ParameterizedInterpreterPlugin
 import tech.antibytes.banana.ast.CoreNode
 
 internal class InterpreterController(
     private val parameter: Map<String, String>,
     private val variableInterpreter: ParameterizedInterpreterPlugin<CoreNode.VariableNode, Map<String, String>>,
     private val textInterpreter: InterpreterPlugin<CoreNode.TextNode>,
-    private val functionSelector: ParameterizedInterpreterPlugin<CoreNode.FunctionNode, BananaContract.InterpreterController>,
-    private val compoundInterpreter: ParameterizedInterpreterPlugin<CoreNode.CompoundNode, BananaContract.InterpreterController>,
-    private val linkInterpreter: ParameterizedInterpreterPlugin<CoreNode.LinkNode, BananaContract.InterpreterController>,
-    private val freeLinkInterpreter: ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode, BananaContract.InterpreterController>
-) : BananaContract.InterpreterController {
-    override fun interpret(node: BananaContract.Node): String {
+    private val functionSelector: ParameterizedInterpreterPlugin<CoreNode.FunctionNode, PublicApi.InterpreterController>,
+    private val compoundInterpreter: ParameterizedInterpreterPlugin<CoreNode.CompoundNode, PublicApi.InterpreterController>,
+    private val linkInterpreter: ParameterizedInterpreterPlugin<CoreNode.LinkNode, PublicApi.InterpreterController>,
+    private val freeLinkInterpreter: ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode, PublicApi.InterpreterController>
+) : PublicApi.InterpreterController {
+    override fun interpret(node: PublicApi.Node): String {
         return when (node) {
             is CoreNode.TextNode -> textInterpreter.interpret(node)
             is CoreNode.VariableNode -> variableInterpreter.interpret(node, parameter)

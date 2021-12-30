@@ -7,7 +7,7 @@
 package tech.antibytes.banana.parser
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FreeLinkNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -42,9 +42,9 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -56,10 +56,10 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -70,9 +70,9 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.VARIABLE to variable,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.VARIABLE to variable,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -84,10 +84,10 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(VariableNode(variable))
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -98,11 +98,11 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -114,10 +114,10 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -128,11 +128,11 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.VARIABLE to variable,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.VARIABLE to variable,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -144,10 +144,10 @@ class BananaParserFreeLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(VariableNode(variable))
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -158,10 +158,10 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.ESCAPED to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.ESCAPED to "]",
             )
         )
 
@@ -174,9 +174,9 @@ class BananaParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
         logger.error[0] mustBe Pair(
-            BananaContract.Tag.PARSER,
+            PublicApi.Tag.PARSER,
             "Error: Unexpected Token (${tokens[3]})!"
         )
     }
@@ -189,10 +189,10 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.LITERAL to "%",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.LITERAL to "%",
             )
         )
 
@@ -205,9 +205,9 @@ class BananaParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(TextNode(listOf(url)))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
         logger.error[0] mustBe Pair(
-            BananaContract.Tag.PARSER,
+            PublicApi.Tag.PARSER,
             "Error: Unexpected Token (${tokens[3]})!"
         )
     }
@@ -220,9 +220,9 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ESCAPED to "[",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.ESCAPED to "]",
+                PublicApi.TokenTypes.ESCAPED to "[",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.ESCAPED to "]",
             )
         )
 
@@ -235,8 +235,8 @@ class BananaParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(listOf("[", url, "]"))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -247,11 +247,11 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to string,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to string,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -264,8 +264,8 @@ class BananaParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(listOf("[", " ", string, " ", "]"))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -277,12 +277,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -298,8 +298,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -311,12 +311,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.NON_ASCII_STRING to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.NON_ASCII_STRING to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -332,8 +332,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -345,12 +345,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.DOUBLE to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.DOUBLE to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -366,8 +366,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -379,12 +379,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.INTEGER to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.INTEGER to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -400,8 +400,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -413,12 +413,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ESCAPED to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ESCAPED to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -434,8 +434,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -447,12 +447,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -468,8 +468,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -480,12 +480,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to url,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to url,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -501,8 +501,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(url)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -514,12 +514,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -535,8 +535,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -548,12 +548,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -569,8 +569,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -582,12 +582,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LINK_START to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LINK_START to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -603,8 +603,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -616,12 +616,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LINK_END to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LINK_END to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -637,8 +637,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -650,12 +650,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.DELIMITER to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.DELIMITER to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -671,8 +671,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -685,14 +685,14 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to displayPart1,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to displayPart2,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to displayPart1,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to displayPart2,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -708,8 +708,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(displayPart1, " ", displayPart2)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -721,13 +721,13 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to display,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to display,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -743,8 +743,8 @@ class BananaParserFreeLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -756,12 +756,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.VARIABLE to display,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.VARIABLE to display,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -777,8 +777,8 @@ class BananaParserFreeLinkSpec {
             listOf(VariableNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -790,14 +790,14 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.ASCII_STRING to display,
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.ASCII_STRING to display,
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -813,8 +813,8 @@ class BananaParserFreeLinkSpec {
             listOf(FunctionNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -826,16 +826,16 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to display,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to display,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -851,8 +851,8 @@ class BananaParserFreeLinkSpec {
             listOf(FunctionNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -867,22 +867,22 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to displayPart1,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to displayPart2,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.VARIABLE to displayPart3,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to displayPart4,
-                BananaContract.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to displayPart1,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to displayPart2,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.VARIABLE to displayPart3,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to displayPart4,
+                PublicApi.TokenTypes.LITERAL to "]",
             )
         )
 
@@ -904,8 +904,8 @@ class BananaParserFreeLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<BananaContract.Tag, String>>()
-        logger.error mustBe emptyList<Pair<BananaContract.Tag, String>>()
+        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
     }
 
     @Test
@@ -917,12 +917,12 @@ class BananaParserFreeLinkSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.URL to url,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to display,
-                BananaContract.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.URL to url,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to display,
+                PublicApi.TokenTypes.WHITESPACE to " ",
             )
         )
 
@@ -940,7 +940,7 @@ class BananaParserFreeLinkSpec {
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[4])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
-            BananaContract.Tag.PARSER,
+            PublicApi.Tag.PARSER,
             "Warning: FreeLink had not been closed!"
         )
     }
@@ -954,12 +954,12 @@ class BananaParserFreeLinkSpec {
         listOf("{", "[", "}").forEach { invalidLiteral ->
             val tokens = createTokens(
                 listOf(
-                    BananaContract.TokenTypes.LITERAL to "[",
-                    BananaContract.TokenTypes.WHITESPACE to " ",
-                    BananaContract.TokenTypes.URL to url,
-                    BananaContract.TokenTypes.LITERAL to invalidLiteral,
-                    BananaContract.TokenTypes.ASCII_STRING to "not important",
-                    BananaContract.TokenTypes.LINK_END to "]",
+                    PublicApi.TokenTypes.LITERAL to "[",
+                    PublicApi.TokenTypes.WHITESPACE to " ",
+                    PublicApi.TokenTypes.URL to url,
+                    PublicApi.TokenTypes.LITERAL to invalidLiteral,
+                    PublicApi.TokenTypes.ASCII_STRING to "not important",
+                    PublicApi.TokenTypes.LINK_END to "]",
                 )
             )
 
@@ -975,7 +975,7 @@ class BananaParserFreeLinkSpec {
             message.children[1] fulfils TextNode::class
             tokenStore.tokens.isEmpty() mustBe true
             logger.error[0] mustBe Pair(
-                BananaContract.Tag.PARSER,
+                PublicApi.Tag.PARSER,
                 "Error: Unexpected Token (${tokens[3]})!"
             )
 

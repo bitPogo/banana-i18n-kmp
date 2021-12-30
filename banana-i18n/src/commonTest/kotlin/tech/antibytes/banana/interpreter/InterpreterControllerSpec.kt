@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterPluginStub
 import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
@@ -29,7 +29,7 @@ class InterpreterControllerSpec {
             ParameterizedInterpreterPluginStub(),
             ParameterizedInterpreterPluginStub(),
             ParameterizedInterpreterPluginStub()
-        ) fulfils BananaContract.InterpreterController::class
+        ) fulfils PublicApi.InterpreterController::class
     }
 
     @Test
@@ -60,7 +60,7 @@ class InterpreterControllerSpec {
         val nestedInterpreter = InterpreterPluginStub<CoreNode.TextNode>()
         val expected: String = fixture()
         val node = CoreNode.TextNode(fixture())
-        var capturedNode: BananaContract.Node? = null
+        var capturedNode: PublicApi.Node? = null
 
         nestedInterpreter.interpret = { givenNode ->
             capturedNode = givenNode
@@ -90,7 +90,7 @@ class InterpreterControllerSpec {
         val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.VariableNode, Map<String, String>>()
         val expected: String = fixture()
         val node = CoreNode.VariableNode(fixture())
-        var capturedNode: BananaContract.Node? = null
+        var capturedNode: PublicApi.Node? = null
         var capturedParameter: Map<String, String> = emptyMap()
 
         nestedInterpreter.interpret = { givenNode, givenParameter ->
@@ -120,7 +120,7 @@ class InterpreterControllerSpec {
     fun `Given interpret is called with a FunctionNode it delegates it to the FunctionSelector`() {
         // Given
         val nestedInterpreter =
-            ParameterizedInterpreterPluginStub<CoreNode.FunctionNode, BananaContract.InterpreterController>()
+            ParameterizedInterpreterPluginStub<CoreNode.FunctionNode, PublicApi.InterpreterController>()
         val controller = InterpreterController(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
@@ -133,8 +133,8 @@ class InterpreterControllerSpec {
 
         val expected: String = fixture()
         val node = CoreNode.FunctionNode(fixture())
-        var capturedNode: BananaContract.Node? = null
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNode: PublicApi.Node? = null
+        var capturedController: PublicApi.InterpreterController? = null
 
         nestedInterpreter.interpret = { givenNode, givenParameter ->
             capturedController = givenParameter
@@ -155,7 +155,7 @@ class InterpreterControllerSpec {
     fun `Given interpret is called with a CompoundNode it delegates it to the CompoundInterpreter`() {
         // Given
         val nestedInterpreter =
-            ParameterizedInterpreterPluginStub<CoreNode.CompoundNode, BananaContract.InterpreterController>()
+            ParameterizedInterpreterPluginStub<CoreNode.CompoundNode, PublicApi.InterpreterController>()
         val controller = InterpreterController(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
@@ -168,8 +168,8 @@ class InterpreterControllerSpec {
 
         val expected: String = fixture()
         val node = CoreNode.CompoundNode(emptyList())
-        var capturedNode: BananaContract.Node? = null
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNode: PublicApi.Node? = null
+        var capturedController: PublicApi.InterpreterController? = null
 
         nestedInterpreter.interpret = { givenNode, givenParameter ->
             capturedController = givenParameter
@@ -189,7 +189,7 @@ class InterpreterControllerSpec {
     @Test
     fun `Given interpret is called with a LinkNode it delegates it to the LinkInterpreter`() {
         // Given
-        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.LinkNode, BananaContract.InterpreterController>()
+        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.LinkNode, PublicApi.InterpreterController>()
         val controller = InterpreterController(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
@@ -202,8 +202,8 @@ class InterpreterControllerSpec {
 
         val expected: String = fixture()
         val node = CoreNode.LinkNode(emptyList())
-        var capturedNode: BananaContract.Node? = null
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNode: PublicApi.Node? = null
+        var capturedController: PublicApi.InterpreterController? = null
 
         nestedInterpreter.interpret = { givenNode, givenParameter ->
             capturedController = givenParameter
@@ -223,7 +223,7 @@ class InterpreterControllerSpec {
     @Test
     fun `Given interpret is called with a FreeLinkNode it delegates it to the FreeLinkInterpreter`() {
         // Given
-        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.FreeLinkNode, BananaContract.InterpreterController>()
+        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.FreeLinkNode, PublicApi.InterpreterController>()
         val controller = InterpreterController(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
@@ -236,8 +236,8 @@ class InterpreterControllerSpec {
 
         val expected: String = fixture()
         val node = CoreNode.FreeLinkNode(CoreNode.TextNode(emptyList()))
-        var capturedNode: BananaContract.Node? = null
-        var capturedController: BananaContract.InterpreterController? = null
+        var capturedNode: PublicApi.Node? = null
+        var capturedController: PublicApi.InterpreterController? = null
 
         nestedInterpreter.interpret = { givenNode, givenParameter ->
             capturedController = givenParameter
@@ -255,4 +255,4 @@ class InterpreterControllerSpec {
     }
 }
 
-private class UnknownNode : BananaContract.Node
+private class UnknownNode : PublicApi.Node

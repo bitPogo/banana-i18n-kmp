@@ -6,14 +6,14 @@
 
 package tech.antibytes.mock.interpreter
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
 class InterpreterControllerStub(
-    var interpret: ((node: BananaContract.Node) -> String)? = null
-) : BananaContract.InterpreterController, MockContract.Mock {
-    override fun interpret(node: BananaContract.Node): String {
+    var interpret: ((node: PublicApi.Node) -> String)? = null
+) : PublicApi.InterpreterController, MockContract.Mock {
+    override fun interpret(node: PublicApi.Node): String {
         return interpret?.invoke(node) ?: throw MockError.MissingStub("No interpret sideeffect was given!")
     }
 

@@ -7,7 +7,7 @@
 package tech.antibytes.banana.parser
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.mock.parser.LoggerStub
@@ -38,7 +38,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.DOUBLE to double,
+                PublicApi.TokenTypes.DOUBLE to double,
             )
         )
 
@@ -61,7 +61,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.INTEGER to integer,
+                PublicApi.TokenTypes.INTEGER to integer,
             )
         )
 
@@ -84,7 +84,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ESCAPED to escaped,
+                PublicApi.TokenTypes.ESCAPED to escaped,
             )
         )
 
@@ -107,7 +107,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to ascii,
+                PublicApi.TokenTypes.ASCII_STRING to ascii,
             )
         )
 
@@ -130,7 +130,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.NON_ASCII_STRING to nonAscii,
+                PublicApi.TokenTypes.NON_ASCII_STRING to nonAscii,
             )
         )
 
@@ -153,7 +153,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LITERAL to literal,
+                PublicApi.TokenTypes.LITERAL to literal,
             )
         )
 
@@ -176,7 +176,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.WHITESPACE to space,
+                PublicApi.TokenTypes.WHITESPACE to space,
             )
         )
 
@@ -199,7 +199,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.DELIMITER to delimiter,
+                PublicApi.TokenTypes.DELIMITER to delimiter,
             )
         )
 
@@ -222,7 +222,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_START to start,
+                PublicApi.TokenTypes.FUNCTION_START to start,
             )
         )
 
@@ -245,7 +245,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.FUNCTION_END to end,
+                PublicApi.TokenTypes.FUNCTION_END to end,
             )
         )
 
@@ -268,7 +268,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LINK_START to start,
+                PublicApi.TokenTypes.LINK_START to start,
             )
         )
 
@@ -291,7 +291,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.LINK_END to end,
+                PublicApi.TokenTypes.LINK_END to end,
             )
         )
 
@@ -314,7 +314,7 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.URL to url,
+                PublicApi.TokenTypes.URL to url,
             )
         )
 
@@ -339,9 +339,9 @@ class BananaParserTextSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to ascii,
-                BananaContract.TokenTypes.WHITESPACE to space,
-                BananaContract.TokenTypes.NON_ASCII_STRING to nonAscii,
+                PublicApi.TokenTypes.ASCII_STRING to ascii,
+                PublicApi.TokenTypes.WHITESPACE to space,
+                PublicApi.TokenTypes.NON_ASCII_STRING to nonAscii,
             )
         )
 

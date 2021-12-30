@@ -6,15 +6,15 @@
 
 package tech.antibytes.mock.parser
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 
-internal class TestArgumentNode : BananaContract.Node
-internal class TestArgumentsNode : BananaContract.Node {
-    companion object : BananaContract.NodeFactory {
-        lateinit var lastInstance: BananaContract.Node
-        lateinit var lastChildren: List<BananaContract.Node>
+internal class TestArgumentNode : PublicApi.Node
+internal class TestArgumentsNode : PublicApi.Node {
+    companion object : PublicApi.NodeFactory {
+        lateinit var lastInstance: PublicApi.Node
+        lateinit var lastChildren: List<PublicApi.Node>
 
-        override fun createNode(children: List<BananaContract.Node>): BananaContract.Node {
+        override fun createNode(children: List<PublicApi.Node>): PublicApi.Node {
             return TestArgumentsNode().also {
                 lastChildren = children
                 lastInstance = it

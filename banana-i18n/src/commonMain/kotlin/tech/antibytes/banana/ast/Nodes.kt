@@ -6,8 +6,8 @@
 
 package tech.antibytes.banana.ast
 
-import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.BananaContract.Node
+import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.PublicApi.Node
 
 private val voidFunctionArguments = CoreNode.CompoundNode(emptyList())
 
@@ -38,7 +38,7 @@ sealed class CoreNode : Node {
     data class CompoundNode(
         val children: List<Node>
     ) : CoreNode() {
-        internal companion object : BananaContract.NodeFactory {
+        internal companion object : PublicApi.NodeFactory {
             override fun createNode(children: List<Node>): Node = CompoundNode(children)
         }
     }

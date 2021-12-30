@@ -9,6 +9,7 @@ package tech.antibytes.banana.parser
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FreeLinkNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -64,7 +65,7 @@ class BananaParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.VARIABLE to variable,
+                PublicApi.TokenTypes.VARIABLE to variable,
             )
         )
 
@@ -76,7 +77,7 @@ class BananaParserSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe VariableNode(variable)
-        tokenStore.capturedShiftedTokens mustBe emptyList<BananaContract.Token>()
+        tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
     }
 
     @Test
@@ -92,28 +93,28 @@ class BananaParserSpec {
 
         val tokens = createTokens(
             listOf(
-                BananaContract.TokenTypes.ASCII_STRING to word1,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to word2,
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.LITERAL to "[",
-                BananaContract.TokenTypes.URL to word3,
-                BananaContract.TokenTypes.LITERAL to "]",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.FUNCTION_START to "{{",
-                BananaContract.TokenTypes.FUNCTION_END to "}}",
-                BananaContract.TokenTypes.LINK_START to "[[",
-                BananaContract.TokenTypes.VARIABLE to word4,
-                BananaContract.TokenTypes.LINK_END to "]]",
-                BananaContract.TokenTypes.WHITESPACE to " ",
-                BananaContract.TokenTypes.ASCII_STRING to word5,
-                BananaContract.TokenTypes.VARIABLE to word6,
+                PublicApi.TokenTypes.ASCII_STRING to word1,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to word2,
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.LITERAL to "[",
+                PublicApi.TokenTypes.URL to word3,
+                PublicApi.TokenTypes.LITERAL to "]",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.FUNCTION_START to "{{",
+                PublicApi.TokenTypes.FUNCTION_END to "}}",
+                PublicApi.TokenTypes.LINK_START to "[[",
+                PublicApi.TokenTypes.VARIABLE to word4,
+                PublicApi.TokenTypes.LINK_END to "]]",
+                PublicApi.TokenTypes.WHITESPACE to " ",
+                PublicApi.TokenTypes.ASCII_STRING to word5,
+                PublicApi.TokenTypes.VARIABLE to word6,
             )
         )
 

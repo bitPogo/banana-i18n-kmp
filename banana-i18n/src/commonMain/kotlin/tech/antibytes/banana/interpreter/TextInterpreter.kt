@@ -7,10 +7,11 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.TextNode
 
 internal class TextInterpreter(
-    private val textInterceptor: BananaContract.TextInterceptor
+    private val textInterceptor: PublicApi.TextInterceptor
 ) : BananaContract.InterpreterPlugin<TextNode> {
     override fun interpret(node: TextNode): String {
         return node.chunks

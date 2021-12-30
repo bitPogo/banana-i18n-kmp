@@ -8,6 +8,7 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.util.test.fulfils
@@ -32,7 +33,7 @@ class NodeConcatenatorSpec {
             CoreNode.FunctionNode(fixture())
         )
 
-        val capturedNodes: MutableList<BananaContract.Node> = mutableListOf()
+        val capturedNodes: MutableList<PublicApi.Node> = mutableListOf()
 
         controller.interpret = { givenNode ->
             capturedNodes.add(givenNode)

@@ -7,15 +7,16 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 
 internal class FreeLinkInterpreter(
     private val concatenator: BananaContract.NodeConcatenator,
     private val formatter: BananaContract.LinkFormatter
-) : BananaContract.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode, BananaContract.InterpreterController> {
+) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode, PublicApi.InterpreterController> {
     override fun interpret(
         node: CoreNode.FreeLinkNode,
-        parameter: BananaContract.InterpreterController
+        parameter: PublicApi.InterpreterController
     ): String {
         return formatter.formatFreeLink(
             url = parameter.interpret(node.url),
