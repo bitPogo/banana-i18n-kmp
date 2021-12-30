@@ -22,7 +22,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
 class BananaFrontendSpec {
-    private val logger = LoggerStub()
+    private val logger = LoggerStub() // TODO replace with DefaultLogger
 
     @Test
     fun `Given parse is called with a Tokenizer, it accepts`() {
