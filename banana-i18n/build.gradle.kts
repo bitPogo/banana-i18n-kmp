@@ -5,6 +5,7 @@
  */
 
 import tech.antibytes.gradle.dependency.Dependency
+import tech.antibytes.gradle.banana.dependency.Dependency as LocalDependency
 import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
 import tech.antibytes.gradle.grammar.jflex.JFlexTask
 import tech.antibytes.gradle.grammar.PostConverterTask
@@ -81,6 +82,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(Dependency.multiplatform.kotlin.jdk8)
+                implementation(LocalDependency.jvm.icu)
             }
         }
         val jvmTest by getting {
