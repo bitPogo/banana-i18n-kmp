@@ -8,7 +8,7 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CoreNodes
+import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -27,9 +27,9 @@ class NodeConcatenatorSpec {
         // Given
         val controller = InterpreterControllerStub()
         val nodes = listOf(
-            CoreNodes.TextNode(fixture()),
-            CoreNodes.VariableNode(fixture()),
-            CoreNodes.FunctionNode(fixture())
+            CoreNode.TextNode(fixture()),
+            CoreNode.VariableNode(fixture()),
+            CoreNode.FunctionNode(fixture())
         )
 
         val capturedNodes: MutableList<BananaContract.Node> = mutableListOf()
@@ -51,9 +51,9 @@ class NodeConcatenatorSpec {
         // Given
         val controller = InterpreterControllerStub()
         val nodes = listOf(
-            CoreNodes.TextNode(fixture()),
-            CoreNodes.VariableNode(fixture()),
-            CoreNodes.FunctionNode(fixture())
+            CoreNode.TextNode(fixture()),
+            CoreNode.VariableNode(fixture()),
+            CoreNode.FunctionNode(fixture())
         )
 
         val output: MutableList<String> = mutableListOf(

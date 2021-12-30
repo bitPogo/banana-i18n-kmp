@@ -6,11 +6,11 @@
 
 package tech.antibytes.integration
 
-import tech.antibytes.banana.ast.CoreNodes.CompoundNode
-import tech.antibytes.banana.ast.CoreNodes.FunctionNode
-import tech.antibytes.banana.ast.CoreNodes.LinkNode
-import tech.antibytes.banana.ast.CoreNodes.TextNode
-import tech.antibytes.banana.ast.CoreNodes.VariableNode
+import tech.antibytes.banana.ast.CoreNode.CompoundNode
+import tech.antibytes.banana.ast.CoreNode.FunctionNode
+import tech.antibytes.banana.ast.CoreNode.LinkNode
+import tech.antibytes.banana.ast.CoreNode.TextNode
+import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.banana.parser.BananaParser
 import tech.antibytes.banana.parser.DefaultArgumentsParser
 import tech.antibytes.banana.parser.ParserPluginController

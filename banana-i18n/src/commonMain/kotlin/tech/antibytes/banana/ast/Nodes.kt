@@ -9,35 +9,35 @@ package tech.antibytes.banana.ast
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Node
 
-private val voidFunctionArguments = CoreNodes.CompoundNode(emptyList())
+private val voidFunctionArguments = CoreNode.CompoundNode(emptyList())
 
-sealed class CoreNodes : Node {
+sealed class CoreNode : Node {
     data class TextNode(
         val chunks: List<String>
-    ) : CoreNodes()
+    ) : CoreNode()
 
     data class VariableNode(
         val id: String
-    ) : CoreNodes()
+    ) : CoreNode()
 
     data class FunctionNode(
         val id: String,
         val arguments: Node = voidFunctionArguments
-    ) : CoreNodes()
+    ) : CoreNode()
 
     data class LinkNode(
         val target: List<Node>,
         val display: List<Node> = emptyList()
-    ) : CoreNodes()
+    ) : CoreNode()
 
     data class FreeLinkNode(
         val url: Node,
         val display: List<Node> = emptyList()
-    ) : CoreNodes()
+    ) : CoreNode()
 
     data class CompoundNode(
         val children: List<Node>
-    ) : Node {
+    ) : CoreNode() {
         internal companion object : BananaContract.NodeFactory {
             override fun createNode(children: List<Node>): Node = CompoundNode(children)
         }
