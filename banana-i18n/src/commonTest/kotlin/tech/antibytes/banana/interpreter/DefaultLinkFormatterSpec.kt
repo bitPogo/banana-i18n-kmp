@@ -66,7 +66,7 @@ class DefaultLinkFormatterSpec {
         val displayText: String = fixture()
 
         // When
-        val actual = DefaultLinkFormatter().formatLink(url, displayText)
+        val actual = DefaultLinkFormatter().formatFreeLink(url, displayText)
 
         // Then
         actual mustBe displayText

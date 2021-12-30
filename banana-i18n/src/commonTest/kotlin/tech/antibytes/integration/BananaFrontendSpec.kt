@@ -6,6 +6,7 @@
 
 package tech.antibytes.integration
 
+import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.LinkNode
@@ -22,7 +23,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
 class BananaFrontendSpec {
-    private val logger = LoggerStub()
+    private val logger = LoggerStub() // TODO replace with DefaultLogger
 
     @Test
     fun `Given parse is called with a Tokenizer, it accepts`() {
@@ -139,6 +140,66 @@ class BananaFrontendSpec {
                         ),
                         TextNode(chunks = listOf(":", "<", "/", "p", ">", "\n")),
                         VariableNode(id = "2")
+                    )
+                ),
+            "Der Link auf diese Seite sollte von [$1 dem dazugehörigen {{WBREPONAME}}-Objekt] entfernt worden sein. Wir bitten dich zu prüfen, ob dies geschehen ist." to
+                CompoundNode(
+                    children = listOf(
+                        TextNode(
+                            chunks = listOf(
+                                "Der",
+                                " ",
+                                "Link",
+                                " ",
+                                "auf",
+                                " ",
+                                "diese",
+                                " ",
+                                "Seite",
+                                " ",
+                                "sollte",
+                                " ",
+                                "von",
+                                " "
+                            )
+                        ),
+                        CoreNode.FreeLinkNode(
+                            url = VariableNode(id = "1"),
+                            display = listOf(
+                                TextNode(chunks = listOf("dem", " ", "dazugehörigen", " ")),
+                                FunctionNode(id = "WBREPONAME"),
+                                TextNode(chunks = listOf("-", "Objekt"))
+                            )
+                        ),
+                        TextNode(
+                            chunks = listOf(
+                                " ",
+                                "entfernt",
+                                " ",
+                                "worden",
+                                " ",
+                                "sein", ".",
+                                " ",
+                                "Wir",
+                                " ",
+                                "bitten",
+                                " ",
+                                "dich",
+                                " ",
+                                "zu",
+                                " ",
+                                "prüfen",
+                                ",",
+                                " ",
+                                "ob",
+                                " ",
+                                "dies",
+                                " ",
+                                "geschehen",
+                                " ",
+                                "ist", "."
+                            )
+                        )
                     )
                 )
         )
