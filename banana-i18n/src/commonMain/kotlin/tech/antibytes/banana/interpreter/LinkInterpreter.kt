@@ -12,7 +12,7 @@ import tech.antibytes.banana.ast.CoreNode
 
 internal class LinkInterpreter(
     private val concatenator: BananaContract.NodeConcatenator,
-    private val formatter: BananaContract.LinkFormatter
+    private val formatter: PublicApi.LinkFormatter
 ) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode, PublicApi.InterpreterController> {
     override fun interpret(
         node: CoreNode.LinkNode,

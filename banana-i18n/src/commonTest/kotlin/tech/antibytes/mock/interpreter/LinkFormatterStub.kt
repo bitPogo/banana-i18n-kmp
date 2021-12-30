@@ -6,13 +6,13 @@
 
 package tech.antibytes.mock.interpreter
 
-import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 
 internal class LinkFormatterStub(
     var formatLink: (String, String) -> String = { _, _ -> "" },
     var formatFreeLink: (String, String) -> String = { _, _ -> "" }
-) : BananaContract.LinkFormatter, MockContract.Mock {
+) : PublicApi.LinkFormatter, MockContract.Mock {
     override fun formatLink(
         target: String,
         displayText: String
