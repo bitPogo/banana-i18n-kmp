@@ -9,6 +9,7 @@ package tech.antibytes.gradle.banana.dependency
 object Version {
 
     val gradle = Gradle
+    val jvm = Jvm
 
     object Gradle {
         /**
@@ -20,5 +21,12 @@ object Version {
          * [Spotless](https://plugins.gradle.org/plugin/com.diffplug.gradle.spotless)
          */
         const val spotless = "6.0.4"
+    }
+
+    object Jvm {
+        /**
+        * [ICU](https://unicode-org.github.io/icu/userguide/icu4j/)
+        */
+        const val icu = "70.1"
     }
 }

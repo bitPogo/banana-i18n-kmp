@@ -8,4 +8,9 @@ package tech.antibytes.gradle.banana.dependency
 
 object Dependency {
     val gradle = GradlePlugin
+    val jvm = Jvm
+
+    object Jvm {
+        val icu = "com.ibm.icu:icu4j:${Version.jvm.icu}"
+    }
 }
