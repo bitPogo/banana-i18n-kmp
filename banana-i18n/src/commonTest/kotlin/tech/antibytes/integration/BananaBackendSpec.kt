@@ -143,8 +143,69 @@ class BananaBackendSpec {
             ) to Pair(
                 "&lt;p&gt;&lt;strong&gt;Warum ist diese Seite geschützt?&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;Diese Seite ist eingebunden in die {{PLURAL}}:&lt;/p&gt;\nanything",
                 listOf(Pair(PublicApi.Tag.INTERPRETER, "Error: Unknown function PLURAL in use."))
+            ),
+            CoreNode.CompoundNode(
+                children = listOf(
+                    CoreNode.TextNode(
+                        chunks = listOf(
+                            "Der",
+                            " ",
+                            "Link",
+                            " ",
+                            "auf",
+                            " ",
+                            "diese",
+                            " ",
+                            "Seite",
+                            " ",
+                            "sollte",
+                            " ",
+                            "von",
+                            " "
+                        )
+                    ),
+                    CoreNode.FreeLinkNode(
+                        url = CoreNode.VariableNode(id = "1"),
+                        display = listOf(
+                            CoreNode.TextNode(chunks = listOf("dem", " ", "dazugehörigen", " ")),
+                            CoreNode.FunctionNode(id = "WBREPONAME"),
+                            CoreNode.TextNode(chunks = listOf("-", "Objekt"))
+                        )
+                    ),
+                    CoreNode.TextNode(
+                        chunks = listOf(
+                            " ",
+                            "entfernt",
+                            " ",
+                            "worden",
+                            " ",
+                            "sein", ".",
+                            " ",
+                            "Wir",
+                            " ",
+                            "bitten",
+                            " ",
+                            "dich",
+                            " ",
+                            "zu",
+                            " ",
+                            "prüfen",
+                            ",",
+                            " ",
+                            "ob",
+                            " ",
+                            "dies",
+                            " ",
+                            "geschehen",
+                            " ",
+                            "ist", "."
+                        )
+                    )
+                )
+            ) to Pair(
+                "Der Link auf diese Seite sollte von dem dazugehörigen {{WBREPONAME}}-Objekt entfernt worden sein. Wir bitten dich zu prüfen, ob dies geschehen ist.",
+                listOf(Pair(PublicApi.Tag.INTERPRETER, "Error: Unknown function WBREPONAME in use."))
             )
-
         )
         val concatenator = NodeConcatenator()
         val interpreter = InterpreterController(
