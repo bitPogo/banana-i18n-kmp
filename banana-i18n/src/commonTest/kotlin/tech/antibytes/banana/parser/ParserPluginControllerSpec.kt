@@ -9,7 +9,7 @@ package tech.antibytes.banana.parser
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
-import tech.antibytes.mock.parser.ParserPluginStub
+import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.sameAs
 import kotlin.test.Test
@@ -22,7 +22,7 @@ class ParserPluginControllerSpec {
         ParserPluginController(
             logger,
             Pair(
-                ParserPluginStub,
+                ParserPluginFactoryStub(),
                 NodeFactoryStub()
             )
         ) fulfils PublicApi.ParserPluginController::class
@@ -31,10 +31,11 @@ class ParserPluginControllerSpec {
     @Test
     fun `Given resolvePlugin is called with a String, it resolves the given DefaultParser and its NodeFactory if the name matches no Plugin`() {
         // Given
-        val factory = NodeFactoryStub()
+        val nodeFactory = NodeFactoryStub()
+        val parserPluginFactory = ParserPluginFactoryStub()
         val default = Pair(
-            ParserPluginStub,
-            factory
+            parserPluginFactory,
+            nodeFactory
         )
         val controller = ParserPluginController(logger, default)
 
@@ -42,15 +43,15 @@ class ParserPluginControllerSpec {
         val plugin = controller.resolvePlugin("plugin")
 
         // Then
-        plugin.first sameAs ParserPluginStub.lastInstance
-        plugin.second sameAs factory
+        plugin.first sameAs parserPluginFactory.lastInstances.first()
+        plugin.second sameAs nodeFactory
     }
 
     @Test
     fun `Given resolvePlugin is called with a String, it resolves a custom ParserPlugin and its NodeFactory if the name matches no Plugin`() {
         // Given
         val pluginId = "name"
-        val customPlugin = Pair(ParserPluginStub(), NodeFactoryStub())
+        val customPlugin = Pair(ParserPluginFactoryStub(), NodeFactoryStub())
         val customPlugins = mapOf(
             pluginId to customPlugin
         )
@@ -58,7 +59,7 @@ class ParserPluginControllerSpec {
         val controller = ParserPluginController(
             logger,
             defaultPlugin = Pair(
-                ParserPluginStub,
+                ParserPluginFactoryStub(),
                 NodeFactoryStub()
             ),
             registeredPlugins = customPlugins
@@ -68,6 +69,7 @@ class ParserPluginControllerSpec {
         val plugin = controller.resolvePlugin(pluginId)
 
         // Then
-        plugin sameAs customPlugin
+        plugin.first sameAs customPlugin.first.lastInstances.first()
+        plugin.second sameAs customPlugin.second
     }
 }

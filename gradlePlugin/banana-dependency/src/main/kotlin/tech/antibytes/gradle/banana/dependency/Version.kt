@@ -25,8 +25,8 @@ object Version {
 
     object Jvm {
         /**
-        * [ICU](https://unicode-org.github.io/icu/userguide/icu4j/)
-        */
+         * [ICU](https://unicode-org.github.io/icu/userguide/icu4j/)
+         */
         const val icu = "70.1"
     }
 }
