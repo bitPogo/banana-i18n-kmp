@@ -8,7 +8,7 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CoreNodes
+import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
@@ -38,8 +38,8 @@ class FreeLinkInterpreterSpec {
     @Test
     fun `Given interprete is called with a FreeLinkNode and a InterpreterController, it delegates its wraped Url to the Controller`() {
         // Given
-        val node = CoreNodes.FreeLinkNode(
-            url = CoreNodes.TextNode(fixture())
+        val node = CoreNode.FreeLinkNode(
+            url = CoreNode.TextNode(fixture())
         )
 
         var capturedNode: BananaContract.Node? = null
@@ -59,12 +59,12 @@ class FreeLinkInterpreterSpec {
     @Test
     fun `Given interprete is called with a FreeLinkNode and a InterpreterController, it delegates its wraped DisplayTextNodes and the Controller to the Concartenator`() {
         // Given
-        val node = CoreNodes.FreeLinkNode(
-            url = CoreNodes.TextNode(fixture()),
+        val node = CoreNode.FreeLinkNode(
+            url = CoreNode.TextNode(fixture()),
             display = listOf(
-                CoreNodes.TextNode(fixture()),
-                CoreNodes.VariableNode(fixture()),
-                CoreNodes.FunctionNode(fixture())
+                CoreNode.TextNode(fixture()),
+                CoreNode.VariableNode(fixture()),
+                CoreNode.FunctionNode(fixture())
             )
         )
 
@@ -109,7 +109,7 @@ class FreeLinkInterpreterSpec {
             expected
         }
 
-        val node = CoreNodes.FreeLinkNode(url = CoreNodes.TextNode(fixture()))
+        val node = CoreNode.FreeLinkNode(url = CoreNode.TextNode(fixture()))
 
         // When
         val result = FreeLinkInterpreter(concatenator, formatter).interpret(node, controller)

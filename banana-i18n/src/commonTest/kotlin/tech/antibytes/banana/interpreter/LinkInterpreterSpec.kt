@@ -8,7 +8,7 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CoreNodes
+import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
@@ -38,11 +38,11 @@ class LinkInterpreterSpec {
     @Test
     fun `Given interprete is called with a LinkNode and a InterpreterController, it delegates its wraped TargetNodes and the Controller to the Concartenator`() {
         // Given
-        val node = CoreNodes.LinkNode(
+        val node = CoreNode.LinkNode(
             target = listOf(
-                CoreNodes.TextNode(fixture()),
-                CoreNodes.VariableNode(fixture()),
-                CoreNodes.FunctionNode(fixture())
+                CoreNode.TextNode(fixture()),
+                CoreNode.VariableNode(fixture()),
+                CoreNode.FunctionNode(fixture())
             )
         )
 
@@ -66,12 +66,12 @@ class LinkInterpreterSpec {
     @Test
     fun `Given interprete is called with a LinkNode and a InterpreterController, it delegates its wraped DisplayTextNodes and the Controller to the Concartenator`() {
         // Given
-        val node = CoreNodes.LinkNode(
+        val node = CoreNode.LinkNode(
             target = emptyList(),
             display = listOf(
-                CoreNodes.TextNode(fixture()),
-                CoreNodes.VariableNode(fixture()),
-                CoreNodes.FunctionNode(fixture())
+                CoreNode.TextNode(fixture()),
+                CoreNode.VariableNode(fixture()),
+                CoreNode.FunctionNode(fixture())
             )
         )
 
@@ -114,7 +114,7 @@ class LinkInterpreterSpec {
             expected
         }
 
-        val node = CoreNodes.LinkNode(target = emptyList())
+        val node = CoreNode.LinkNode(target = emptyList())
 
         // When
         val result = LinkInterpreter(concatenator, formatter).interpret(node, controller)

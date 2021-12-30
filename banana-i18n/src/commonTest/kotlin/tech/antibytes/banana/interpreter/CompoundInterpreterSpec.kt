@@ -8,7 +8,7 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CoreNodes
+import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
 import tech.antibytes.util.test.fulfils
@@ -29,11 +29,11 @@ class CompoundInterpreterSpec {
         val controller = InterpreterControllerStub()
         val concatenator = NodeConcatenatorStub()
 
-        val node = CoreNodes.CompoundNode(
+        val node = CoreNode.CompoundNode(
             listOf(
-                CoreNodes.TextNode(fixture()),
-                CoreNodes.VariableNode(fixture()),
-                CoreNodes.FunctionNode(fixture())
+                CoreNode.TextNode(fixture()),
+                CoreNode.VariableNode(fixture()),
+                CoreNode.FunctionNode(fixture())
             )
         )
 

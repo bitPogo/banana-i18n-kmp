@@ -9,7 +9,7 @@ package tech.antibytes.banana.interpreter
 import tech.antibytes.banana.BananaContract.InterpreterController
 import tech.antibytes.banana.BananaContract.InterpreterPlugin
 import tech.antibytes.banana.BananaContract.ParameterizedInterpreterPlugin
-import tech.antibytes.banana.ast.CoreNodes.FunctionNode
+import tech.antibytes.banana.ast.CoreNode.FunctionNode
 
 internal class FunctionSelector(
     private val defaultInterpreter: InterpreterPlugin<FunctionNode>,

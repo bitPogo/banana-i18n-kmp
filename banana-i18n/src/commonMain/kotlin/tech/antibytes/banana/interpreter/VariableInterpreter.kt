@@ -7,7 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CoreNodes.VariableNode
+import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 internal class VariableInterpreter(
     private val logger: BananaContract.Logger

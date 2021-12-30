@@ -8,13 +8,13 @@ package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.InterpreterController
-import tech.antibytes.banana.ast.CoreNodes
+import tech.antibytes.banana.ast.CoreNode
 
 internal class CompoundInterpreter(
     private val concatenator: BananaContract.NodeConcatenator
-) : BananaContract.ParameterizedInterpreterPlugin<CoreNodes.CompoundNode, InterpreterController> {
+) : BananaContract.ParameterizedInterpreterPlugin<CoreNode.CompoundNode, InterpreterController> {
     override fun interpret(
-        node: CoreNodes.CompoundNode,
+        node: CoreNode.CompoundNode,
         parameter: InterpreterController
     ): String = concatenator.concatenate(node.children, parameter)
 }

@@ -7,9 +7,9 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.BananaContract
-import tech.antibytes.banana.ast.CoreNodes.FunctionNode
-import tech.antibytes.banana.ast.CoreNodes.TextNode
-import tech.antibytes.banana.ast.CoreNodes.VariableNode
+import tech.antibytes.banana.ast.CoreNode.FunctionNode
+import tech.antibytes.banana.ast.CoreNode.TextNode
+import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 abstract class SharedParserRules(
     protected val logger: BananaContract.Logger,
