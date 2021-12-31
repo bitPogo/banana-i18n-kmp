@@ -11,7 +11,7 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.PublicApi.ParameterizedInterpreterPlugin
 import tech.antibytes.banana.ast.CoreNode
 
-internal class InterpreterController(
+internal class BananaInterpreter(
     private val parameter: Map<String, String>,
     private val variableInterpreter: ParameterizedInterpreterPlugin<CoreNode.VariableNode, Map<String, String>>,
     private val textInterpreter: InterpreterPlugin<CoreNode.TextNode>,

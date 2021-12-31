@@ -13,7 +13,7 @@ import tech.antibytes.banana.interpreter.DefaultFunctionInterpreter
 import tech.antibytes.banana.interpreter.DefaultLinkFormatter
 import tech.antibytes.banana.interpreter.FreeLinkInterpreter
 import tech.antibytes.banana.interpreter.FunctionSelector
-import tech.antibytes.banana.interpreter.InterpreterController
+import tech.antibytes.banana.interpreter.BananaInterpreter
 import tech.antibytes.banana.interpreter.LinkInterpreter
 import tech.antibytes.banana.interpreter.NodeConcatenator
 import tech.antibytes.banana.interpreter.TextInterpreter
@@ -208,7 +208,7 @@ class BananaBackendSpec {
             )
         )
         val concatenator = NodeConcatenator()
-        val interpreter = InterpreterController(
+        val interpreter = BananaInterpreter(
             parameter = mapOf("0" to "somewhere", "1" to "someting", "2" to "anything"),
             variableInterpreter = VariableInterpreter(logger),
             textInterpreter = TextInterpreter(XMLInterceptor()),

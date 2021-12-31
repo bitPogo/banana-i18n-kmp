@@ -16,12 +16,12 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class InterpreterControllerSpec {
+class BananaInterpreterSpec {
     private val fixture = kotlinFixture()
 
     @Test
     fun `It fulfils InterpreterController`() {
-        InterpreterController(
+        BananaInterpreter(
             emptyMap(),
             ParameterizedInterpreterPluginStub(),
             InterpreterPluginStub(),
@@ -39,7 +39,7 @@ class InterpreterControllerSpec {
 
         // When
         val actual = assertFailsWith<FatalInterpreterError> {
-            InterpreterController(
+            BananaInterpreter(
                 parameter = emptyMap(),
                 variableInterpreter = ParameterizedInterpreterPluginStub(),
                 textInterpreter = InterpreterPluginStub(),
@@ -68,7 +68,7 @@ class InterpreterControllerSpec {
         }
 
         // When
-        val actual = InterpreterController(
+        val actual = BananaInterpreter(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = nestedInterpreter,
@@ -100,7 +100,7 @@ class InterpreterControllerSpec {
         }
 
         // When
-        val actual = InterpreterController(
+        val actual = BananaInterpreter(
             parameter = parameter,
             variableInterpreter = nestedInterpreter,
             textInterpreter = InterpreterPluginStub(),
@@ -121,7 +121,7 @@ class InterpreterControllerSpec {
         // Given
         val nestedInterpreter =
             ParameterizedInterpreterPluginStub<CoreNode.FunctionNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
+        val controller = BananaInterpreter(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = InterpreterPluginStub(),
@@ -156,7 +156,7 @@ class InterpreterControllerSpec {
         // Given
         val nestedInterpreter =
             ParameterizedInterpreterPluginStub<CoreNode.CompoundNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
+        val controller = BananaInterpreter(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = InterpreterPluginStub(),
@@ -190,7 +190,7 @@ class InterpreterControllerSpec {
     fun `Given interpret is called with a LinkNode it delegates it to the LinkInterpreter`() {
         // Given
         val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.LinkNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
+        val controller = BananaInterpreter(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = InterpreterPluginStub(),
@@ -224,7 +224,7 @@ class InterpreterControllerSpec {
     fun `Given interpret is called with a FreeLinkNode it delegates it to the FreeLinkInterpreter`() {
         // Given
         val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.FreeLinkNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
+        val controller = BananaInterpreter(
             parameter = emptyMap(),
             variableInterpreter = ParameterizedInterpreterPluginStub(),
             textInterpreter = InterpreterPluginStub(),
