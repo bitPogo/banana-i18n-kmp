@@ -34,10 +34,12 @@ internal interface BananaContract {
         fun concatenate(nodes: List<PublicApi.Node>, controller: PublicApi.InterpreterController): String
     }
 
-    enum class KoinLabel {
+    enum class KoinLabels {
         COMPOUND_FACTORY,
         DEFAULT_ARGUMENT_PARSER,
-        PARSER_PLUGINS
+        PARSER_PLUGINS,
+        TEXT_INTERPRETER,
+        VARIABLE_INTERPRETER
     }
 
     companion object {

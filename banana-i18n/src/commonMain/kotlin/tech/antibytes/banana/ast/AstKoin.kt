@@ -12,9 +12,9 @@ import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 
-internal fun resolveAstKoin(): Module {
+internal fun resolveAstModule(): Module {
     return module {
-        single<PublicApi.NodeFactory>(named(BananaContract.KoinLabel.COMPOUND_FACTORY)) {
+        single<PublicApi.NodeFactory>(named(BananaContract.KoinLabels.COMPOUND_FACTORY)) {
             CoreNode.CompoundNode
         }
     }

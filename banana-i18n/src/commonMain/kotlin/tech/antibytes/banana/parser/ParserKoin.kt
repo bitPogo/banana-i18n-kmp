@@ -12,24 +12,24 @@ import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 
-internal fun resolveParserKoin(): Module {
+internal fun resolveParserModule(): Module {
     return module {
         single<PublicApi.TokenStore> {
             TokenStore(get())
         }
 
-        single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabel.DEFAULT_ARGUMENT_PARSER)) {
+        single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)) {
             Pair(
                 DefaultArgumentsParser,
-                get(named(BananaContract.KoinLabel.COMPOUND_FACTORY))
+                get(named(BananaContract.KoinLabels.COMPOUND_FACTORY))
             )
         }
 
         single<PublicApi.ParserPluginController> {
             ParserPluginController(
                 get(),
-                get(named(BananaContract.KoinLabel.DEFAULT_ARGUMENT_PARSER)),
-                get(named(BananaContract.KoinLabel.PARSER_PLUGINS)),
+                get(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)),
+                get(named(BananaContract.KoinLabels.PARSER_PLUGINS)),
             )
         }
 

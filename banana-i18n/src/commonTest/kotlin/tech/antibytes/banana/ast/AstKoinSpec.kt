@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.ast
 
-import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import tech.antibytes.banana.BananaContract
@@ -16,14 +15,14 @@ import kotlin.test.Test
 
 class AstKoinSpec {
     @Test
-    fun `Given resoloveAstKoin is called it contains a NodeFactory tagged with CompoundNode`() {
+    fun `Given resolveAstModule is called it contains a NodeFactory tagged with CompoundNode`() {
         // Given
         val koin = koinApplication {
-            modules(resolveAstKoin())
+            modules(resolveAstModule())
         }
 
         // When
-        val nodeFactory: PublicApi.NodeFactory = koin.koin.get(named(BananaContract.KoinLabel.COMPOUND_FACTORY))
+        val nodeFactory: PublicApi.NodeFactory = koin.koin.get(named(BananaContract.KoinLabels.COMPOUND_FACTORY))
 
         // Then
         nodeFactory fulfils PublicApi.NodeFactory::class

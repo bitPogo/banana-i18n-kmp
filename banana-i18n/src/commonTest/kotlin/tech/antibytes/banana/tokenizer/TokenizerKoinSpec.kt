@@ -13,10 +13,10 @@ import kotlin.test.Test
 
 class TokenizerKoinSpec {
     @Test
-    fun `Given resoloveTokenizerKoin is called it contains a TokenizerFactory`() {
+    fun `Given resolveTokenizerModule is called it contains a TokenizerFactory`() {
         // Given
         val koin = koinApplication {
-            modules(resolveTokenizer())
+            modules(resolveTokenizerModule())
         }
 
         // When

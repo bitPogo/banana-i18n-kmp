@@ -10,7 +10,7 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 
-internal fun resolveTokenizer(): Module {
+internal fun resolveTokenizerModule(): Module {
     return module {
         single<BananaContract.TokenizerFactory> {
             BananaTokenizer

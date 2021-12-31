@@ -21,11 +21,11 @@ import kotlin.test.Test
 
 class ParserKoinSpec {
     @Test
-    fun `Given resolveParserKoin is called it contains a TokenStore`() {
+    fun `Given resolveParserModule is called it contains a TokenStore`() {
         // Given
         val koin = koinApplication {
             modules(
-                resolveParserKoin(),
+                resolveParserModule(),
                 module {
                     single<BananaContract.Tokenizer> {
                         TokenizerStub(next = { BananaContract.EOF })
@@ -42,13 +42,13 @@ class ParserKoinSpec {
     }
 
     @Test
-    fun `Given resolveParserKoin is called it contains a DefaultArgumentParser Pair`() {
+    fun `Given resolveParserModule is called it contains a DefaultArgumentParser Pair`() {
         // Given
         val koin = koinApplication {
             modules(
-                resolveParserKoin(),
+                resolveParserModule(),
                 module {
-                    single<PublicApi.NodeFactory>(named(BananaContract.KoinLabel.COMPOUND_FACTORY)) {
+                    single<PublicApi.NodeFactory>(named(BananaContract.KoinLabels.COMPOUND_FACTORY)) {
                         NodeFactoryStub()
                     }
                 }
@@ -57,7 +57,7 @@ class ParserKoinSpec {
 
         // When
         val default: Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory> = koin.koin.get(
-            named(BananaContract.KoinLabel.DEFAULT_ARGUMENT_PARSER)
+            named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)
         )
 
         // Then
@@ -66,14 +66,14 @@ class ParserKoinSpec {
     }
 
     @Test
-    fun `Given resolveParserKoin is called it contains a ParserPluginController`() {
+    fun `Given resolveParserModule is called it contains a ParserPluginController`() {
         // Given
         val koin = koinApplication {
             allowOverride(true)
             modules(
-                resolveParserKoin(),
+                resolveParserModule(),
                 module {
-                    single<Map<String, Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>>(named(BananaContract.KoinLabel.PARSER_PLUGINS)) {
+                    single<Map<String, Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>>(named(BananaContract.KoinLabels.PARSER_PLUGINS)) {
                         emptyMap()
                     }
 
@@ -81,7 +81,7 @@ class ParserKoinSpec {
                         LoggerStub()
                     }
 
-                    single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabel.DEFAULT_ARGUMENT_PARSER)) {
+                    single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)) {
                         Pair(
                             ParserPluginFactoryStub(),
                             NodeFactoryStub()
@@ -99,12 +99,12 @@ class ParserKoinSpec {
     }
 
     @Test
-    fun `Given resolveParserKoin is called it contains a BananaParser`() {
+    fun `Given resolveParserModule is called it contains a BananaParser`() {
         // Given
         val koin = koinApplication {
             allowOverride(true)
             modules(
-                resolveParserKoin(),
+                resolveParserModule(),
                 module {
                     single<PublicApi.Logger> {
                         LoggerStub()
