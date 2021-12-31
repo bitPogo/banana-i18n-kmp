@@ -34,6 +34,12 @@ internal interface BananaContract {
         fun concatenate(nodes: List<PublicApi.Node>, controller: PublicApi.InterpreterController): String
     }
 
+    enum class KoinLabel {
+        COMPOUND_FACTORY,
+        DEFAULT_ARGUMENT_PARSER,
+        PARSER_PLUGINS
+    }
+
     companion object {
         val EOF = PublicApi.Token(PublicApi.TokenTypes.EOF, "", -1, -1)
     }

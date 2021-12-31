@@ -9,6 +9,7 @@ package tech.antibytes.banana.ast
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
+import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
@@ -22,7 +23,7 @@ class AstKoinSpec {
         }
 
         // When
-        val nodeFactory: PublicApi.NodeFactory = koin.koin.get(named("CompoundNode"))
+        val nodeFactory: PublicApi.NodeFactory = koin.koin.get(named(BananaContract.KoinLabel.COMPOUND_FACTORY))
 
         // Then
         nodeFactory fulfils PublicApi.NodeFactory::class
