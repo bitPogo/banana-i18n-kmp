@@ -11,7 +11,7 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
 
-class TokenizerKoin {
+class TokenizerKoinSpec {
     @Test
     fun `Given resoloveTokenizerKoin is called it contains a TokenizerFactory`() {
         // Given
