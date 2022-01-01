@@ -72,7 +72,7 @@ interface PublicApi {
         fun interpret(node: Node): String
     }
 
-    interface ParameterizedInterpreterPlugin<T: Node> : Interpreter<T> {
+    interface ParameterizedInterpreterPlugin<T : Node> : Interpreter<T> {
         fun interpret(node: T, controller: InterpreterController): String
     }
 

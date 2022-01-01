@@ -10,6 +10,7 @@ import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 
 internal fun resolveInterpreterModule(): Module {
@@ -20,6 +21,41 @@ internal fun resolveInterpreterModule(): Module {
 
         single<BananaContract.InterpreterPlugin<CoreNode.TextNode>>(named(BananaContract.KoinLabels.TEXT_INTERPRETER)) {
             TextInterpreter(get())
+        }
+
+        single<BananaContract.VariableInterpreter<CoreNode.VariableNode>>(named(BananaContract.KoinLabels.VARIABLE_INTERPRETER)) {
+            VariableInterpreter(get())
+        }
+
+        single<BananaContract.InterpreterPlugin<CoreNode.FunctionNode>>(named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)) {
+            DefaultFunctionInterpreter(get())
+        }
+
+        single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode>>(named(BananaContract.KoinLabels.FUNCTION_SELECTOR)) {
+            FunctionInterpreterSelector(
+                get(named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)),
+                get(named(BananaContract.KoinLabels.INTERPRETER_PLUGINS))
+            )
+        }
+
+        single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode>>(named(BananaContract.KoinLabels.COMPOUND_INTERPRETER)) {
+            CompoundInterpreter(
+                get()
+            )
+        }
+
+        single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode>>(named(BananaContract.KoinLabels.LINK_INTERPRETER)) {
+            LinkInterpreter(
+                get(),
+                get()
+            )
+        }
+
+        single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode>>(named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)) {
+            FreeLinkInterpreter(
+                get(),
+                get()
+            )
         }
     }
 }

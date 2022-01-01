@@ -6,9 +6,11 @@
 
 package tech.antibytes.banana
 
+import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.banana.tokenizer.TokenizerContract
 
 internal typealias Variables = Map<String, String>
+internal typealias RegisteredInterpreterPlugins = Map<String, PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode>>
 
 internal interface BananaContract {
     interface Tokenizer {
@@ -45,7 +47,13 @@ internal interface BananaContract {
         DEFAULT_ARGUMENT_PARSER,
         PARSER_PLUGINS,
         TEXT_INTERPRETER,
-        VARIABLE_INTERPRETER
+        VARIABLE_INTERPRETER,
+        FUNCTION_INTERPRETER,
+        FUNCTION_SELECTOR,
+        INTERPRETER_PLUGINS,
+        COMPOUND_INTERPRETER,
+        LINK_INTERPRETER,
+        FREE_LINK_INTERPRETER,
     }
 
     companion object {

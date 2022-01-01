@@ -6,13 +6,15 @@
 
 package tech.antibytes.banana.interpreter
 
-import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.RegisteredInterpreterPlugins
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.mock.interpreter.FunctionInterpreterStub
+import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.util.test.fulfils
@@ -60,8 +62,7 @@ class InterpreterKoinSpec {
         interpreter fulfils BananaContract.InterpreterPlugin::class
     }
 
-    // TODO
-    /*@Test
+    @Test
     fun `Given resolveInterpreterModule is called it contains a VariableInterpreter`() {
         // Given
         val koin = koinApplication {
@@ -77,12 +78,130 @@ class InterpreterKoinSpec {
         }
 
         // When
-        val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.VariableNode, Any> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.VARIABLE_INTERPRETER),
-            parameters = { parametersOf(emptyMap<String, String>()) }
+        val interpreter: BananaContract.VariableInterpreter<CoreNode.VariableNode> = koin.koin.get(
+            qualifier = named(BananaContract.KoinLabels.VARIABLE_INTERPRETER)
+        )
+
+        // Then
+        interpreter fulfils BananaContract.VariableInterpreter::class
+    }
+
+    @Test
+    fun `Given resolveInterpreterModule is called it contains a FunctionInterpreter`() {
+        // Given
+        val koin = koinApplication {
+            allowOverride(true)
+            modules(
+                resolveInterpreterModule(),
+                module {
+                    single<PublicApi.Logger> {
+                        LoggerStub()
+                    }
+                }
+            )
+        }
+
+        // When
+        val interpreter: BananaContract.InterpreterPlugin<CoreNode.FunctionNode> = koin.koin.get(
+            qualifier = named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)
         )
 
         // Then
         interpreter fulfils BananaContract.InterpreterPlugin::class
-    }*/
+    }
+
+    @Test
+    fun `Given resolveInterpreterModule is called it contains a FunctionInterpreterSelector`() {
+        // Given
+        val koin = koinApplication {
+            allowOverride(true)
+            modules(
+                resolveInterpreterModule(),
+                module {
+                    single<BananaContract.InterpreterPlugin<CoreNode.FunctionNode>>(named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)) {
+                        FunctionInterpreterStub()
+                    }
+
+                    single<RegisteredInterpreterPlugins>(named(BananaContract.KoinLabels.INTERPRETER_PLUGINS)) {
+                        emptyMap()
+                    }
+                }
+            )
+        }
+
+        // When
+        val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode> = koin.koin.get(
+            qualifier = named(BananaContract.KoinLabels.FUNCTION_SELECTOR)
+        )
+
+        // Then
+        interpreter fulfils PublicApi.ParameterizedInterpreterPlugin::class
+    }
+
+    @Test
+    fun `Given resolveInterpreterModule is called it contains a CompoundInterpreter`() {
+        // Given
+        val koin = koinApplication {
+            allowOverride(true)
+            modules(
+                resolveInterpreterModule()
+            )
+        }
+
+        // When
+        val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode> = koin.koin.get(
+            qualifier = named(BananaContract.KoinLabels.COMPOUND_INTERPRETER)
+        )
+
+        // Then
+        interpreter fulfils PublicApi.ParameterizedInterpreterPlugin::class
+    }
+
+    @Test
+    fun `Given resolveInterpreterModule is called it contains a LinkInterpreter`() {
+        // Given
+        val koin = koinApplication {
+            allowOverride(true)
+            modules(
+                resolveInterpreterModule(),
+                module {
+                    single<PublicApi.LinkFormatter> {
+                        LinkFormatterStub()
+                    }
+                }
+            )
+        }
+
+        // When
+        val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode> = koin.koin.get(
+            qualifier = named(BananaContract.KoinLabels.LINK_INTERPRETER)
+        )
+
+        // Then
+        interpreter fulfils PublicApi.ParameterizedInterpreterPlugin::class
+    }
+
+    @Test
+    fun `Given resolveInterpreterModule is called it contains a FreeLinkInterpreter`() {
+        // Given
+        val koin = koinApplication {
+            allowOverride(true)
+            modules(
+                resolveInterpreterModule(),
+                module {
+                    single<PublicApi.LinkFormatter> {
+                        LinkFormatterStub()
+                    }
+                }
+            )
+        }
+
+        // When
+        val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode> = koin.koin.get(
+            qualifier = named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)
+        )
+
+        // Then
+        interpreter fulfils PublicApi.ParameterizedInterpreterPlugin::class
+    }
 }

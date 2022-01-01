@@ -8,12 +8,12 @@ package tech.antibytes.integration
 
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.banana.interpreter.BananaInterpreter
 import tech.antibytes.banana.interpreter.CompoundInterpreter
 import tech.antibytes.banana.interpreter.DefaultFunctionInterpreter
 import tech.antibytes.banana.interpreter.DefaultLinkFormatter
 import tech.antibytes.banana.interpreter.FreeLinkInterpreter
-import tech.antibytes.banana.interpreter.FunctionSelector
-import tech.antibytes.banana.interpreter.BananaInterpreter
+import tech.antibytes.banana.interpreter.FunctionInterpreterSelector
 import tech.antibytes.banana.interpreter.LinkInterpreter
 import tech.antibytes.banana.interpreter.NodeConcatenator
 import tech.antibytes.banana.interpreter.TextInterpreter
@@ -212,7 +212,7 @@ class BananaBackendSpec {
             variables = mapOf("0" to "somewhere", "1" to "someting", "2" to "anything"),
             variableInterpreter = VariableInterpreter(logger),
             textInterpreter = TextInterpreter(XMLInterceptor()),
-            functionSelector = FunctionSelector(DefaultFunctionInterpreter(logger), emptyMap()),
+            functionSelector = FunctionInterpreterSelector(DefaultFunctionInterpreter(logger), emptyMap()),
             compoundInterpreter = CompoundInterpreter(concatenator),
             linkInterpreter = LinkInterpreter(concatenator, DefaultLinkFormatter()),
             freeLinkInterpreter = FreeLinkInterpreter(concatenator, DefaultLinkFormatter()),

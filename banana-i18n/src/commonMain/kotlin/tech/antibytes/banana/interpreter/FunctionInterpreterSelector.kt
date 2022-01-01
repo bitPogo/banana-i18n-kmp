@@ -8,15 +8,16 @@ package tech.antibytes.banana.interpreter
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.RegisteredInterpreterPlugins
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 
-internal class FunctionSelector(
+internal class FunctionInterpreterSelector(
     private val defaultInterpreter: BananaContract.InterpreterPlugin<FunctionNode>,
-    private val registerPlugins: Map<String, PublicApi.ParameterizedInterpreterPlugin<FunctionNode>>
+    private val registeredPlugins: RegisteredInterpreterPlugins
 ) : PublicApi.ParameterizedInterpreterPlugin<FunctionNode> {
     override fun interpret(node: FunctionNode, controller: PublicApi.InterpreterController): String {
-        return if (registerPlugins.containsKey(node.id)) {
-            registerPlugins[node.id]!!.interpret(node, controller)
+        return if (registeredPlugins.containsKey(node.id)) {
+            registeredPlugins[node.id]!!.interpret(node, controller)
         } else {
             defaultInterpreter.interpret(node)
         }
