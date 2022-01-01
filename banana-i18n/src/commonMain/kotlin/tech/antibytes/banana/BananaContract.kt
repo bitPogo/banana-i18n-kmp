@@ -8,6 +8,8 @@ package tech.antibytes.banana
 
 import tech.antibytes.banana.tokenizer.TokenizerContract
 
+internal typealias Variables = Map<String, String>
+
 internal interface BananaContract {
     interface Tokenizer {
         fun setReader(reader: TokenizerContract.Reader)
@@ -26,12 +28,16 @@ internal interface BananaContract {
 
     interface TopLevelParser : PublicApi.ParserPlugin
 
-    interface InterpreterPlugin<T : PublicApi.Node> : PublicApi.Interpreter<T> {
-        fun interpret(node: T): String
-    }
-
     interface NodeConcatenator {
         fun concatenate(nodes: List<PublicApi.Node>, controller: PublicApi.InterpreterController): String
+    }
+
+    interface VariableInterpreter<T : PublicApi.Node> : PublicApi.Interpreter<T> {
+        fun interpret(node: T, variables: Variables): String
+    }
+
+    interface InterpreterPlugin<T : PublicApi.Node> {
+        fun interpret(node: T): String
     }
 
     enum class KoinLabels {

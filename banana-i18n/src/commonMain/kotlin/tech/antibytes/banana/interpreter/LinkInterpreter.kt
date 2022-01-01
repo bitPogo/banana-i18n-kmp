@@ -13,14 +13,14 @@ import tech.antibytes.banana.ast.CoreNode
 internal class LinkInterpreter(
     private val concatenator: BananaContract.NodeConcatenator,
     private val formatter: PublicApi.LinkFormatter
-) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode, PublicApi.InterpreterController> {
+) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode> {
     override fun interpret(
         node: CoreNode.LinkNode,
-        parameter: PublicApi.InterpreterController
+        controller: PublicApi.InterpreterController
     ): String {
         return formatter.formatLink(
-            target = concatenator.concatenate(node.target, parameter),
-            displayText = concatenator.concatenate(node.display, parameter)
+            target = concatenator.concatenate(node.target, controller),
+            displayText = concatenator.concatenate(node.display, controller)
         )
     }
 }

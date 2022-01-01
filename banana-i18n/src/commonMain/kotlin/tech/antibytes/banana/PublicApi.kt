@@ -63,9 +63,6 @@ interface PublicApi {
     }
 
     interface Interpreter<T : Node>
-    interface ParameterizedInterpreterPlugin<T : Node, P : Any> : Interpreter<T> {
-        fun interpret(node: T, parameter: P): String
-    }
 
     interface TextInterceptor {
         fun intercept(chunk: String): String
@@ -75,8 +72,12 @@ interface PublicApi {
         fun interpret(node: Node): String
     }
 
+    interface ParameterizedInterpreterPlugin<T: Node> : Interpreter<T> {
+        fun interpret(node: T, controller: InterpreterController): String
+    }
+
     interface InterpreterFactory {
-        fun getInstance(logger: Logger, locale: Locale): Interpreter<out Node>
+        fun getInstance(logger: Logger, locale: Locale): ParameterizedInterpreterPlugin<out Node>
     }
 
     interface LinkFormatter {

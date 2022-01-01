@@ -24,7 +24,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
 class BananaBackendSpec {
-    private val logger = LoggerStub() // TODO replace with a DefaultLogger
+    private val logger = LoggerStub()
 
     @Test
     fun `Given interprete is called with a parse tree it returns a the formatted text`() {
@@ -209,7 +209,7 @@ class BananaBackendSpec {
         )
         val concatenator = NodeConcatenator()
         val interpreter = BananaInterpreter(
-            parameter = mapOf("0" to "somewhere", "1" to "someting", "2" to "anything"),
+            variables = mapOf("0" to "somewhere", "1" to "someting", "2" to "anything"),
             variableInterpreter = VariableInterpreter(logger),
             textInterpreter = TextInterpreter(XMLInterceptor()),
             functionSelector = FunctionSelector(DefaultFunctionInterpreter(logger), emptyMap()),

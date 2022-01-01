@@ -7,6 +7,7 @@
 package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
+import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
@@ -25,8 +26,8 @@ class VariableInterpreterSpec {
     }
 
     @Test
-    fun `It fulfils ParameterizedInterpreterPlugin`() {
-        VariableInterpreter(logger) fulfils PublicApi.ParameterizedInterpreterPlugin::class
+    fun `It fulfils variablesizedInterpreterPlugin`() {
+        VariableInterpreter(logger) fulfils BananaContract.VariableInterpreter::class
     }
 
     @Test
@@ -34,12 +35,12 @@ class VariableInterpreterSpec {
         // Given
         val id = "abc"
         val value: String = fixture()
-        val parameter = mapOf(id to value)
+        val variables = mapOf(id to value)
 
         val node = VariableNode(id)
 
         // When
-        val result = VariableInterpreter(logger).interpret(node, parameter)
+        val result = VariableInterpreter(logger).interpret(node, variables)
 
         // Then
         result mustBe value
@@ -51,12 +52,12 @@ class VariableInterpreterSpec {
         // Given
         val id: String = fixture()
         val value: String = fixture()
-        val parameter = mapOf("any" to value)
+        val variables = mapOf("any" to value)
 
         val node = VariableNode(id)
 
         // When
-        val result = VariableInterpreter(logger).interpret(node, parameter)
+        val result = VariableInterpreter(logger).interpret(node, variables)
 
         // Then
         result mustBe "\$$id"

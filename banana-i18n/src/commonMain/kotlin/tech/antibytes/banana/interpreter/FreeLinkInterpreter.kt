@@ -13,14 +13,11 @@ import tech.antibytes.banana.ast.CoreNode
 internal class FreeLinkInterpreter(
     private val concatenator: BananaContract.NodeConcatenator,
     private val formatter: PublicApi.LinkFormatter
-) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode, PublicApi.InterpreterController> {
-    override fun interpret(
-        node: CoreNode.FreeLinkNode,
-        parameter: PublicApi.InterpreterController
-    ): String {
+) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode> {
+    override fun interpret(node: CoreNode.FreeLinkNode, controller: PublicApi.InterpreterController): String {
         return formatter.formatFreeLink(
-            url = parameter.interpret(node.url),
-            displayText = concatenator.concatenate(node.display, parameter)
+            url = controller.interpret(node.url),
+            displayText = concatenator.concatenate(node.display, controller)
         )
     }
 }
