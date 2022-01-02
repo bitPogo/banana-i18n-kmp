@@ -9,7 +9,6 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi.Token
 import tech.antibytes.banana.PublicApi.TokenTypes
-import tech.antibytes.mock.tokenizer.ReaderStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -17,27 +16,15 @@ import kotlin.test.assertFailsWith
 
 class BananaTokenizerSpec {
     @Test
-    fun `It fulfils TokenizerFactory`() {
-        BananaTokenizer fulfils BananaContract.TokenizerFactory::class
-    }
-
-    @Test
-    fun `Given getInstance is called with a Reader it returns a Tokenizer`() {
-        // Given
-        val reader = ReaderStub()
-
-        // When
-        val result = BananaTokenizer.getInstance(reader)
-
-        // Then
-        result fulfils BananaContract.Tokenizer::class
+    fun `It fulfils Tokenizer`() {
+        BananaTokenizer(StringReader("")) fulfils BananaContract.Tokenizer::class
     }
 
     @Test
     fun `Given next is called, it returns EOF, if the input was empty`() {
         // Given
         val input = StringReader("")
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -50,7 +37,7 @@ class BananaTokenizerSpec {
     fun `Given next is called, it returns EOF, if the input had been consumed`() {
         // Given
         val input = StringReader("a")
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         tokenizer.next()
@@ -64,7 +51,7 @@ class BananaTokenizerSpec {
     fun `Given next is called, it fails for illegal chars`() {
         // Given
         val input = StringReader(0x1.toChar().toString())
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // Then
         val error = assertFailsWith<TokenizerError.IllegalCharacter> {
@@ -80,7 +67,7 @@ class BananaTokenizerSpec {
         // Given
         val value = "!xxx"
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -94,7 +81,7 @@ class BananaTokenizerSpec {
         val value = " \n\r\t"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -108,7 +95,7 @@ class BananaTokenizerSpec {
         val value = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -121,7 +108,7 @@ class BananaTokenizerSpec {
         val value = "ηὕρηκα"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -138,7 +125,7 @@ class BananaTokenizerSpec {
         unescaped.forEach { char -> valueBuilder.append("\\$char") }
 
         val input = StringReader(valueBuilder.toString())
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         var idx = 0
         unescaped.forEach { char ->
@@ -157,7 +144,7 @@ class BananaTokenizerSpec {
         val value = "123456789"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -172,7 +159,7 @@ class BananaTokenizerSpec {
         val value = "߀߁߂߃߄߅߆߇߈߉"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -186,7 +173,7 @@ class BananaTokenizerSpec {
         val value = "1234.56789"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -200,7 +187,7 @@ class BananaTokenizerSpec {
         val value = "1234.56789"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -214,7 +201,7 @@ class BananaTokenizerSpec {
         val value = "1234e23"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -228,7 +215,7 @@ class BananaTokenizerSpec {
         val value = "߀߁߂߃߄߅߆߇߈߉e+߀߁߂߃߄߅߆߇߈߉"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -242,7 +229,7 @@ class BananaTokenizerSpec {
         val value = "1234e+23"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -256,7 +243,7 @@ class BananaTokenizerSpec {
         val value = "1234e-23"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -270,7 +257,7 @@ class BananaTokenizerSpec {
         val value = "1234.234e-23"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -284,7 +271,7 @@ class BananaTokenizerSpec {
         val value = ".234e-23"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -298,7 +285,7 @@ class BananaTokenizerSpec {
         val value = "\$1234567890"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -312,7 +299,7 @@ class BananaTokenizerSpec {
         val value = "\$abc"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -326,7 +313,7 @@ class BananaTokenizerSpec {
         val value = "\$abc_def"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -340,7 +327,7 @@ class BananaTokenizerSpec {
         val value = "\$abc_"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token1 = tokenizer.next()
@@ -356,7 +343,7 @@ class BananaTokenizerSpec {
         val value = "|"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -370,7 +357,7 @@ class BananaTokenizerSpec {
         val value = "{{"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -384,7 +371,7 @@ class BananaTokenizerSpec {
         val value = "{{{{{"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token1 = tokenizer.next()
@@ -404,7 +391,7 @@ class BananaTokenizerSpec {
         val value = "}}"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -418,7 +405,7 @@ class BananaTokenizerSpec {
         val value = "}}}"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token1 = tokenizer.next()
@@ -434,7 +421,7 @@ class BananaTokenizerSpec {
         val value = "[["
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -448,7 +435,7 @@ class BananaTokenizerSpec {
         val value = "[[[[["
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token1 = tokenizer.next()
@@ -468,7 +455,7 @@ class BananaTokenizerSpec {
         val value = "]]"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val result = tokenizer.next()
@@ -482,7 +469,7 @@ class BananaTokenizerSpec {
         val value = "]]]"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token1 = tokenizer.next()
@@ -498,7 +485,7 @@ class BananaTokenizerSpec {
         val value = "https://example.org"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token = tokenizer.next()
@@ -512,7 +499,7 @@ class BananaTokenizerSpec {
         val value = "https://example.org"
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         // When
         val token = tokenizer.next()
@@ -527,7 +514,7 @@ class BananaTokenizerSpec {
         val value = "ηὕρηκα! {{ measurement: +١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩ | kilometer }} to walk until becoming a developer."
 
         val input = StringReader(value)
-        val tokenizer = BananaTokenizer.getInstance(input)
+        val tokenizer = BananaTokenizer(input)
 
         val tokens = mutableListOf<Token>()
 
@@ -567,19 +554,5 @@ class BananaTokenizerSpec {
         tokens[27] mustBe Token(type = TokenTypes.ASCII_STRING, value = "developer", column = 85, line = 0)
         tokens[28] mustBe Token(type = TokenTypes.LITERAL, value = ".", column = 94, line = 0)
         tokens[29] mustBe EOF
-    }
-
-    @Test
-    fun `Given setReader is called with a Reader, it replaces the current Reader`() {
-        // Given
-        val reader = ReaderStub()
-
-        val tokenizer = BananaTokenizer.getInstance(reader)
-
-        // When
-        tokenizer.setReader(StringReader("abc"))
-
-        // Then
-        tokenizer.next() mustBe Token(type = TokenTypes.ASCII_STRING, value = "abc", column = 0, line = 0)
     }
 }

@@ -11,10 +11,10 @@ import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 
-internal class TokenStoreFake(
+internal class ParserEngineFake(
     private var _tokens: MutableList<PublicApi.Token> = mutableListOf(EOF, EOF),
     var tokenizerStub: BananaContract.Tokenizer? = null
-) : PublicApi.TokenStore, MockContract.Mock {
+) : PublicApi.ParserEngine, MockContract.Mock {
     val capturedShiftedTokens = mutableListOf<PublicApi.Token>()
     private val stringBuffer: MutableList<String> = mutableListOf()
 

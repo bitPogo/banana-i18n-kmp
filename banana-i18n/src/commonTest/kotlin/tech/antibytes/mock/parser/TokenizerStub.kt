@@ -16,11 +16,6 @@ internal class TokenizerStub(
     var setReader: ((reader: Reader) -> Unit)? = null,
     var next: (() -> PublicApi.Token)? = null
 ) : BananaContract.Tokenizer, MockContract.Mock {
-    override fun setReader(reader: Reader) {
-        return setReader?.invoke(reader)
-            ?: throw MockError.MissingStub("Missing sideeffect for setReader")
-    }
-
     override fun next(): PublicApi.Token {
         return next?.invoke()
             ?: throw MockError.MissingStub("Missing next for setReader")

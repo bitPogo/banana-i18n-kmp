@@ -12,10 +12,10 @@ import tech.antibytes.banana.PublicApi.InterpreterController
 import tech.antibytes.banana.ast.CoreNode
 
 internal class CompoundInterpreter(
-    private val concatenator: BananaContract.NodeConcatenator
-) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode, InterpreterController> {
+    private val concatenator: BananaContract.NodeConcatenator,
+) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode> {
     override fun interpret(
         node: CoreNode.CompoundNode,
-        parameter: InterpreterController
-    ): String = concatenator.concatenate(node.children, parameter)
+        controller: InterpreterController
+    ): String = concatenator.concatenate(node.children, controller)
 }

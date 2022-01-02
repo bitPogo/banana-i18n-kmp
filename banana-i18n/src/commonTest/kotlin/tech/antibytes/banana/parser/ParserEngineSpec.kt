@@ -7,7 +7,6 @@
 package tech.antibytes.banana.parser
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.parser.TokenizerStub
@@ -16,7 +15,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
 
-class TokenStoreSpec {
+class ParserEngineSpec {
     private val fixture = kotlinFixture()
     private val tokenizer = TokenizerStub()
 
@@ -26,17 +25,10 @@ class TokenStoreSpec {
     }
 
     @Test
-    fun `It fulfils TokenStore`() {
-        val store: Any = TokenStore(tokenizer.also { it.next = { EOF } })
+    fun `It fulfils ParserEngine`() {
+        val store: Any = ParserEngine(tokenizer.also { it.next = { EOF } })
 
-        store fulfils PublicApi.TokenStore::class
-    }
-
-    @Test
-    fun `It fulfils TokenStoreResetter`() {
-        val store: Any = TokenStore(tokenizer.also { it.next = { EOF } })
-
-        store fulfils BananaContract.TokenStoreResetter::class
+        store fulfils PublicApi.ParserEngine::class
     }
 
     @Test
@@ -65,7 +57,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         store.currentToken mustBe tokens[0]
         store.lookahead mustBe tokens[1]
@@ -98,7 +90,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val result = store.consume()
@@ -136,7 +128,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val result = store.shift()
@@ -152,7 +144,7 @@ class TokenStoreSpec {
         // Given
         tokenizer.next = { EOF }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val buffer = store.resolveValues()
@@ -189,7 +181,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         store.shift()
@@ -241,7 +233,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         store.shift()
@@ -285,7 +277,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val token = store.lookahead(5)
@@ -322,7 +314,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val token = store.lookahead(2)
@@ -371,7 +363,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         store.lookahead(3)
@@ -421,7 +413,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         store.lookahead(3)
@@ -447,7 +439,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val token = store.lookahead(0)
@@ -472,7 +464,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val token = store.lookahead(-23)
@@ -497,7 +489,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         val token = store.lookahead(1)
@@ -546,7 +538,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         store.lookahead(2)
@@ -603,7 +595,7 @@ class TokenStoreSpec {
 
         tokenizer.next = { consumableTokens.removeAt(0) }
 
-        val store = TokenStore(tokenizer)
+        val store = ParserEngine(tokenizer)
 
         // When
         store.lookahead(2)
@@ -614,56 +606,5 @@ class TokenStoreSpec {
         // Then
         store.currentToken mustBe tokens[3]
         store.lookahead mustBe tokens[4]
-    }
-
-    @Test
-    fun `Given reset is called, it resets the storage to current and lookahead `() {
-        val tokens = listOf(
-            PublicApi.Token(
-                PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            PublicApi.Token(
-                PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            PublicApi.Token(
-                PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            PublicApi.Token(
-                PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            PublicApi.Token(
-                PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
-                -1,
-                -1,
-            ),
-            EOF
-        )
-        val consumableTokens = tokens.toMutableList()
-
-        tokenizer.next = { consumableTokens.removeAt(0) }
-
-        val store = TokenStore(tokenizer)
-
-        // When
-        store.shift()
-        store.reset()
-
-        // Then
-        store.currentToken mustBe tokens[3]
-        store.lookahead mustBe tokens[4]
-        store.resolveValues().isEmpty() mustBe true
     }
 }

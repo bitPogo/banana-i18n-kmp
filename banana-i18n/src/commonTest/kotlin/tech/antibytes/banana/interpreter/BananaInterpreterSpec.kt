@@ -8,22 +8,24 @@ package tech.antibytes.banana.interpreter
 
 import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.Variables
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterPluginStub
 import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
+import tech.antibytes.mock.interpreter.VariableInterpreterStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class InterpreterControllerSpec {
+class BananaInterpreterSpec {
     private val fixture = kotlinFixture()
 
     @Test
     fun `It fulfils InterpreterController`() {
-        InterpreterController(
+        BananaInterpreter(
             emptyMap(),
-            ParameterizedInterpreterPluginStub(),
+            VariableInterpreterStub(),
             InterpreterPluginStub(),
             ParameterizedInterpreterPluginStub(),
             ParameterizedInterpreterPluginStub(),
@@ -39,9 +41,9 @@ class InterpreterControllerSpec {
 
         // When
         val actual = assertFailsWith<FatalInterpreterError> {
-            InterpreterController(
-                parameter = emptyMap(),
-                variableInterpreter = ParameterizedInterpreterPluginStub(),
+            BananaInterpreter(
+                variables = emptyMap(),
+                variableInterpreter = VariableInterpreterStub(),
                 textInterpreter = InterpreterPluginStub(),
                 functionSelector = ParameterizedInterpreterPluginStub(),
                 compoundInterpreter = ParameterizedInterpreterPluginStub(),
@@ -68,9 +70,9 @@ class InterpreterControllerSpec {
         }
 
         // When
-        val actual = InterpreterController(
-            parameter = emptyMap(),
-            variableInterpreter = ParameterizedInterpreterPluginStub(),
+        val actual = BananaInterpreter(
+            variables = emptyMap(),
+            variableInterpreter = VariableInterpreterStub(),
             textInterpreter = nestedInterpreter,
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
@@ -86,22 +88,22 @@ class InterpreterControllerSpec {
     @Test
     fun `Given interpret is called with a VariableNode it delegates it to the VariableInterpreter`() {
         // Given
-        val parameter: Map<String, String> = fixture()
-        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.VariableNode, Map<String, String>>()
+        val variables: Variables = fixture()
+        val nestedInterpreter = VariableInterpreterStub()
         val expected: String = fixture()
         val node = CoreNode.VariableNode(fixture())
         var capturedNode: PublicApi.Node? = null
-        var capturedParameter: Map<String, String> = emptyMap()
+        var capturedVariables: Variables = emptyMap()
 
-        nestedInterpreter.interpret = { givenNode, givenParameter ->
-            capturedParameter = givenParameter
+        nestedInterpreter.interpret = { givenNode, givenVariables ->
             capturedNode = givenNode
+            capturedVariables = givenVariables
             expected
         }
 
         // When
-        val actual = InterpreterController(
-            parameter = parameter,
+        val actual = BananaInterpreter(
+            variables = variables,
             variableInterpreter = nestedInterpreter,
             textInterpreter = InterpreterPluginStub(),
             functionSelector = ParameterizedInterpreterPluginStub(),
@@ -113,17 +115,16 @@ class InterpreterControllerSpec {
         // Then
         actual mustBe expected
         capturedNode!! mustBe node
-        capturedParameter mustBe parameter
+        capturedVariables mustBe variables
     }
 
     @Test
     fun `Given interpret is called with a FunctionNode it delegates it to the FunctionSelector`() {
         // Given
-        val nestedInterpreter =
-            ParameterizedInterpreterPluginStub<CoreNode.FunctionNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
-            parameter = emptyMap(),
-            variableInterpreter = ParameterizedInterpreterPluginStub(),
+        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.FunctionNode>()
+        val controller = BananaInterpreter(
+            variables = emptyMap(),
+            variableInterpreter = VariableInterpreterStub(),
             textInterpreter = InterpreterPluginStub(),
             functionSelector = nestedInterpreter,
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
@@ -136,9 +137,9 @@ class InterpreterControllerSpec {
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
 
-        nestedInterpreter.interpret = { givenNode, givenParameter ->
-            capturedController = givenParameter
+        nestedInterpreter.interpret = { givenNode, givenController ->
             capturedNode = givenNode
+            capturedController = givenController
             expected
         }
 
@@ -154,11 +155,10 @@ class InterpreterControllerSpec {
     @Test
     fun `Given interpret is called with a CompoundNode it delegates it to the CompoundInterpreter`() {
         // Given
-        val nestedInterpreter =
-            ParameterizedInterpreterPluginStub<CoreNode.CompoundNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
-            parameter = emptyMap(),
-            variableInterpreter = ParameterizedInterpreterPluginStub(),
+        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.CompoundNode>()
+        val controller = BananaInterpreter(
+            variables = emptyMap(),
+            variableInterpreter = VariableInterpreterStub(),
             textInterpreter = InterpreterPluginStub(),
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = nestedInterpreter,
@@ -171,9 +171,9 @@ class InterpreterControllerSpec {
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
 
-        nestedInterpreter.interpret = { givenNode, givenParameter ->
-            capturedController = givenParameter
+        nestedInterpreter.interpret = { givenNode, givenController ->
             capturedNode = givenNode
+            capturedController = givenController
             expected
         }
 
@@ -189,10 +189,10 @@ class InterpreterControllerSpec {
     @Test
     fun `Given interpret is called with a LinkNode it delegates it to the LinkInterpreter`() {
         // Given
-        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.LinkNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
-            parameter = emptyMap(),
-            variableInterpreter = ParameterizedInterpreterPluginStub(),
+        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.LinkNode>()
+        val controller = BananaInterpreter(
+            variables = emptyMap(),
+            variableInterpreter = VariableInterpreterStub(),
             textInterpreter = InterpreterPluginStub(),
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
@@ -205,9 +205,9 @@ class InterpreterControllerSpec {
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
 
-        nestedInterpreter.interpret = { givenNode, givenParameter ->
-            capturedController = givenParameter
+        nestedInterpreter.interpret = { givenNode, givenController ->
             capturedNode = givenNode
+            capturedController = givenController
             expected
         }
 
@@ -223,10 +223,10 @@ class InterpreterControllerSpec {
     @Test
     fun `Given interpret is called with a FreeLinkNode it delegates it to the FreeLinkInterpreter`() {
         // Given
-        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.FreeLinkNode, PublicApi.InterpreterController>()
-        val controller = InterpreterController(
-            parameter = emptyMap(),
-            variableInterpreter = ParameterizedInterpreterPluginStub(),
+        val nestedInterpreter = ParameterizedInterpreterPluginStub<CoreNode.FreeLinkNode>()
+        val controller = BananaInterpreter(
+            variables = emptyMap(),
+            variableInterpreter = VariableInterpreterStub(),
             textInterpreter = InterpreterPluginStub(),
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
@@ -239,9 +239,9 @@ class InterpreterControllerSpec {
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
 
-        nestedInterpreter.interpret = { givenNode, givenParameter ->
-            capturedController = givenParameter
+        nestedInterpreter.interpret = { givenNode, givenController ->
             capturedNode = givenNode
+            capturedController = givenController
             expected
         }
 

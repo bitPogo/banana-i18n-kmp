@@ -17,12 +17,12 @@ import tech.antibytes.util.test.mustBe
 import tech.antibytes.util.test.sameAs
 import kotlin.test.Test
 
-class FunctionSelectorSpec {
+class FunctionInterpreterSelectorSpec {
     private val fixture = kotlinFixture()
 
     @Test
     fun `It fulfils ParameterizedInterpreterPlugin`() {
-        FunctionSelector(
+        FunctionInterpreterSelector(
             FunctionInterpreterStub(),
             emptyMap()
         ) fulfils PublicApi.ParameterizedInterpreterPlugin::class
@@ -39,7 +39,7 @@ class FunctionSelectorSpec {
         val node = FunctionNode(functionName)
 
         // When
-        val actual = FunctionSelector(default, emptyMap()).interpret(node, InterpreterControllerStub())
+        val actual = FunctionInterpreterSelector(default, emptyMap()).interpret(node, InterpreterControllerStub())
 
         // Then
         actual mustBe node.id
@@ -66,7 +66,7 @@ class FunctionSelectorSpec {
         )
 
         // When
-        val actual = FunctionSelector(
+        val actual = FunctionInterpreterSelector(
             FunctionInterpreterStub(),
             plugins
         ).interpret(node, controller)

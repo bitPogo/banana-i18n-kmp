@@ -13,10 +13,10 @@ import tech.antibytes.util.test.MockContract
 
 internal class CustomFunctionInterpreterStub(
     var interpret: (FunctionNode, InterpreterController) -> String = { node, _ -> node.id }
-) : PublicApi.ParameterizedInterpreterPlugin<FunctionNode, InterpreterController>, MockContract.Mock {
+) : PublicApi.ParameterizedInterpreterPlugin<FunctionNode>, MockContract.Mock {
 
-    override fun interpret(node: FunctionNode, parameter: InterpreterController): String {
-        return interpret.invoke(node, parameter)
+    override fun interpret(node: FunctionNode, controller: InterpreterController): String {
+        return interpret.invoke(node, controller)
     }
 
     override fun clear() {

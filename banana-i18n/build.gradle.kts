@@ -54,6 +54,12 @@ kotlin {
                 kotlin.srcDirs("${projectDir.absolutePath.trimEnd('/')}/src-gen/commonMain/kotlin")
 
                 implementation(Dependency.multiplatform.kotlin.common)
+                implementation(Dependency.multiplatform.koin.core) {
+                    exclude(
+                        "org.jetbrains.kotlin",
+                        "kotlin-stdlib-jdk8"
+                    )
+                }
             }
         }
         val commonTest by getting {

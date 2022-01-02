@@ -10,11 +10,11 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
-class ParameterizedInterpreterPluginStub<T : PublicApi.Node, P : Any>(
-    var interpret: ((node: T, parameter: P) -> String)? = null
-) : PublicApi.ParameterizedInterpreterPlugin<T, P>, MockContract.Mock {
-    override fun interpret(node: T, parameter: P): String {
-        return interpret?.invoke(node, parameter) ?: throw MockError.MissingStub("No nested interpreter were given!")
+class ParameterizedInterpreterPluginStub<T : PublicApi.Node>(
+    var interpret: ((node: T, parameter: PublicApi.InterpreterController) -> String)? = null
+) : PublicApi.ParameterizedInterpreterPlugin<T>, MockContract.Mock {
+    override fun interpret(node: T, controller: PublicApi.InterpreterController): String {
+        return interpret?.invoke(node, controller) ?: throw MockError.MissingStub("No nested interpreter were given!")
     }
 
     override fun clear() {
