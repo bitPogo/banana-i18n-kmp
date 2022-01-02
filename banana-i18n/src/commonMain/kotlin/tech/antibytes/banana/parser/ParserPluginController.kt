@@ -6,6 +6,7 @@
 
 package tech.antibytes.banana.parser
 
+import tech.antibytes.banana.ParserPluginMap
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.PublicApi.NodeFactory
 import tech.antibytes.banana.PublicApi.ParserPlugin
@@ -14,10 +15,14 @@ import tech.antibytes.banana.PublicApi.ParserPluginFactory
 internal class ParserPluginController(
     logger: PublicApi.Logger,
     defaultPlugin: Pair<ParserPluginFactory, NodeFactory>,
-    registeredPlugins: Map<String, Pair<ParserPluginFactory, NodeFactory>> = emptyMap()
+    registeredPlugins: ParserPluginMap = emptyMap()
 ) : PublicApi.ParserPluginController {
-    private val plugins: Map<String, Pair<ParserPlugin, NodeFactory>> =
-        initializePlugins(logger, defaultPlugin, registeredPlugins, this)
+    private val plugins: Map<String, Pair<ParserPlugin, NodeFactory>> = initializePlugins(
+        logger,
+        defaultPlugin,
+        registeredPlugins,
+        this
+    )
 
     override fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory> = plugins.getValue(name)
 
@@ -36,7 +41,7 @@ internal class ParserPluginController(
         fun initializePlugins(
             logger: PublicApi.Logger,
             defaultPlugin: Pair<ParserPluginFactory, NodeFactory>,
-            registeredPlugins: Map<String, Pair<ParserPluginFactory, NodeFactory>>,
+            registeredPlugins: ParserPluginMap,
             controller: PublicApi.ParserPluginController
         ): Map<String, Pair<ParserPlugin, NodeFactory>> {
             val initializedPlugins: MutableMap<String, Pair<ParserPlugin, NodeFactory>> = mutableMapOf()
