@@ -91,8 +91,7 @@ interface PublicApi {
     }
 
     interface Cache<T : Any> {
-        fun contains(key: String): Boolean
-        fun getValue(key: String): T
+        fun getValue(key: String): T?
         fun store(key: String, value: T)
     }
 
@@ -107,19 +106,20 @@ interface PublicApi {
         val parser: Pair<ParserPluginFactory, NodeFactory>? = null,
     )
 
+    interface BananaI18n {
+        fun i18n(message: String, vararg parameter: String): String
+        fun i18n(message: String, parameter: Map<String, String>): String
+    }
+
     interface BananaBuilder {
         fun setLanguage(locale: Locale): BananaBuilder
         fun setTextInterceptor(interceptor: TextInterceptor): BananaBuilder
         fun setLinkFormatter(formatter: LinkFormatter): BananaBuilder
-        fun setParserCache(cache: Cache<out Node>): BananaBuilder
+        fun setParserCache(cache: Cache<Node>): BananaBuilder
         fun setMessageCache(cache: Cache<String>): BananaBuilder
         fun setLogger(logger: Logger): BananaBuilder
         fun registerPlugin(plugin: Plugin): BananaBuilder
-        fun clearPlugins(): BananaBuilder
-    }
 
-    interface BananaI18n {
-        fun i18n(message: String, vararg parameter: String): String
-        fun i18n(message: String, parameter: Map<String, String>): String
+        fun build(): BananaI18n
     }
 }

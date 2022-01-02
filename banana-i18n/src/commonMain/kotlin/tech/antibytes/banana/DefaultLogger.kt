@@ -7,11 +7,6 @@
 package tech.antibytes.banana
 
 internal class DefaultLogger : PublicApi.Logger {
-    override fun warning(tag: PublicApi.Tag, message: String) {
-        // Do nothing
-    }
-
-    override fun error(tag: PublicApi.Tag, message: String) {
-        // Do nothing
-    }
+    override fun warning(tag: PublicApi.Tag, message: String) = Unit
+    override fun error(tag: PublicApi.Tag, message: String) = Unit
 }

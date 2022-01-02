@@ -6,6 +6,7 @@
 
 package tech.antibytes.mock.interpreter
 
+import tech.antibytes.banana.Locale
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.PublicApi.InterpreterController
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
