@@ -19,7 +19,7 @@ import tech.antibytes.banana.interpreter.NodeConcatenator
 import tech.antibytes.banana.interpreter.TextInterpreter
 import tech.antibytes.banana.interpreter.VariableInterpreter
 import tech.antibytes.banana.interpreter.XMLInterceptor
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 

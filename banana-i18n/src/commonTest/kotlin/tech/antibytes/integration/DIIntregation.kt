@@ -13,7 +13,7 @@ import tech.antibytes.banana.initKoin
 import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.fulfils

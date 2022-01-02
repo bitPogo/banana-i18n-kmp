@@ -12,7 +12,6 @@ import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
-import tech.antibytes.banana.parser.resolveParserModule
 import tech.antibytes.mock.tokenizer.TokenizerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe

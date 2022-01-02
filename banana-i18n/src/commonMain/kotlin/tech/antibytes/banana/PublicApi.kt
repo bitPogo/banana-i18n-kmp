@@ -119,7 +119,7 @@ interface PublicApi {
     }
 
     interface BananaI18n {
-        fun i18n(message: String): String
-        fun toBuilder(): BananaBuilder
+        fun i18n(message: String, vararg parameter: String): String
+        fun i18n(message: String, parameter: Map<String, String>): String
     }
 }

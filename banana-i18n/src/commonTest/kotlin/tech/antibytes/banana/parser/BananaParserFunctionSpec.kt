@@ -11,7 +11,7 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.ParserPluginStub

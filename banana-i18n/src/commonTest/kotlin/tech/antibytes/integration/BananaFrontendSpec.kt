@@ -18,7 +18,7 @@ import tech.antibytes.banana.tokenizer.TokenStore
 import tech.antibytes.banana.parser.ParserPluginController
 import tech.antibytes.banana.tokenizer.BananaTokenizer
 import tech.antibytes.banana.tokenizer.StringReader
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 

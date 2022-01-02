@@ -7,7 +7,7 @@
 package tech.antibytes.banana.parser
 
 import tech.antibytes.banana.PublicApi
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.fulfils

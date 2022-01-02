@@ -20,7 +20,7 @@ import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.mock.interpreter.VariableInterpreterStub
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
 
