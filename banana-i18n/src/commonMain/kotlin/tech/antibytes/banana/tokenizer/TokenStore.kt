@@ -1,18 +1,18 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
-package tech.antibytes.banana.parser
+package tech.antibytes.banana.tokenizer
 
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
 
-internal class ParserEngine(
+internal class TokenStore(
     private val tokenizer: BananaContract.Tokenizer
-) : PublicApi.ParserEngine {
+) : PublicApi.TokenStore {
     override val currentToken: PublicApi.Token
         get() = _currentToken
     override val lookahead: PublicApi.Token

@@ -13,9 +13,9 @@ import tech.antibytes.banana.ast.CoreNode.FreeLinkNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
-import tech.antibytes.mock.parser.LoggerStub
-import tech.antibytes.mock.parser.ParserEngineFake
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
+import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -24,7 +24,7 @@ import kotlin.test.Test
 
 class BananaParserFreeLinkSpec {
     private val fixture = kotlinFixture()
-    private val tokenStore = ParserEngineFake()
+    private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
     private val pluginController = ParserPluginControllerStub()
 
@@ -810,7 +810,7 @@ class BananaParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
             TextNode(listOf(url)),
-            listOf(FunctionNode(display))
+            listOf(FunctionNode(display.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -848,7 +848,7 @@ class BananaParserFreeLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FreeLinkNode(
             TextNode(listOf(url)),
-            listOf(FunctionNode(display))
+            listOf(FunctionNode(display.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -897,7 +897,7 @@ class BananaParserFreeLinkSpec {
             TextNode(listOf(url)),
             listOf(
                 TextNode(listOf(displayPart1, " ")),
-                FunctionNode(displayPart2),
+                FunctionNode(displayPart2.uppercase()),
                 TextNode(listOf(" ")),
                 VariableNode(displayPart3),
                 TextNode(listOf(" ", displayPart4)),

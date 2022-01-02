@@ -9,6 +9,7 @@ package tech.antibytes.banana.tokenizer
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.PublicApi
 
 internal fun resolveTokenizerModule(): Module {
     return module {
@@ -20,9 +21,13 @@ internal fun resolveTokenizerModule(): Module {
 
         factory<BananaContract.Tokenizer> { parameter ->
             BananaTokenizer(
-                get(
-                    parameters = { parameter }
-                )
+                get(parameters = { parameter })
+            )
+        }
+
+        factory<PublicApi.TokenStore> { parameter ->
+            TokenStore(
+                get(parameters = { parameter })
             )
         }
     }

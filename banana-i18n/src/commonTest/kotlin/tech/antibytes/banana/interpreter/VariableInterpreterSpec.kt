@@ -10,7 +10,7 @@ import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.VariableNode
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest

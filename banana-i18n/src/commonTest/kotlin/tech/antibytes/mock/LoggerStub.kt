@@ -4,7 +4,7 @@
  * Use of this source code is governed by LGPL v2.1
  */
 
-package tech.antibytes.mock.parser
+package tech.antibytes.mock
 
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockContract

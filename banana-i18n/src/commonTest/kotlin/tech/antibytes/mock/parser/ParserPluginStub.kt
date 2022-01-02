@@ -11,16 +11,16 @@ import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
 internal class ParserPluginStub(
-    private val parse: ((tokenizer: PublicApi.ParserEngine) -> PublicApi.Node)? = null
+    private val parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null
 ) : PublicApi.ParserPlugin {
-    override fun parse(tokenizer: PublicApi.ParserEngine): PublicApi.Node {
+    override fun parse(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         return parse?.invoke(tokenizer)
             ?: throw MockError.MissingStub("Missing sideeffect for parse")
     }
 }
 
 internal class ParserPluginFactoryStub(
-    var parse: ((tokenizer: PublicApi.ParserEngine) -> PublicApi.Node)? = null
+    var parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null
 ) : PublicApi.ParserPluginFactory, MockContract.Mock {
     val lastInstances: List<PublicApi.ParserPlugin>
         get() = capturedInstance
@@ -28,7 +28,7 @@ internal class ParserPluginFactoryStub(
 
     override fun createPlugin(
         logger: PublicApi.Logger,
-        plugins: PublicApi.ParserPluginController
+        controller: PublicApi.ParserPluginController
     ): PublicApi.ParserPlugin = ParserPluginStub(parse).also { capturedInstance.add(it) }
 
     override fun clear() {

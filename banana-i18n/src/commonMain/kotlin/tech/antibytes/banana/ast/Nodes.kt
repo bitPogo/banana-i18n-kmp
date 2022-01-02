@@ -38,7 +38,7 @@ sealed class CoreNode : Node {
     data class CompoundNode(
         val children: List<Node>
     ) : CoreNode() {
-        internal companion object : PublicApi.NodeFactory {
+        companion object : PublicApi.NodeFactory {
             override fun createNode(children: List<Node>): Node = CompoundNode(children)
         }
     }

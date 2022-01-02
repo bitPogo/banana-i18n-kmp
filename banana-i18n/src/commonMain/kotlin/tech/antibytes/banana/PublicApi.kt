@@ -6,6 +6,8 @@
 
 package tech.antibytes.banana
 
+import tech.antibytes.banana.ast.CoreNode
+
 interface PublicApi {
     enum class TokenTypes {
         DOUBLE,
@@ -32,7 +34,7 @@ interface PublicApi {
         val line: Int
     )
 
-    interface ParserEngine {
+    interface TokenStore {
         val currentToken: Token
         val lookahead: Token
         fun shift()
@@ -48,7 +50,7 @@ interface PublicApi {
     }
 
     interface ParserPlugin {
-        fun parse(tokenizer: ParserEngine): Node
+        fun parse(tokenizer: TokenStore): Node
     }
 
     interface ParserPluginController {
@@ -58,7 +60,7 @@ interface PublicApi {
     interface ParserPluginFactory {
         fun createPlugin(
             logger: Logger,
-            plugins: ParserPluginController,
+            controller: ParserPluginController,
         ): ParserPlugin
     }
 
@@ -76,8 +78,10 @@ interface PublicApi {
         fun interpret(node: T, controller: InterpreterController): String
     }
 
+    interface CustomInterpreter : ParameterizedInterpreterPlugin<CoreNode.FunctionNode>
+
     interface InterpreterFactory {
-        fun getInstance(logger: Logger, locale: Locale): ParameterizedInterpreterPlugin<out Node>
+        fun getInstance(logger: Logger, locale: Locale): CustomInterpreter
     }
 
     interface LinkFormatter {
@@ -88,12 +92,6 @@ interface PublicApi {
     interface Logger {
         fun warning(tag: Tag, message: String)
         fun error(tag: Tag, message: String)
-    }
-
-    interface Cache<T : Any> {
-        fun contains(key: String): Boolean
-        fun getValue(key: String): T
-        fun store(key: String, value: T)
     }
 
     enum class Tag {
@@ -107,19 +105,18 @@ interface PublicApi {
         val parser: Pair<ParserPluginFactory, NodeFactory>? = null,
     )
 
+    interface BananaI18n {
+        fun i18n(message: String, vararg parameter: String): String
+        fun i18n(message: String, parameter: Map<String, String>): String
+    }
+
     interface BananaBuilder {
         fun setLanguage(locale: Locale): BananaBuilder
         fun setTextInterceptor(interceptor: TextInterceptor): BananaBuilder
         fun setLinkFormatter(formatter: LinkFormatter): BananaBuilder
-        fun setParserCache(cache: Cache<out Node>): BananaBuilder
-        fun setMessageCache(cache: Cache<String>): BananaBuilder
         fun setLogger(logger: Logger): BananaBuilder
         fun registerPlugin(plugin: Plugin): BananaBuilder
-        fun clearPlugins(): BananaBuilder
-    }
 
-    interface BananaI18n {
-        fun i18n(message: String): String
-        fun toBuilder(): BananaBuilder
+        fun build(): BananaI18n
     }
 }

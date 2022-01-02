@@ -12,12 +12,12 @@ import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
-import tech.antibytes.mock.parser.LoggerStub
-import tech.antibytes.mock.parser.ParserEngineFake
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.ParserPluginStub
 import tech.antibytes.mock.parser.TestArgumentNode
 import tech.antibytes.mock.parser.TestArgumentsNode
+import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -26,7 +26,7 @@ import kotlin.test.Test
 
 class DefaultArgumentsParserSpec {
     private val fixture = kotlinFixture()
-    private val tokenStore = ParserEngineFake()
+    private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
     private val pluginController = ParserPluginControllerStub()
 
@@ -92,7 +92,7 @@ class DefaultArgumentsParserSpec {
         // Then
         argument fulfils CompoundNode::class
         argument as CompoundNode
-        argument.children[0] mustBe FunctionNode(functionName)
+        argument.children[0] mustBe FunctionNode(functionName.uppercase())
     }
 
     @Test
@@ -149,7 +149,7 @@ class DefaultArgumentsParserSpec {
         // Then
         argument fulfils CompoundNode::class
         argument as CompoundNode
-        argument.children[0] mustBe FunctionNode(functionName)
+        argument.children[0] mustBe FunctionNode(functionName.uppercase())
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
         logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -191,7 +191,7 @@ class DefaultArgumentsParserSpec {
         // Then
         argument fulfils CompoundNode::class
         argument as CompoundNode
-        argument.children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
+        argument.children[0] mustBe FunctionNode(functionName.uppercase(), TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe listOf(nestedArgument)
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -239,7 +239,7 @@ class DefaultArgumentsParserSpec {
         // Then
         argument fulfils CompoundNode::class
         argument as CompoundNode
-        argument.children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
+        argument.children[0] mustBe FunctionNode(functionName.uppercase(), TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -292,7 +292,7 @@ class DefaultArgumentsParserSpec {
         // Then
         argument fulfils CompoundNode::class
         argument as CompoundNode
-        argument.children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
+        argument.children[0] mustBe FunctionNode(functionName.uppercase(), TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -754,7 +754,7 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe TextNode(listOf(string, " "))
         argument.children[1] mustBe VariableNode(variable)
         argument.children[2] mustBe TextNode(listOf(" "))
-        argument.children[3] mustBe FunctionNode(functionName)
+        argument.children[3] mustBe FunctionNode(functionName.uppercase())
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
         logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()

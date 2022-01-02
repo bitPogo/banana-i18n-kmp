@@ -14,11 +14,11 @@ import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.banana.parser.BananaParser
 import tech.antibytes.banana.parser.DefaultArgumentsParser
-import tech.antibytes.banana.parser.ParserEngine
 import tech.antibytes.banana.parser.ParserPluginController
 import tech.antibytes.banana.tokenizer.BananaTokenizer
 import tech.antibytes.banana.tokenizer.StringReader
-import tech.antibytes.mock.parser.LoggerStub
+import tech.antibytes.banana.tokenizer.TokenStore
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
@@ -216,7 +216,7 @@ class BananaFrontendSpec {
         )
 
         for (mappedMessage in messages) {
-            val tokens = ParserEngine(
+            val tokens = TokenStore(
                 BananaTokenizer(
                     StringReader(mappedMessage.key)
                 )

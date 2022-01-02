@@ -10,6 +10,9 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
+import tech.antibytes.banana.BananaContract.Companion.EOF
+import tech.antibytes.banana.PublicApi
+import tech.antibytes.mock.tokenizer.TokenizerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -61,6 +64,36 @@ class TokenizerKoinSpec {
 
         // Then
         tokenizer fulfils BananaContract.Tokenizer::class
+        capturedParameter!! mustBe message
+    }
+
+    @Test
+    fun `Given resolveParserModule is called it contains a TokenStore`() {
+        // Given
+        var capturedParameter: String? = null
+        val message = "Something"
+
+        val koin = koinApplication {
+            modules(
+                resolveTokenizerModule(),
+                module {
+                    single<BananaContract.Tokenizer> { parameter ->
+                        capturedParameter = parameter.get()
+                        TokenizerStub { EOF }
+                    }
+                }
+            )
+        }
+
+        // When
+        val store: PublicApi.TokenStore = koin.koin.get(
+            parameters = {
+                parametersOf(message)
+            }
+        )
+
+        // Then
+        store fulfils PublicApi.TokenStore::class
         capturedParameter!! mustBe message
     }
 }
