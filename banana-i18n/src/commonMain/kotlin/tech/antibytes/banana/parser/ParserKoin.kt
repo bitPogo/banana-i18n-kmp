@@ -11,13 +11,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
+import tech.antibytes.banana.tokenizer.TokenStore
 
 internal fun resolveParserModule(): Module {
     return module {
-        factory<PublicApi.ParserEngine> {
-            ParserEngine(get())
-        }
-
         single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)) {
             Pair(
                 DefaultArgumentsParser,

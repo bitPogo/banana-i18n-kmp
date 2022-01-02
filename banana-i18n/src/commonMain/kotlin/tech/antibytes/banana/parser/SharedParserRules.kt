@@ -16,7 +16,7 @@ abstract class SharedParserRules(
     protected val logger: PublicApi.Logger,
     private val plugins: PublicApi.ParserPluginController
 ) {
-    protected fun logOrConsume(rule: String, tokenizer: PublicApi.ParserEngine, condition: () -> Boolean) {
+    protected fun logOrConsume(rule: String, tokenizer: PublicApi.TokenStore, condition: () -> Boolean) {
         when {
             condition() -> tokenizer.consume()
             tokenizer.currentToken == BananaContract.EOF -> logger.warning(
@@ -27,11 +27,11 @@ abstract class SharedParserRules(
         }
     }
 
-    protected fun isVariable(tokenizer: PublicApi.ParserEngine): Boolean {
+    protected fun isVariable(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isVariable()
     }
 
-    protected fun isFunction(tokenizer: PublicApi.ParserEngine): Boolean {
+    protected fun isFunction(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isFunctionStart() &&
             (
                 tokenizer.lookahead.isAscii() ||
@@ -42,7 +42,7 @@ abstract class SharedParserRules(
                 )
     }
 
-    protected fun isDelimiter(tokenizer: PublicApi.ParserEngine): Boolean {
+    protected fun isDelimiter(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isDelimiter() ||
             (
                 tokenizer.currentToken.isSpace() &&
@@ -50,7 +50,7 @@ abstract class SharedParserRules(
                 )
     }
 
-    protected fun isEOF(tokenizer: PublicApi.ParserEngine): Boolean {
+    protected fun isEOF(tokenizer: PublicApi.TokenStore): Boolean {
         return tokenizer.currentToken.isEOF() ||
             (
                 tokenizer.currentToken.isSpace() &&
@@ -58,13 +58,13 @@ abstract class SharedParserRules(
                 )
     }
 
-    protected fun shiftUntil(tokenizer: PublicApi.ParserEngine, condition: () -> Boolean) {
+    protected fun shiftUntil(tokenizer: PublicApi.TokenStore, condition: () -> Boolean) {
         do {
             tokenizer.shift()
         } while (condition())
     }
 
-    protected fun isFunctionEndOrDelimiter(tokenizer: PublicApi.ParserEngine): Boolean {
+    protected fun isFunctionEndOrDelimiter(tokenizer: PublicApi.TokenStore): Boolean {
         return isDelimiter(tokenizer) ||
             tokenizer.currentToken.isFunctionEnd() ||
             (
@@ -74,13 +74,13 @@ abstract class SharedParserRules(
             isEOF(tokenizer)
     }
 
-    protected fun variable(tokenizer: PublicApi.ParserEngine): PublicApi.Node {
+    protected fun variable(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         return VariableNode(
             tokenizer.currentToken.value
         ).also { tokenizer.consume() }
     }
 
-    private fun identifier(tokenizer: PublicApi.ParserEngine): String {
+    private fun identifier(tokenizer: PublicApi.TokenStore): String {
         do {
             tokenizer.shift()
 
@@ -92,13 +92,13 @@ abstract class SharedParserRules(
         return tokenizer.resolveValues().joinToString("")
     }
 
-    protected fun space(tokenizer: PublicApi.ParserEngine) {
+    protected fun space(tokenizer: PublicApi.TokenStore) {
         if (tokenizer.currentToken.isSpace()) {
             tokenizer.consume()
         }
     }
 
-    protected fun nestedText(tokenizer: PublicApi.ParserEngine): PublicApi.Node {
+    protected fun nestedText(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         shiftUntil(tokenizer) {
             !isFunction(tokenizer) &&
                 !isFunctionEndOrDelimiter(tokenizer) &&
@@ -110,7 +110,7 @@ abstract class SharedParserRules(
 
     private fun arguments(
         functionId: String,
-        tokenizer: PublicApi.ParserEngine
+        tokenizer: PublicApi.TokenStore
     ): PublicApi.Node {
         tokenizer.consume()
         space(tokenizer)
@@ -133,7 +133,7 @@ abstract class SharedParserRules(
         return factory.createNode(arguments)
     }
 
-    protected fun function(tokenizer: PublicApi.ParserEngine): PublicApi.Node {
+    protected fun function(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         tokenizer.consume()
         space(tokenizer)
 

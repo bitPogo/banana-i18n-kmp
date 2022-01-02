@@ -33,7 +33,7 @@ class DIIntregation {
     private val message = "simple message string"
 
     @Test
-    fun `Given initKoin is called with its parameter it resolves the Tokenizer`() {
+    fun `Given initKoin is called with its parameter it resolves the TokenStore`() {
         // When
         val koin = initKoin(
             logger,
@@ -43,12 +43,12 @@ class DIIntregation {
             interpreterPlugins
         )
 
-        val actual: BananaContract.Tokenizer = koin.koin.get(
+        val actual: PublicApi.TokenStore = koin.koin.get(
             parameters = { parametersOf(message) }
         )
 
         // Then
-        actual fulfils BananaContract.Tokenizer::class
+        actual fulfils PublicApi.TokenStore::class
     }
 
     @Test

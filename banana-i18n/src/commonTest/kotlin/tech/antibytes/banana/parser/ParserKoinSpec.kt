@@ -15,32 +15,11 @@ import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
-import tech.antibytes.mock.parser.TokenizerStub
+import tech.antibytes.mock.tokenizer.TokenizerStub
 import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
 
 class ParserKoinSpec {
-    @Test
-    fun `Given resolveParserModule is called it contains a TokenStore`() {
-        // Given
-        val koin = koinApplication {
-            modules(
-                resolveParserModule(),
-                module {
-                    single<BananaContract.Tokenizer> {
-                        TokenizerStub(next = { BananaContract.EOF })
-                    }
-                }
-            )
-        }
-
-        // When
-        val store: PublicApi.ParserEngine = koin.koin.get()
-
-        // Then
-        store fulfils PublicApi.ParserEngine::class
-    }
-
     @Test
     fun `Given resolveParserModule is called it contains a DefaultArgumentParser Pair`() {
         // Given

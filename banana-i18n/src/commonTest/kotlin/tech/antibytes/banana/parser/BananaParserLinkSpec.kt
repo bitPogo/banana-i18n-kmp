@@ -14,7 +14,7 @@ import tech.antibytes.banana.ast.CoreNode.LinkNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.mock.parser.LoggerStub
-import tech.antibytes.mock.parser.ParserEngineFake
+import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
@@ -24,7 +24,7 @@ import kotlin.test.Test
 
 class BananaParserLinkSpec {
     private val fixture = kotlinFixture()
-    private val tokenStore = ParserEngineFake()
+    private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
     private val pluginController = ParserPluginControllerStub()
 
