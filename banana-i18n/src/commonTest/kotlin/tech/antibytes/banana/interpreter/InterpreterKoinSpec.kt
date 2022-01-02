@@ -6,6 +6,7 @@
 
 package tech.antibytes.banana.interpreter
 
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
@@ -14,8 +15,11 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.RegisteredInterpreterPlugins
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.FunctionInterpreterStub
+import tech.antibytes.mock.interpreter.InterpreterPluginStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
+import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
+import tech.antibytes.mock.interpreter.VariableInterpreterStub
 import tech.antibytes.mock.parser.LoggerStub
 import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
@@ -203,5 +207,57 @@ class InterpreterKoinSpec {
 
         // Then
         interpreter fulfils PublicApi.ParameterizedInterpreterPlugin::class
+    }
+
+    @Test
+    fun `Given resolveInterpreterModule is called it contains a InterpreterController, if variables are delegated`() {
+        // Given
+        val koin = koinApplication {
+            allowOverride(true)
+            modules(
+                resolveInterpreterModule(),
+                module {
+                    single<BananaContract.InterpreterPlugin<CoreNode.TextNode>>(named(BananaContract.KoinLabels.TEXT_INTERPRETER)) {
+                        InterpreterPluginStub()
+                    }
+
+                    single<BananaContract.VariableInterpreter<CoreNode.VariableNode>>(named(BananaContract.KoinLabels.VARIABLE_INTERPRETER)) {
+                        VariableInterpreterStub()
+                    }
+
+                    single<BananaContract.InterpreterPlugin<CoreNode.FunctionNode>>(named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)) {
+                        InterpreterPluginStub()
+                    }
+
+                    single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode>>(named(BananaContract.KoinLabels.FUNCTION_SELECTOR)) {
+                        ParameterizedInterpreterPluginStub()
+                    }
+
+                    single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode>>(named(BananaContract.KoinLabels.COMPOUND_INTERPRETER)) {
+                        ParameterizedInterpreterPluginStub()
+                    }
+
+                    single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode>>(named(BananaContract.KoinLabels.LINK_INTERPRETER)) {
+                        ParameterizedInterpreterPluginStub()
+                    }
+
+                    single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode>>(named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)) {
+                        ParameterizedInterpreterPluginStub()
+                    }
+                }
+            )
+        }
+
+        // When
+        val interpreter: PublicApi.InterpreterController = koin.koin.get(
+            parameters = {
+                parametersOf(
+                    mapOf("1" to "1"),
+                )
+            }
+        )
+
+        // Then
+        interpreter fulfils PublicApi.InterpreterController::class
     }
 }

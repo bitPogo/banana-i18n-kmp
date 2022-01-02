@@ -57,5 +57,17 @@ internal fun resolveInterpreterModule(): Module {
                 get()
             )
         }
+
+        factory<PublicApi.InterpreterController> { parameter ->
+            BananaInterpreter(
+                parameter.get(),
+                get(named(BananaContract.KoinLabels.VARIABLE_INTERPRETER)),
+                get(named(BananaContract.KoinLabels.TEXT_INTERPRETER)),
+                get(named(BananaContract.KoinLabels.FUNCTION_SELECTOR)),
+                get(named(BananaContract.KoinLabels.COMPOUND_INTERPRETER)),
+                get(named(BananaContract.KoinLabels.LINK_INTERPRETER)),
+                get(named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)),
+            )
+        }
     }
 }
