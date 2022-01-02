@@ -16,7 +16,7 @@ internal class BananaI18n(
 
     private fun mapVarArgs(args: Array<out String>): Map<String, String> {
         return args
-            .mapIndexed { index, value -> index.toString() to value }
+            .mapIndexed { index, value -> (index + 1).toString() to value }
             .toMap()
     }
 

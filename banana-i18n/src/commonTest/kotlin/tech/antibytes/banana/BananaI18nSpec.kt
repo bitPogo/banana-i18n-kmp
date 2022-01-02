@@ -114,7 +114,7 @@ class BananaI18nSpec {
 
         val expectedVariables = variables
             .mapIndexed { idx, value ->
-                idx.toString() to value
+                (idx + 1).toString() to value
             }
             .toMap()
 

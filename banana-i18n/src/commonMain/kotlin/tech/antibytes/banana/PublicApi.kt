@@ -6,6 +6,8 @@
 
 package tech.antibytes.banana
 
+import tech.antibytes.banana.ast.CoreNode
+
 interface PublicApi {
     enum class TokenTypes {
         DOUBLE,
@@ -76,8 +78,10 @@ interface PublicApi {
         fun interpret(node: T, controller: InterpreterController): String
     }
 
+    interface CustomInterpreter : ParameterizedInterpreterPlugin<CoreNode.FunctionNode>
+
     interface InterpreterFactory {
-        fun getInstance(logger: Logger, locale: Locale): ParameterizedInterpreterPlugin<out Node>
+        fun getInstance(logger: Logger, locale: Locale): CustomInterpreter
     }
 
     interface LinkFormatter {

@@ -11,12 +11,12 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockError
 
 internal class InterpreterFactoryStub(
-    var getInstance: ((PublicApi.Logger, Locale) -> PublicApi.ParameterizedInterpreterPlugin<out PublicApi.Node>)? = null
+    var getInstance: ((PublicApi.Logger, Locale) -> PublicApi.CustomInterpreter)? = null
 ) : PublicApi.InterpreterFactory {
     override fun getInstance(
         logger: PublicApi.Logger,
         locale: Locale
-    ): PublicApi.ParameterizedInterpreterPlugin<out PublicApi.Node> {
+    ): PublicApi.CustomInterpreter {
         return getInstance?.invoke(logger, locale) ?: throw MockError.MissingStub("Missing sideeffect getInstance!")
     }
 }
