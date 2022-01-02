@@ -35,10 +35,10 @@ class ParserKoinSpec {
         }
 
         // When
-        val store: PublicApi.TokenStore = koin.koin.get()
+        val store: PublicApi.ParserEngine = koin.koin.get()
 
         // Then
-        store fulfils PublicApi.TokenStore::class
+        store fulfils PublicApi.ParserEngine::class
     }
 
     @Test

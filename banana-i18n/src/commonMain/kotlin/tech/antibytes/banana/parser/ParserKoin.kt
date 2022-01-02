@@ -14,8 +14,8 @@ import tech.antibytes.banana.PublicApi
 
 internal fun resolveParserModule(): Module {
     return module {
-        single<PublicApi.TokenStore> {
-            TokenStore(get())
+        factory<PublicApi.ParserEngine> {
+            ParserEngine(get())
         }
 
         single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)) {

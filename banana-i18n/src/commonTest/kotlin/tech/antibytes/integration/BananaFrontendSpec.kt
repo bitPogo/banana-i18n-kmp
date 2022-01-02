@@ -15,7 +15,7 @@ import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.banana.parser.BananaParser
 import tech.antibytes.banana.parser.DefaultArgumentsParser
 import tech.antibytes.banana.parser.ParserPluginController
-import tech.antibytes.banana.parser.TokenStore
+import tech.antibytes.banana.parser.ParserEngine
 import tech.antibytes.banana.tokenizer.BananaTokenizer
 import tech.antibytes.banana.tokenizer.StringReader
 import tech.antibytes.mock.parser.LoggerStub
@@ -23,7 +23,7 @@ import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
 class BananaFrontendSpec {
-    private val logger = LoggerStub() // TODO replace with DefaultLogger
+    private val logger = LoggerStub()
 
     @Test
     fun `Given parse is called with a Tokenizer, it accepts`() {
@@ -204,12 +204,6 @@ class BananaFrontendSpec {
                 )
         )
 
-        val tokens = TokenStore(
-            BananaTokenizer.getInstance(
-                StringReader(" ")
-            )
-        )
-
         val parser = BananaParser(
             logger,
             ParserPluginController(
@@ -222,8 +216,11 @@ class BananaFrontendSpec {
         )
 
         for (mappedMessage in messages) {
-            tokens.tokenizer.setReader(StringReader(mappedMessage.key))
-            tokens.reset()
+            val tokens = ParserEngine(
+                BananaTokenizer(
+                    StringReader(mappedMessage.key)
+                )
+            )
 
             val message = parser.parse(tokens)
 

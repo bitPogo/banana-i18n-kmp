@@ -32,7 +32,7 @@ interface PublicApi {
         val line: Int
     )
 
-    interface TokenStore {
+    interface ParserEngine {
         val currentToken: Token
         val lookahead: Token
         fun shift()
@@ -48,7 +48,7 @@ interface PublicApi {
     }
 
     interface ParserPlugin {
-        fun parse(tokenizer: TokenStore): Node
+        fun parse(tokenizer: ParserEngine): Node
     }
 
     interface ParserPluginController {

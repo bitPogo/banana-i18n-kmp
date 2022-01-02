@@ -12,8 +12,14 @@ import tech.antibytes.banana.BananaContract
 
 internal fun resolveTokenizerModule(): Module {
     return module {
-        single<BananaContract.TokenizerFactory> {
-            BananaTokenizer
+        factory<TokenizerContract.Reader> { parameter ->
+            StringReader(
+                parameter.get()
+            )
+        }
+
+        factory<BananaContract.Tokenizer> {
+            BananaTokenizer(get())
         }
     }
 }

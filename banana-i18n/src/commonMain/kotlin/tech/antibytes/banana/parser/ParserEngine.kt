@@ -10,9 +10,9 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
 
-internal class TokenStore(
-    override val tokenizer: BananaContract.Tokenizer
-) : PublicApi.TokenStore, BananaContract.TokenStoreResetter {
+internal class ParserEngine(
+    private val tokenizer: BananaContract.Tokenizer
+) : PublicApi.ParserEngine {
     override val currentToken: PublicApi.Token
         get() = _currentToken
     override val lookahead: PublicApi.Token
@@ -61,12 +61,5 @@ internal class TokenStore(
             k <= 0 -> _currentToken
             else -> tokenBuffer[idx]
         }
-    }
-
-    override fun reset() {
-        _currentToken = tokenizer.next()
-        tokenBuffer.clear()
-        tokenBuffer.add(tokenizer.next())
-        stringBuffer.clear()
     }
 }

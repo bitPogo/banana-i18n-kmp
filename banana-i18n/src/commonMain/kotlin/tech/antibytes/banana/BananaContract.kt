@@ -7,7 +7,6 @@
 package tech.antibytes.banana
 
 import tech.antibytes.banana.ast.CoreNode
-import tech.antibytes.banana.tokenizer.TokenizerContract
 
 internal typealias ParserPluginMap = Map<String, Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>
 internal typealias Variables = Map<String, String>
@@ -15,18 +14,7 @@ internal typealias RegisteredInterpreterPlugins = Map<String, PublicApi.Paramete
 
 internal interface BananaContract {
     interface Tokenizer {
-        fun setReader(reader: TokenizerContract.Reader)
         fun next(): PublicApi.Token
-    }
-
-    interface TokenizerFactory {
-        fun getInstance(reader: TokenizerContract.Reader): Tokenizer
-    }
-
-    interface TokenStoreResetter {
-        val tokenizer: Tokenizer
-
-        fun reset()
     }
 
     interface TopLevelParser : PublicApi.ParserPlugin

@@ -119,7 +119,7 @@ class BananaParameterKoinSpec {
     fun `Given resolveBananaParameterModule is called wit InterpreterPlugins, the resulting Module holds it`() {
         // Given
         val plugin = CustomFunctionInterpreterStub()
-        val functionName: String = "name"
+        val functionName = "name"
         val plugins = mapOf(
             functionName to plugin
         )
