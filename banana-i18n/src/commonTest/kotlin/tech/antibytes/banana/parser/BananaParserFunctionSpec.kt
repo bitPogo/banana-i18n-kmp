@@ -12,11 +12,11 @@ import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.mock.LoggerStub
-import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.ParserPluginStub
 import tech.antibytes.mock.parser.TestArgumentNode
 import tech.antibytes.mock.parser.TestArgumentsNode
+import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -159,7 +159,10 @@ class BananaParserFunctionSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            functionName.uppercase(),
+            TestArgumentsNode.lastInstance
+        )
         TestArgumentsNode.lastChildren mustBe listOf(nestedArgument)
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -206,7 +209,10 @@ class BananaParserFunctionSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            functionName.uppercase(),
+            TestArgumentsNode.lastInstance
+        )
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -258,7 +264,10 @@ class BananaParserFunctionSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FunctionNode(functionName, TestArgumentsNode.lastInstance)
+        (message as CompoundNode).children[0] mustBe FunctionNode(
+            functionName.uppercase(),
+            TestArgumentsNode.lastInstance
+        )
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -319,7 +328,7 @@ class BananaParserFunctionSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FunctionNode(word)
+        (message as CompoundNode).children[0] mustBe FunctionNode(word.uppercase())
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
@@ -352,7 +361,7 @@ class BananaParserFunctionSpec {
 
         // Then
         message fulfils CompoundNode::class
-        (message as CompoundNode).children[0] mustBe FunctionNode(word)
+        (message as CompoundNode).children[0] mustBe FunctionNode(word.uppercase())
 
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()

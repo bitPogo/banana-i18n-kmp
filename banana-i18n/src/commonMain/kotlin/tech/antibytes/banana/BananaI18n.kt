@@ -11,7 +11,7 @@ import org.koin.core.parameter.parametersOf
 
 internal class BananaI18n(
     private val di: KoinApplication
-): PublicApi.BananaI18n {
+) : PublicApi.BananaI18n {
     private val parser: BananaContract.TopLevelParser by di.koin.inject()
 
     private fun mapVarArgs(args: Array<out String>): Map<String, String> {

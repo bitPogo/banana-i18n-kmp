@@ -12,7 +12,7 @@ import tech.antibytes.util.test.MockError
 
 internal class BananaParserStub(
     var parse: ((PublicApi.TokenStore) -> PublicApi.Node)? = null
-): BananaContract.TopLevelParser {
+) : BananaContract.TopLevelParser {
     override fun parse(
         tokenizer: PublicApi.TokenStore
     ): PublicApi.Node {

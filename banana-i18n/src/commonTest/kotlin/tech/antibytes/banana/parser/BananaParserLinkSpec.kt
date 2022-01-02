@@ -14,8 +14,8 @@ import tech.antibytes.banana.ast.CoreNode.LinkNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.mock.LoggerStub
-import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.mock.parser.ParserPluginControllerStub
+import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -375,7 +375,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target))
+            listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -408,7 +408,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target))
+            listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -512,7 +512,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target))
+            listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -583,7 +583,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target))
+            listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -626,7 +626,7 @@ class BananaParserLinkSpec {
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
                 TextNode(listOf(target1, " ")),
-                FunctionNode(target2),
+                FunctionNode(target2.uppercase()),
                 TextNode(listOf(" ")),
                 VariableNode(target3)
             )
@@ -1176,7 +1176,7 @@ class BananaParserLinkSpec {
             listOf(
                 TextNode(listOf(target))
             ),
-            listOf(FunctionNode(display))
+            listOf(FunctionNode(display.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -1216,7 +1216,7 @@ class BananaParserLinkSpec {
             listOf(
                 TextNode(listOf(target))
             ),
-            listOf(FunctionNode(display))
+            listOf(FunctionNode(display.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
@@ -1267,7 +1267,7 @@ class BananaParserLinkSpec {
             ),
             listOf(
                 TextNode(listOf(displayPart1, " ")),
-                FunctionNode(displayPart2),
+                FunctionNode(displayPart2.uppercase()),
                 TextNode(listOf(" ")),
                 VariableNode(displayPart3),
                 TextNode(listOf(" ", displayPart4)),

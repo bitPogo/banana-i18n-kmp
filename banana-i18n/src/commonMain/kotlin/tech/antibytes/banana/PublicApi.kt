@@ -60,7 +60,7 @@ interface PublicApi {
     interface ParserPluginFactory {
         fun createPlugin(
             logger: Logger,
-            plugins: ParserPluginController,
+            controller: ParserPluginController,
         ): ParserPlugin
     }
 

@@ -25,7 +25,6 @@ internal fun resolveTokenizerModule(): Module {
             )
         }
 
-
         factory<PublicApi.TokenStore> { parameter ->
             TokenStore(
                 get(parameters = { parameter })

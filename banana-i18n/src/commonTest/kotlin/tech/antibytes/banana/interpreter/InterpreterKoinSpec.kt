@@ -14,13 +14,13 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.RegisteredInterpreterPlugins
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.interpreter.FunctionInterpreterStub
 import tech.antibytes.mock.interpreter.InterpreterPluginStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.mock.interpreter.VariableInterpreterStub
-import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.fulfils
 import kotlin.test.Test
 

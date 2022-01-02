@@ -9,8 +9,9 @@ package tech.antibytes.banana
 import tech.antibytes.banana.interpreter.DefaultLinkFormatter
 import tech.antibytes.banana.interpreter.DefaultTextInterceptor
 
-class BananaBuilder : PublicApi.BananaBuilder {
-    private var locale: Locale? = null
+class BananaBuilder(
+    private var locale: Locale
+) : PublicApi.BananaBuilder {
     private var logger: PublicApi.Logger = DefaultLogger()
     private var textInterceptor: PublicApi.TextInterceptor = DefaultTextInterceptor()
     private var linkFormatter: PublicApi.LinkFormatter = DefaultLinkFormatter()
@@ -46,23 +47,37 @@ class BananaBuilder : PublicApi.BananaBuilder {
         }
     }
 
-    private fun initializeBanana(): PublicApi.BananaI18n {
-        val koin = initKoin(
-            logger,
-            emptyMap(),
-            textInterceptor,
-            linkFormatter,
-            emptyMap()
-        )
+    private fun initializeInterpreterPlugins(): RegisteredInterpreterPlugins {
+        val interpreterPlugins = mutableMapOf<String, PublicApi.CustomInterpreter>()
 
-        return BananaI18n(koin)
+        plugins.forEach { plugin ->
+            interpreterPlugins[plugin.name.uppercase()] = plugin.interpreter.getInstance(logger, locale)
+        }
+
+        return interpreterPlugins
+    }
+
+    private fun collectParserPlugins(): ParserPluginMap {
+        val parserPlugins = mutableMapOf<String, Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>()
+
+        plugins.forEach { plugin ->
+            if (plugin.parser != null) {
+                parserPlugins[plugin.name.uppercase()] = plugin.parser
+            }
+        }
+
+        return parserPlugins
     }
 
     override fun build(): PublicApi.BananaI18n {
-        return if (locale == null) {
-            throw BananaRuntimeError("You forgot to set a Language!")
-        } else {
-            initializeBanana()
-        }
+        val koin = initKoin(
+            logger,
+            collectParserPlugins(),
+            textInterceptor,
+            linkFormatter,
+            initializeInterpreterPlugins()
+        )
+
+        return BananaI18n(koin)
     }
 }

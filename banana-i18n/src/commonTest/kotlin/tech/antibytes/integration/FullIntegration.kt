@@ -11,6 +11,7 @@ import tech.antibytes.banana.Locale
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.banana.interpreter.XMLInterceptor
+import tech.antibytes.banana.parser.SharedParserRules
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.createLocale
 import tech.antibytes.util.test.annotations.RobolectricTestRunner
@@ -25,10 +26,11 @@ class FullIntegration {
         "Sprachlink hinzugefügt: \$lang",
         "<p><strong>Warum ist diese Seite geschützt?</strong></p>\n<p>Diese Seite ist [[Project:Transclusion|eingebunden]] in die {{PLURAL:$1|folgende Seite, welche [[Project:Cascade|kaskadengeschützt]] ist|folgenden Seiten, welche [[Project:Cascade|kaskadengeschützt]] sind}}:</p>\n$2",
         "Die Seite, die du verlinken willst, ist bereits einem [https://en.wikipedia.org/wiki/GLR_parser Objekt] in unserem zentralen Datenrepositorium zugeordnet, das auf [[GLR parser]] auf dieser Website verlinkt. Es kann nur eine Seite pro Website einem Objekt zugeordnet werden. Bitte wähle eine andere Seite, die verlinkt werden soll.",
-        "Das {{WBREPONAME}}-Objekt wurde geändert"
+        "Das {{WBREPONAME}}-Objekt wurde geändert",
+        "{{CAP: links}} bearbeiten"
     )
 
-    val i18nBuilder = BananaBuilder().setLanguage(createLocale("de-DE"))
+    val i18nBuilder = BananaBuilder(createLocale("de-DE"))
 
     @Test
     fun `It uses provided variabales`() {
@@ -131,7 +133,7 @@ class FullIntegration {
         val i18n = i18nBuilder
             .registerPlugin(
                 PublicApi.Plugin(
-                    "WBREPONAME",
+                    "wbreponame",
                     RepoNameInterpreter
                 )
             ).build()
@@ -142,8 +144,26 @@ class FullIntegration {
         // Then
         result mustBe "Das BananaI18n-Objekt wurde geändert"
     }
-}
 
+    @Test
+    fun `It uses given FullPlugins`() {
+        // Given
+        val i18n = i18nBuilder
+            .registerPlugin(
+                PublicApi.Plugin(
+                    "cap",
+                    CapitalizeInterpreter,
+                    Pair(CapitalizeParser, CoreNode.CompoundNode)
+                )
+            ).build()
+
+        // When
+        val result = i18n.i18n(messages[5])
+
+        // Then
+        result mustBe "Links bearbeiten"
+    }
+}
 
 private object TestLinkFormatter : PublicApi.LinkFormatter {
     override fun formatLink(target: String, displayText: String): String {
@@ -168,5 +188,51 @@ private class RepoNameInterpreter : PublicApi.CustomInterpreter {
             logger: PublicApi.Logger,
             locale: Locale
         ): PublicApi.CustomInterpreter = RepoNameInterpreter()
+    }
+}
+
+private data class CapitalizeNode(
+    val word: String
+) : PublicApi.Node
+
+private class CapitalizeParser(
+    logger: PublicApi.Logger,
+    controller: PublicApi.ParserPluginController,
+) : PublicApi.ParserPlugin, SharedParserRules(logger, controller) {
+    override fun parse(tokenizer: PublicApi.TokenStore): PublicApi.Node {
+        tokenizer.shift()
+        return CapitalizeNode(tokenizer.resolveValues().first())
+    }
+
+    companion object : PublicApi.ParserPluginFactory {
+        override fun createPlugin(
+            logger: PublicApi.Logger,
+            controller: PublicApi.ParserPluginController
+        ): PublicApi.ParserPlugin = CapitalizeParser(logger, controller)
+    }
+}
+
+private class CapitalizeInterpreter : PublicApi.CustomInterpreter {
+    override fun interpret(
+        node: CoreNode.FunctionNode,
+        controller: PublicApi.InterpreterController
+    ): String {
+        val arguments = node.arguments as CoreNode.CompoundNode
+        val word = (arguments.children.first() as CapitalizeNode).word
+
+        return word.replaceFirstChar {
+            if (it.isLowerCase()) {
+                it.titlecase()
+            } else {
+                it.toString()
+            }
+        }
+    }
+
+    companion object : PublicApi.InterpreterFactory {
+        override fun getInstance(
+            logger: PublicApi.Logger,
+            locale: Locale
+        ): PublicApi.CustomInterpreter = CapitalizeInterpreter()
     }
 }

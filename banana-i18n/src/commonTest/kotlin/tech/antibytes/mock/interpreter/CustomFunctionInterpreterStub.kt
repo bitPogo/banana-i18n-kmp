@@ -6,7 +6,6 @@
 
 package tech.antibytes.mock.interpreter
 
-import tech.antibytes.banana.Locale
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.PublicApi.InterpreterController
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -14,7 +13,7 @@ import tech.antibytes.util.test.MockContract
 
 internal class CustomFunctionInterpreterStub(
     var interpret: (FunctionNode, InterpreterController) -> String = { node, _ -> node.id }
-) : PublicApi.ParameterizedInterpreterPlugin<FunctionNode>, MockContract.Mock {
+) : PublicApi.CustomInterpreter, MockContract.Mock {
 
     override fun interpret(node: FunctionNode, controller: InterpreterController): String {
         return interpret.invoke(node, controller)

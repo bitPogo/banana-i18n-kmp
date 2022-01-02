@@ -28,7 +28,7 @@ internal class ParserPluginFactoryStub(
 
     override fun createPlugin(
         logger: PublicApi.Logger,
-        plugins: PublicApi.ParserPluginController
+        controller: PublicApi.ParserPluginController
     ): PublicApi.ParserPlugin = ParserPluginStub(parse).also { capturedInstance.add(it) }
 
     override fun clear() {

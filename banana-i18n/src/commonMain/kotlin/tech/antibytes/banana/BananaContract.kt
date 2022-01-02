@@ -6,11 +6,9 @@
 
 package tech.antibytes.banana
 
-import tech.antibytes.banana.ast.CoreNode
-
 internal typealias ParserPluginMap = Map<String, Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>
 internal typealias Variables = Map<String, String>
-internal typealias RegisteredInterpreterPlugins = Map<String, PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode>>
+internal typealias RegisteredInterpreterPlugins = Map<String, PublicApi.CustomInterpreter>
 
 internal interface BananaContract {
     interface Tokenizer {

@@ -8,4 +8,4 @@ package tech.antibytes.mock
 
 import tech.antibytes.banana.Locale
 
-expect fun createLocale(bcp47: String) : Locale
+expect fun createLocale(bcp47: String): Locale

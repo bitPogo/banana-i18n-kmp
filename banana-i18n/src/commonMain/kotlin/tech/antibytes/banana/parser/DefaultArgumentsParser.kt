@@ -34,7 +34,7 @@ internal class DefaultArgumentsParser private constructor(
     companion object : PublicApi.ParserPluginFactory {
         override fun createPlugin(
             logger: PublicApi.Logger,
-            plugins: PublicApi.ParserPluginController
-        ): PublicApi.ParserPlugin = DefaultArgumentsParser(logger, plugins)
+            controller: PublicApi.ParserPluginController
+        ): PublicApi.ParserPlugin = DefaultArgumentsParser(logger, controller)
     }
 }

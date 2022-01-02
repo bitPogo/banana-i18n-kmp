@@ -96,6 +96,4 @@ class TokenizerKoinSpec {
         store fulfils PublicApi.TokenStore::class
         capturedParameter!! mustBe message
     }
-
-
 }

@@ -17,8 +17,8 @@ import tech.antibytes.banana.ast.CoreNode.LinkNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.mock.LoggerStub
-import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.mock.parser.ParserPluginControllerStub
+import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
@@ -122,13 +122,12 @@ class BananaParserSpec {
 
         // When
         val message = parser.parse(tokenStore)
-        println(message)
 
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children.isEmpty() mustBe false
         message.children[0] mustBe TextNode(listOf(word1, " "))
-        message.children[1] mustBe FunctionNode(word2)
+        message.children[1] mustBe FunctionNode(word2.uppercase())
         message.children[2] mustBe TextNode(listOf(" "))
         message.children[3] mustBe FreeLinkNode(TextNode(listOf(word3)))
         message.children[4] mustBe TextNode(

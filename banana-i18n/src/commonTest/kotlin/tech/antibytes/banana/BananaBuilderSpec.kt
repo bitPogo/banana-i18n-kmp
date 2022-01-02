@@ -8,6 +8,7 @@ package tech.antibytes.banana
 
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.createLocale
+import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
 import tech.antibytes.mock.interpreter.InterpreterFactoryStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
@@ -17,20 +18,21 @@ import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import tech.antibytes.util.test.sameAs
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 @RunWithRobolectricTestRunner(RobolectricTestRunner::class)
 class BananaBuilderSpec {
+    private val locale = createLocale("de-DE")
+
     @Test
     fun `It fulfils BananaBuilder`() {
-        BananaBuilder() fulfils PublicApi.BananaBuilder::class
+        BananaBuilder(locale) fulfils PublicApi.BananaBuilder::class
     }
 
     @Test
     fun `Given setLanguage with a Locale is called, it returns the Builder`() {
         // Given
-        val locale = createLocale("de-DE")
-        val builder = BananaBuilder()
+        val locale = createLocale("en-DE")
+        val builder = BananaBuilder(locale)
 
         // When
         val actual = builder.setLanguage(locale)
@@ -43,7 +45,7 @@ class BananaBuilderSpec {
     fun `Given setTextInterceptor with a TextInterceptor is called, it returns the Builder`() {
         // Given
         val interceptor = TextInterceptorSpy()
-        val builder = BananaBuilder()
+        val builder = BananaBuilder(locale)
 
         // When
         val actual = builder.setTextInterceptor(interceptor)
@@ -56,7 +58,7 @@ class BananaBuilderSpec {
     fun `Given setLinkFormatter with a LinkFormatter is called, it returns the Builder`() {
         // Given
         val formatter = LinkFormatterStub()
-        val builder = BananaBuilder()
+        val builder = BananaBuilder(locale)
 
         // When
         val actual = builder.setLinkFormatter(formatter)
@@ -69,7 +71,7 @@ class BananaBuilderSpec {
     fun `Given setLogger with a Logger is called, it returns the Builder`() {
         // Given
         val logger = LoggerStub()
-        val builder = BananaBuilder()
+        val builder = BananaBuilder(locale)
 
         // When
         val actual = builder.setLogger(logger)
@@ -85,7 +87,7 @@ class BananaBuilderSpec {
             name = "test",
             interpreter = InterpreterFactoryStub()
         )
-        val builder = BananaBuilder()
+        val builder = BananaBuilder(locale)
 
         // When
         val actual = builder.registerPlugin(plugin)
@@ -95,31 +97,85 @@ class BananaBuilderSpec {
     }
 
     @Test
-    fun `Given build is called, it fails if no Language was set`() {
-        // Given
-        val builder = BananaBuilder()
-
-        // Then
-        val error = assertFailsWith<BananaRuntimeError> {
-            // When
-            builder.build()
-        }
-
-        error.message mustBe "You forgot to set a Language!"
-    }
-
-    @Test
     fun `Given build is called and the Language is set, it returns a Instance of BananaI18n`() {
         // Given
-        val locale = createLocale("de-DE")
-        val builder = BananaBuilder()
+        val builder = BananaBuilder(locale)
 
         // When
         val actual = builder
-            .setLanguage(locale)
             .build()
 
         // Then
         actual fulfils PublicApi.BananaI18n::class
+    }
+
+    @Test
+    fun `Given build is called it initalizes given InterpreterPlugins`() {
+        // Given
+        val factory = InterpreterFactoryStub()
+        val logger = LoggerStub()
+        val plugin = PublicApi.Plugin(
+            name = "test",
+            interpreter = factory
+        )
+
+        val builder = BananaBuilder(locale)
+
+        var capturedLocale: Locale? = null
+        var capturedLogger: PublicApi.Logger? = null
+
+        factory.getInstance = { givenLogger, givenLocale ->
+            capturedLogger = givenLogger
+            capturedLocale = givenLocale
+
+            CustomFunctionInterpreterStub()
+        }
+
+        // When
+        val actual = builder
+            .setLogger(logger)
+            .registerPlugin(plugin)
+            .build()
+
+        // Then
+        actual fulfils PublicApi.BananaI18n::class
+        capturedLocale!! mustBe locale
+        capturedLogger!! mustBe logger
+    }
+
+    @Test
+    fun `Given build is called it initalizes given InterpreterPlugins with resetted Locale`() {
+        // Given
+        val resettedLocale = createLocale("en-DE")
+        val factory = InterpreterFactoryStub()
+        val logger = LoggerStub()
+        val plugin = PublicApi.Plugin(
+            name = "test",
+            interpreter = factory
+        )
+
+        val builder = BananaBuilder(locale)
+
+        var capturedLocale: Locale? = null
+        var capturedLogger: PublicApi.Logger? = null
+
+        factory.getInstance = { givenLogger, givenLocale ->
+            capturedLogger = givenLogger
+            capturedLocale = givenLocale
+
+            CustomFunctionInterpreterStub()
+        }
+
+        // When
+        val actual = builder
+            .setLogger(logger)
+            .setLanguage(resettedLocale)
+            .registerPlugin(plugin)
+            .build()
+
+        // Then
+        actual fulfils PublicApi.BananaI18n::class
+        capturedLocale!! mustBe resettedLocale
+        capturedLogger!! mustBe logger
     }
 }

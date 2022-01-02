@@ -14,7 +14,7 @@ import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 abstract class SharedParserRules(
     protected val logger: PublicApi.Logger,
-    private val plugins: PublicApi.ParserPluginController
+    private val controller: PublicApi.ParserPluginController
 ) {
     protected fun logOrConsume(rule: String, tokenizer: PublicApi.TokenStore, condition: () -> Boolean) {
         when {
@@ -115,7 +115,7 @@ abstract class SharedParserRules(
         tokenizer.consume()
         space(tokenizer)
 
-        val (argument, factory) = plugins.resolvePlugin(functionId)
+        val (argument, factory) = controller.resolvePlugin(functionId)
 
         val arguments = mutableListOf(argument.parse(tokenizer))
 
@@ -137,7 +137,7 @@ abstract class SharedParserRules(
         tokenizer.consume()
         space(tokenizer)
 
-        val functionId = identifier(tokenizer)
+        val functionId = identifier(tokenizer).uppercase()
 
         space(tokenizer)
 

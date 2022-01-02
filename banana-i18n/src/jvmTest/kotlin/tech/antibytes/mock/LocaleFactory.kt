@@ -9,4 +9,4 @@ package tech.antibytes.mock
 import com.ibm.icu.util.ULocale
 import tech.antibytes.banana.Locale
 
-actual fun createLocale(bcp47: String) : Locale = ULocale.forLanguageTag(bcp47)
+actual fun createLocale(bcp47: String): Locale = ULocale.forLanguageTag(bcp47)
