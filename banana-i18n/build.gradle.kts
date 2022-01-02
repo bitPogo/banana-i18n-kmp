@@ -57,7 +57,7 @@ kotlin {
                 implementation(Dependency.multiplatform.koin.core) {
                     exclude(
                         "org.jetbrains.kotlin",
-                    "kotlin-stdlib-jdk8"
+                        "kotlin-stdlib-jdk8"
                     )
                 }
             }

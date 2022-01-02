@@ -11,11 +11,12 @@ import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.util.test.fulfils
+import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
 
 class TokenizerKoinSpec {
     @Test
-    fun `Given resolveTokenizerModule is called it contains a Reader, if the appropriate Parameter is delegated`() {
+    fun `Given resolveTokenizerModule is called it contains a Reader, if the appropriate Parameter are delegated`() {
         // Given
         val koin = koinApplication {
             modules(resolveTokenizerModule())
@@ -33,25 +34,33 @@ class TokenizerKoinSpec {
     }
 
     @Test
-    fun `Given resolveTokenizerModule is called it contains a Tokenizer`() {
+    fun `Given resolveTokenizerModule is called it contains a Tokenizer, if the appropriate Parameter are delegated`() {
         // Given
+        var capturedParameter: String? = null
+        val message = "Something"
+
         val koin = koinApplication {
             allowOverride(true)
             modules(
                 resolveTokenizerModule(),
                 module {
-                    single<TokenizerContract.Reader> {
-                        StringReader("")
+                    single<TokenizerContract.Reader> { parameter ->
+                        capturedParameter = parameter.get()
+                        StringReader(parameter.get())
                     }
                 }
             )
-
         }
 
         // When
-        val tokenizer: BananaContract.Tokenizer = koin.koin.get()
+        val tokenizer: BananaContract.Tokenizer = koin.koin.get(
+            parameters = {
+                parametersOf(message)
+            }
+        )
 
         // Then
         tokenizer fulfils BananaContract.Tokenizer::class
+        capturedParameter!! mustBe message
     }
 }

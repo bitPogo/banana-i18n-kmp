@@ -18,8 +18,12 @@ internal fun resolveTokenizerModule(): Module {
             )
         }
 
-        factory<BananaContract.Tokenizer> {
-            BananaTokenizer(get())
+        factory<BananaContract.Tokenizer> { parameter ->
+            BananaTokenizer(
+                get(
+                    parameters = { parameter }
+                )
+            )
         }
     }
 }

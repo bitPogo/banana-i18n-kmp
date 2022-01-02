@@ -9,7 +9,6 @@ import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi.Token
 import tech.antibytes.banana.PublicApi.TokenTypes
-import tech.antibytes.mock.tokenizer.ReaderStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test

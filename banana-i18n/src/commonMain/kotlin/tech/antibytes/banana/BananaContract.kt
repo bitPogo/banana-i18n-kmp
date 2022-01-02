@@ -35,6 +35,7 @@ internal interface BananaContract {
         COMPOUND_FACTORY,
         DEFAULT_ARGUMENT_PARSER,
         PARSER_PLUGINS,
+        VARIABLES,
         TEXT_INTERPRETER,
         VARIABLE_INTERPRETER,
         FUNCTION_INTERPRETER,
