@@ -12,8 +12,6 @@ import tech.antibytes.banana.interpreter.DefaultTextInterceptor
 class BananaBuilder : PublicApi.BananaBuilder {
     private var locale: Locale? = null
     private var logger: PublicApi.Logger = DefaultLogger()
-    private var parserCache: PublicApi.Cache<PublicApi.Node> = DefaultCache()
-    private var interpreterCache: PublicApi.Cache<String> = DefaultCache()
     private var textInterceptor: PublicApi.TextInterceptor = DefaultTextInterceptor()
     private var linkFormatter: PublicApi.LinkFormatter = DefaultLinkFormatter()
     private val plugins: MutableSet<PublicApi.Plugin> = mutableSetOf()
@@ -33,18 +31,6 @@ class BananaBuilder : PublicApi.BananaBuilder {
     override fun setLinkFormatter(formatter: PublicApi.LinkFormatter): PublicApi.BananaBuilder {
         return this.also {
             linkFormatter = formatter
-        }
-    }
-
-    override fun setParserCache(cache: PublicApi.Cache<PublicApi.Node>): PublicApi.BananaBuilder {
-        return this.also {
-            parserCache = cache
-        }
-    }
-
-    override fun setMessageCache(cache: PublicApi.Cache<String>): PublicApi.BananaBuilder {
-        return this.also {
-            interpreterCache = cache
         }
     }
 

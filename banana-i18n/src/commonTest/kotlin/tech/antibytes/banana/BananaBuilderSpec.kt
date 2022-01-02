@@ -6,13 +6,11 @@
 
 package tech.antibytes.banana
 
-import tech.antibytes.mock.CacheStub
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.createLocale
 import tech.antibytes.mock.interpreter.InterpreterFactoryStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
-import tech.antibytes.util.test.annotations.RobolectricConfig
 import tech.antibytes.util.test.annotations.RobolectricTestRunner
 import tech.antibytes.util.test.annotations.RunWithRobolectricTestRunner
 import tech.antibytes.util.test.fulfils
@@ -62,32 +60,6 @@ class BananaBuilderSpec {
 
         // When
         val actual = builder.setLinkFormatter(formatter)
-
-        // Then
-        actual sameAs builder
-    }
-
-    @Test
-    fun `Given setParserCache with a Cache is called, it returns the Builder`() {
-        // Given
-        val cache = CacheStub<PublicApi.Node>()
-        val builder = BananaBuilder()
-
-        // When
-        val actual = builder.setParserCache(cache)
-
-        // Then
-        actual sameAs builder
-    }
-
-    @Test
-    fun `Given setMessageCache with a Cache is called, it returns the Builder`() {
-        // Given
-        val cache = CacheStub<String>()
-        val builder = BananaBuilder()
-
-        // When
-        val actual = builder.setMessageCache(cache)
 
         // Then
         actual sameAs builder

@@ -90,11 +90,6 @@ interface PublicApi {
         fun error(tag: Tag, message: String)
     }
 
-    interface Cache<T : Any> {
-        fun getValue(key: String): T?
-        fun store(key: String, value: T)
-    }
-
     enum class Tag {
         PARSER,
         INTERPRETER
@@ -115,8 +110,6 @@ interface PublicApi {
         fun setLanguage(locale: Locale): BananaBuilder
         fun setTextInterceptor(interceptor: TextInterceptor): BananaBuilder
         fun setLinkFormatter(formatter: LinkFormatter): BananaBuilder
-        fun setParserCache(cache: Cache<Node>): BananaBuilder
-        fun setMessageCache(cache: Cache<String>): BananaBuilder
         fun setLogger(logger: Logger): BananaBuilder
         fun registerPlugin(plugin: Plugin): BananaBuilder
 
