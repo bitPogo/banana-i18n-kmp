@@ -19,7 +19,8 @@ data class CustomRepository(
 )
 
 val githubGroups = listOf(
-    "tech.antibytes.gradle-plugins"
+    "tech.antibytes.gradle-plugins",
+    "tech.antibytes.test-utils-kmp"
 )
 
 val repositories = listOf(

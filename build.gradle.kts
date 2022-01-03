@@ -14,8 +14,6 @@ plugins {
 
     id("tech.antibytes.gradle.banana.script.quality-spotless")
 
-    id("org.owasp.dependencycheck")
-
     id("tech.antibytes.gradle.publishing")
 }
 

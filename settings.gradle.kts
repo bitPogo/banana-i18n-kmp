@@ -18,8 +18,7 @@ plugins {
 }
 
 include(
-    ":banana-i18n",
-    ":test-utils"
+    ":banana-i18n"
 )
 
 buildCache {

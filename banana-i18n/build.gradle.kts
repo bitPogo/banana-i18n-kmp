@@ -67,7 +67,7 @@ kotlin {
                 implementation(Dependency.multiplatform.test.common)
                 implementation(Dependency.multiplatform.test.annotations)
                 implementation(Dependency.multiplatform.test.fixture)
-                implementation(project(":test-utils"))
+                implementation(LocalDependency.antibytes.test)
             }
         }
 

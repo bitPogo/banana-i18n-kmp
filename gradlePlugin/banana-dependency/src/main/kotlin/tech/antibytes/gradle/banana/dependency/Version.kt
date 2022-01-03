@@ -10,6 +10,7 @@ object Version {
 
     val gradle = Gradle
     val jvm = Jvm
+    val antibytes = Antibytes
 
     object Gradle {
         /**
@@ -28,5 +29,9 @@ object Version {
          * [ICU](https://unicode-org.github.io/icu/userguide/icu4j/)
          */
         const val icu = "70.1"
+    }
+
+    object Antibytes {
+        val test = "3764d82"
     }
 }
