@@ -9,8 +9,13 @@ package tech.antibytes.gradle.banana.dependency
 object Dependency {
     val gradle = GradlePlugin
     val jvm = Jvm
+    val antibytes = AntiBytes
 
     object Jvm {
         val icu = "com.ibm.icu:icu4j:${Version.jvm.icu}"
+    }
+
+    object AntiBytes {
+        val test = "tech.antibytes.test-utils-kmp:test-utils:${Version.antibytes.test}"
     }
 }
