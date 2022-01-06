@@ -6,11 +6,13 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
+import tech.antibytes.util.test.fixture.listFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -31,13 +33,13 @@ class CompoundInterpreterSpec {
 
         val node = CoreNode.CompoundNode(
             listOf(
-                CoreNode.TextNode(fixture()),
-                CoreNode.VariableNode(fixture()),
-                CoreNode.FunctionNode(fixture())
+                CoreNode.TextNode(fixture.listFixture()),
+                CoreNode.VariableNode(fixture.fixture()),
+                CoreNode.FunctionNode(fixture.fixture())
             )
         )
 
-        val expected: String = fixture()
+        val expected: String = fixture.fixture()
         var capturedNodes: List<PublicApi.Node> = emptyList()
         var capturedController: PublicApi.InterpreterController? = null
 

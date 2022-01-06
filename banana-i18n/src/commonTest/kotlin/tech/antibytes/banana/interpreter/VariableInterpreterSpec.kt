@@ -6,11 +6,12 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 import tech.antibytes.mock.LoggerStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -34,7 +35,7 @@ class VariableInterpreterSpec {
     fun `Given interprete is called with a VariableNode and a Map, it returns the value of a Entry`() {
         // Given
         val id = "abc"
-        val value: String = fixture()
+        val value: String = fixture.fixture()
         val variables = mapOf(id to value)
 
         val node = VariableNode(id)
@@ -50,8 +51,8 @@ class VariableInterpreterSpec {
     @Test
     fun `Given interprete is called with a VariableNode and a Map, it logs an Error and returns the ID of the not matched Entry`() {
         // Given
-        val id: String = fixture()
-        val value: String = fixture()
+        val id: String = fixture.fixture()
+        val value: String = fixture.fixture()
         val variables = mapOf("any" to value)
 
         val node = VariableNode(id)

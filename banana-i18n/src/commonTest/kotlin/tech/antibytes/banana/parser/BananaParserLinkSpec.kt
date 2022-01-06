@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.parser
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -17,6 +16,8 @@ import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -60,8 +61,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -93,8 +94,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -125,15 +126,15 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
     fun `Given parse is called it accepts DOUBLE as Link`() {
         // Given
         val parser = BananaParser(logger, pluginController)
-        val target = fixture<Double>().toString()
+        val target = fixture.fixture<Double>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -157,15 +158,15 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
     fun `Given parse is called it accepts INTEGER as Link`() {
         // Given
         val parser = BananaParser(logger, pluginController)
-        val target = fixture<Int>().toString()
+        val target = fixture.fixture<Int>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -189,8 +190,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -221,8 +222,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -253,8 +254,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -285,8 +286,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -315,8 +316,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -347,8 +348,8 @@ class BananaParserLinkSpec {
         )
         tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -378,8 +379,8 @@ class BananaParserLinkSpec {
             listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -411,8 +412,8 @@ class BananaParserLinkSpec {
             listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -446,8 +447,8 @@ class BananaParserLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -482,8 +483,8 @@ class BananaParserLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -515,8 +516,8 @@ class BananaParserLinkSpec {
             listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -552,8 +553,8 @@ class BananaParserLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -586,8 +587,8 @@ class BananaParserLinkSpec {
             listOf(FunctionNode(target.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -632,8 +633,8 @@ class BananaParserLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -668,8 +669,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -704,8 +705,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -713,7 +714,7 @@ class BananaParserLinkSpec {
         // Given
         val parser = BananaParser(logger, pluginController)
         val target = "abc"
-        val display = fixture<Double>().toString()
+        val display = fixture.fixture<Double>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -740,8 +741,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -749,7 +750,7 @@ class BananaParserLinkSpec {
         // Given
         val parser = BananaParser(logger, pluginController)
         val target = "abc"
-        val display = fixture<Int>().toString()
+        val display = fixture.fixture<Int>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -776,8 +777,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -812,8 +813,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -848,8 +849,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -884,8 +885,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -920,8 +921,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -956,8 +957,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -992,8 +993,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1030,8 +1031,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1069,8 +1070,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(displayPart1, " ", displayPart2)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1105,8 +1106,8 @@ class BananaParserLinkSpec {
             listOf(TextNode(listOf(display)))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1141,8 +1142,8 @@ class BananaParserLinkSpec {
             listOf(VariableNode(display))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1179,8 +1180,8 @@ class BananaParserLinkSpec {
             listOf(FunctionNode(display.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1219,8 +1220,8 @@ class BananaParserLinkSpec {
             listOf(FunctionNode(display.uppercase()))
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1274,8 +1275,8 @@ class BananaParserLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1421,8 +1422,8 @@ class BananaParserLinkSpec {
             listOf("[[", " ", "{{", " ", "{{", " ", target, "}}", " ", "]]")
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -1459,7 +1460,7 @@ class BananaParserLinkSpec {
             )
         )
         tokenStore.tokens.isEmpty() mustBe true
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.error mustBe emptyList()
         logger.warning[0] mustBe Pair(
             PublicApi.Tag.PARSER,
             "Warning: Link had not been closed!"

@@ -6,13 +6,16 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.Variables
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterPluginStub
 import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
 import tech.antibytes.mock.interpreter.VariableInterpreterStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
+import tech.antibytes.util.test.fixture.listFixture
+import tech.antibytes.util.test.fixture.mapFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -60,8 +63,8 @@ class BananaInterpreterSpec {
     fun `Given interpret is called with a TextNode it delegates it to the TextInterpreter`() {
         // Given
         val nestedInterpreter = InterpreterPluginStub<CoreNode.TextNode>()
-        val expected: String = fixture()
-        val node = CoreNode.TextNode(fixture())
+        val expected: String = fixture.fixture()
+        val node = CoreNode.TextNode(fixture.listFixture())
         var capturedNode: PublicApi.Node? = null
 
         nestedInterpreter.interpret = { givenNode ->
@@ -88,10 +91,10 @@ class BananaInterpreterSpec {
     @Test
     fun `Given interpret is called with a VariableNode it delegates it to the VariableInterpreter`() {
         // Given
-        val variables: Variables = fixture()
+        val variables: Variables = fixture.mapFixture()
         val nestedInterpreter = VariableInterpreterStub()
-        val expected: String = fixture()
-        val node = CoreNode.VariableNode(fixture())
+        val expected: String = fixture.fixture()
+        val node = CoreNode.VariableNode(fixture.fixture())
         var capturedNode: PublicApi.Node? = null
         var capturedVariables: Variables = emptyMap()
 
@@ -132,8 +135,8 @@ class BananaInterpreterSpec {
             freeLinkInterpreter = ParameterizedInterpreterPluginStub()
         )
 
-        val expected: String = fixture()
-        val node = CoreNode.FunctionNode(fixture())
+        val expected: String = fixture.fixture()
+        val node = CoreNode.FunctionNode(fixture.fixture())
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
 
@@ -166,7 +169,7 @@ class BananaInterpreterSpec {
             freeLinkInterpreter = ParameterizedInterpreterPluginStub()
         )
 
-        val expected: String = fixture()
+        val expected: String = fixture.fixture()
         val node = CoreNode.CompoundNode(emptyList())
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
@@ -200,7 +203,7 @@ class BananaInterpreterSpec {
             freeLinkInterpreter = ParameterizedInterpreterPluginStub()
         )
 
-        val expected: String = fixture()
+        val expected: String = fixture.fixture()
         val node = CoreNode.LinkNode(emptyList())
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null
@@ -234,7 +237,7 @@ class BananaInterpreterSpec {
             freeLinkInterpreter = nestedInterpreter
         )
 
-        val expected: String = fixture()
+        val expected: String = fixture.fixture()
         val node = CoreNode.FreeLinkNode(CoreNode.TextNode(emptyList()))
         var capturedNode: PublicApi.Node? = null
         var capturedController: PublicApi.InterpreterController? = null

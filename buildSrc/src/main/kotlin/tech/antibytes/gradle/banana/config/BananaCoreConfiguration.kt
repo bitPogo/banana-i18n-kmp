@@ -19,7 +19,7 @@ object BananaCoreConfiguration {
             pom = PomConfiguration(
                 name = "banana-i18n",
                 description = "A implementation of MediaWikis banana for Kotlin Multiplatform.",
-                year = 2021,
+                year = 2022,
                 url = "https://$gitHubRepositoryPath"
             ),
             developers = listOf(developer),

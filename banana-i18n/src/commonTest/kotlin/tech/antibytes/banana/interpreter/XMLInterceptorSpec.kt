@@ -6,8 +6,9 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -23,7 +24,7 @@ class XMLInterceptorSpec {
     @Test
     fun `Given intercept is called with a String it reflects it, if is not a XML special character`() {
         // Given
-        val chunk: String = fixture()
+        val chunk: String = fixture.fixture()
 
         // When
         val result = XMLInterceptor().intercept(chunk)

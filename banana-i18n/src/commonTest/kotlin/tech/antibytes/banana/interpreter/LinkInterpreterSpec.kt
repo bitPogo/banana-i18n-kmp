@@ -6,12 +6,14 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
+import tech.antibytes.util.test.fixture.listFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -40,9 +42,9 @@ class LinkInterpreterSpec {
         // Given
         val node = CoreNode.LinkNode(
             target = listOf(
-                CoreNode.TextNode(fixture()),
-                CoreNode.VariableNode(fixture()),
-                CoreNode.FunctionNode(fixture())
+                CoreNode.TextNode(fixture.listFixture()),
+                CoreNode.VariableNode(fixture.fixture()),
+                CoreNode.FunctionNode(fixture.fixture())
             )
         )
 
@@ -69,9 +71,9 @@ class LinkInterpreterSpec {
         val node = CoreNode.LinkNode(
             target = emptyList(),
             display = listOf(
-                CoreNode.TextNode(fixture()),
-                CoreNode.VariableNode(fixture()),
-                CoreNode.FunctionNode(fixture())
+                CoreNode.TextNode(fixture.listFixture()),
+                CoreNode.VariableNode(fixture.fixture()),
+                CoreNode.FunctionNode(fixture.fixture())
             )
         )
 
@@ -95,9 +97,9 @@ class LinkInterpreterSpec {
     @Test
     fun `Given interprete is called with a LinkNode and a InterpreterController, it delegates the interpreted Nodes to the Formatter and returns the result`() {
         // Given
-        val target: String = fixture()
-        val display: String = fixture()
-        val expected: String = fixture()
+        val target: String = fixture.fixture()
+        val display: String = fixture.fixture()
+        val expected: String = fixture.fixture()
 
         val interpreted = mutableListOf(target, display)
 

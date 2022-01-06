@@ -6,12 +6,14 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
+import tech.antibytes.util.test.fixture.listFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -39,7 +41,7 @@ class FreeLinkInterpreterSpec {
     fun `Given interprete is called with a FreeLinkNode and a InterpreterController, it delegates its wraped Url to the Controller`() {
         // Given
         val node = CoreNode.FreeLinkNode(
-            url = CoreNode.TextNode(fixture())
+            url = CoreNode.TextNode(fixture.listFixture())
         )
 
         var capturedNode: PublicApi.Node? = null
@@ -60,11 +62,11 @@ class FreeLinkInterpreterSpec {
     fun `Given interprete is called with a FreeLinkNode and a InterpreterController, it delegates its wraped DisplayTextNodes and the Controller to the Concartenator`() {
         // Given
         val node = CoreNode.FreeLinkNode(
-            url = CoreNode.TextNode(fixture()),
+            url = CoreNode.TextNode(fixture.listFixture()),
             display = listOf(
-                CoreNode.TextNode(fixture()),
-                CoreNode.VariableNode(fixture()),
-                CoreNode.FunctionNode(fixture())
+                CoreNode.TextNode(fixture.listFixture()),
+                CoreNode.VariableNode(fixture.fixture()),
+                CoreNode.FunctionNode(fixture.fixture())
             )
         )
 
@@ -89,9 +91,9 @@ class FreeLinkInterpreterSpec {
     @Test
     fun `Given interprete is called with a FreeLinkNode and a InterpreterController, it delegates the interpreted Nodes to the Formatter and returns the result`() {
         // Given
-        val url: String = fixture()
-        val display: String = fixture()
-        val expected: String = fixture()
+        val url: String = fixture.fixture()
+        val display: String = fixture.fixture()
+        val expected: String = fixture.fixture()
         var capturedUrl: String? = null
         var capturedDisplay: String? = null
 
@@ -109,7 +111,7 @@ class FreeLinkInterpreterSpec {
             expected
         }
 
-        val node = CoreNode.FreeLinkNode(url = CoreNode.TextNode(fixture()))
+        val node = CoreNode.FreeLinkNode(url = CoreNode.TextNode(fixture.listFixture()))
 
         // When
         val result = FreeLinkInterpreter(concatenator, formatter).interpret(node, controller)

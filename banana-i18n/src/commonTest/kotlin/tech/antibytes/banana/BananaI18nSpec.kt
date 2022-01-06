@@ -6,13 +6,16 @@
 
 package tech.antibytes.banana
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.parser.BananaParserStub
 import tech.antibytes.mock.parser.TokenStoreFake
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
+import tech.antibytes.util.test.fixture.listFixture
+import tech.antibytes.util.test.fixture.mapFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -28,7 +31,7 @@ class BananaI18nSpec {
     @Test
     fun `Given i18n is called with only a message, it delegates the message to the Tokenizer and a EmptyMap to the Interpreter`() {
         // Given
-        val message: String = fixture()
+        val message: String = fixture.fixture()
 
         var capturedMessage: String? = null
         var capturedVariables: Map<String, String>? = null
@@ -62,14 +65,14 @@ class BananaI18nSpec {
 
         // Then
         capturedMessage!! mustBe message
-        capturedVariables!! mustBe emptyMap<String, String>()
+        capturedVariables!! mustBe emptyMap()
     }
 
     @Test
     fun `Given i18n is called with only a message with a Map, it delegates the message to the Tokenizer and the given Map to the Interpreter`() {
         // Given
-        val message: String = fixture()
-        val variables: Map<String, String> = fixture()
+        val message: String = fixture.fixture()
+        val variables: Map<String, String> = fixture.mapFixture()
 
         var capturedMessage: String? = null
         var capturedVariables: Map<String, String>? = null
@@ -109,8 +112,8 @@ class BananaI18nSpec {
     @Test
     fun `Given i18n is called with only a message with a variable amount of String, it delegates the message to the Tokenizer and a Variables as Map by their index to the Interpreter`() {
         // Given
-        val message: String = fixture()
-        val variables: Array<String> = fixture()
+        val message: String = fixture.fixture()
+        val variables: Array<String> = fixture.listFixture<String>().toTypedArray()
 
         val expectedVariables = variables
             .mapIndexed { idx, value ->
@@ -156,8 +159,8 @@ class BananaI18nSpec {
     @Test
     fun `Given i18n is called with a message, it returns the interpreted Messages`() {
         // Given
-        val message: String = fixture()
-        val expected: String = fixture()
+        val message: String = fixture.fixture()
+        val expected: String = fixture.fixture()
 
         val tokenStore = TokenStoreFake()
         val rootNode = CoreNode.CompoundNode(emptyList())
