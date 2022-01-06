@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.parser
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
@@ -14,6 +13,8 @@ import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -34,7 +35,7 @@ class BananaParserTextSpec {
     fun `Given parse is called it accepts DOUBLE as Text`() {
         // Given
         val parser = BananaParser(logger, pluginController)
-        val double = fixture<Double>().toString()
+        val double = fixture.fixture<Double>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -57,7 +58,7 @@ class BananaParserTextSpec {
     fun `Given parse is called it accepts INTEGER as Text`() {
         // Given
         val parser = BananaParser(logger, pluginController)
-        val integer = fixture<Int>().toString()
+        val integer = fixture.fixture<Int>().toString()
 
         val tokens = createTokens(
             listOf(

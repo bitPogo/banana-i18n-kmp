@@ -6,10 +6,11 @@
 
 package tech.antibytes.banana.tokenizer
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.tokenizer.TokenizerStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -36,19 +37,19 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             )
@@ -69,19 +70,19 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             )
@@ -107,19 +108,19 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             )
@@ -159,19 +160,19 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -199,31 +200,31 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -255,19 +256,19 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -292,19 +293,19 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -329,31 +330,31 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -379,31 +380,31 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -429,7 +430,7 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -454,7 +455,7 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -479,7 +480,7 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -504,31 +505,31 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
@@ -561,31 +562,31 @@ class TokenStoreSpec {
         val tokens = listOf(
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),
             PublicApi.Token(
                 PublicApi.TokenTypes.INTEGER,
-                fixture<Int>().toString(),
+                fixture.fixture<Int>().toString(),
                 -1,
                 -1,
             ),

@@ -6,12 +6,13 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
 import tech.antibytes.mock.interpreter.FunctionInterpreterStub
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import tech.antibytes.util.test.sameAs
@@ -35,7 +36,7 @@ class FunctionInterpreterSelectorSpec {
         val default = FunctionInterpreterStub { givenNode ->
             givenNode.id.also { capturedNode = givenNode }
         }
-        val functionName: String = fixture()
+        val functionName: String = fixture.fixture()
         val node = FunctionNode(functionName)
 
         // When
@@ -58,7 +59,7 @@ class FunctionInterpreterSelectorSpec {
             capturedController = givenController
             givenNode.id
         }
-        val functionName: String = fixture()
+        val functionName: String = fixture.fixture()
         val node = FunctionNode(functionName)
 
         val plugins = mapOf(

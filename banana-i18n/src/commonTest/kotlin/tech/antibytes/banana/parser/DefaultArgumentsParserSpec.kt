@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.parser
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -19,6 +18,8 @@ import tech.antibytes.mock.parser.TestArgumentNode
 import tech.antibytes.mock.parser.TestArgumentsNode
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
@@ -121,8 +122,8 @@ class DefaultArgumentsParserSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FunctionNode("${functionNamePart1}_$functionNamePart2")
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -151,8 +152,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe FunctionNode(functionName.uppercase())
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -194,8 +195,8 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe FunctionNode(functionName.uppercase(), TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe listOf(nestedArgument)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -242,8 +243,8 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe FunctionNode(functionName.uppercase(), TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -295,8 +296,8 @@ class DefaultArgumentsParserSpec {
         argument.children[0] mustBe FunctionNode(functionName.uppercase(), TestArgumentsNode.lastInstance)
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -321,8 +322,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -347,8 +348,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -373,15 +374,15 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
     fun `Given parse is called it accepts Ingeger`() {
         // Given
         val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
-        val value = fixture<Int>().toString()
+        val value = fixture.fixture<Int>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -399,15 +400,15 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
     fun `Given parse is called it accepts Double`() {
         // Given
         val plugin = DefaultArgumentsParser.createPlugin(logger, pluginController)
-        val value = fixture<Double>().toString()
+        val value = fixture.fixture<Double>().toString()
 
         val tokens = createTokens(
             listOf(
@@ -425,8 +426,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -451,8 +452,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -477,8 +478,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -503,8 +504,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -529,8 +530,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -555,8 +556,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -583,8 +584,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value, " ", value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -610,8 +611,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -637,8 +638,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -665,8 +666,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -692,8 +693,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -720,8 +721,8 @@ class DefaultArgumentsParserSpec {
         argument as CompoundNode
         argument.children[0] mustBe TextNode(listOf(value))
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -756,7 +757,7 @@ class DefaultArgumentsParserSpec {
         argument.children[2] mustBe TextNode(listOf(" "))
         argument.children[3] mustBe FunctionNode(functionName.uppercase())
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 }

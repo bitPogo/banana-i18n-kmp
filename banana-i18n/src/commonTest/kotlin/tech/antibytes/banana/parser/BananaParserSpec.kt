@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.parser
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
@@ -26,7 +25,6 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 
 class BananaParserSpec {
-    private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
     private val pluginController = ParserPluginControllerStub()

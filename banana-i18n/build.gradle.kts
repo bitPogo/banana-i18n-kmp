@@ -66,7 +66,8 @@ kotlin {
             dependencies {
                 implementation(Dependency.multiplatform.test.common)
                 implementation(Dependency.multiplatform.test.annotations)
-                implementation(Dependency.multiplatform.test.fixture)
+
+                implementation(LocalDependency.antibytes.fixture)
                 implementation(LocalDependency.antibytes.test)
             }
         }

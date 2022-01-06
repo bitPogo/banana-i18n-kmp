@@ -6,8 +6,9 @@
 
 package tech.antibytes.banana.interpreter
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
+import tech.antibytes.util.test.fixture.fixture
+import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import kotlin.test.Test
@@ -23,7 +24,7 @@ class DefaultLinkFormatterSpec {
     @Test
     fun `Given formatLink is called with a target and a empty displayText it returns the target`() {
         // Given
-        val target: String = fixture()
+        val target: String = fixture.fixture()
         val displayText = ""
 
         // When
@@ -36,8 +37,8 @@ class DefaultLinkFormatterSpec {
     @Test
     fun `Given formatLink is called with a target and a displayText it returns the displayText`() {
         // Given
-        val target: String = fixture()
-        val displayText: String = fixture()
+        val target: String = fixture.fixture()
+        val displayText: String = fixture.fixture()
 
         // When
         val actual = DefaultLinkFormatter().formatLink(target, displayText)
@@ -49,7 +50,7 @@ class DefaultLinkFormatterSpec {
     @Test
     fun `Given formatFreeLink is called with a URL and a empty displayText it returns the target`() {
         // Given
-        val url: String = fixture()
+        val url: String = fixture.fixture()
         val displayText = ""
 
         // When
@@ -62,8 +63,8 @@ class DefaultLinkFormatterSpec {
     @Test
     fun `Given formatFreeLink is called with a URL and a displayText it returns the displayText`() {
         // Given
-        val url: String = fixture()
-        val displayText: String = fixture()
+        val url: String = fixture.fixture()
+        val displayText: String = fixture.fixture()
 
         // When
         val actual = DefaultLinkFormatter().formatFreeLink(url, displayText)

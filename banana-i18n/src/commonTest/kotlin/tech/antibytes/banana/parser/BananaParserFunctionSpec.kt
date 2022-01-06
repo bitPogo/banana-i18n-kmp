@@ -6,7 +6,6 @@
 
 package tech.antibytes.banana.parser
 
-import com.appmattus.kotlinfixture.kotlinFixture
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -24,7 +23,6 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 
 class BananaParserFunctionSpec {
-    private val fixture = kotlinFixture()
     private val tokenStore = TokenStoreFake()
     private val logger = LoggerStub()
     private val pluginController = ParserPluginControllerStub()
@@ -59,8 +57,8 @@ class BananaParserFunctionSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(functionName)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -90,8 +88,8 @@ class BananaParserFunctionSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode("${functionNamePart1}_$functionNamePart2")
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -120,8 +118,8 @@ class BananaParserFunctionSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(functionName)
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -165,8 +163,8 @@ class BananaParserFunctionSpec {
         )
         TestArgumentsNode.lastChildren mustBe listOf(nestedArgument)
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -215,8 +213,8 @@ class BananaParserFunctionSpec {
         )
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -270,8 +268,8 @@ class BananaParserFunctionSpec {
         )
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -302,8 +300,8 @@ class BananaParserFunctionSpec {
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
-        logger.error mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
+        logger.error mustBe emptyList()
     }
 
     @Test
@@ -364,7 +362,7 @@ class BananaParserFunctionSpec {
         (message as CompoundNode).children[0] mustBe FunctionNode(word.uppercase())
 
         tokenStore.tokens.isEmpty() mustBe true
-        logger.warning mustBe emptyList<Pair<PublicApi.Tag, String>>()
+        logger.warning mustBe emptyList()
         logger.error[0] mustBe Pair(
             PublicApi.Tag.PARSER,
             "Error: Unexpected Token (${tokens[3]})!"
