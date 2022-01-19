@@ -83,7 +83,7 @@ kotlin {
 
                 implementation(Dependency.multiplatform.test.jvm)
                 implementation(Dependency.multiplatform.test.junit)
-                implementation(Dependency.androidTest.robolectric)
+                implementation(Dependency.android.test.robolectric)
             }
         }
 
