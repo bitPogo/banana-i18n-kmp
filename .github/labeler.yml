@@ -6,7 +6,7 @@ scripts:
 
 dependencies:
   - buildSrc/**/*
-  - gradlePlugin/banana-dependency/**/*
+  - gradlePlugin/**/*
 
 documentation:
   - docs/**/*
