@@ -17,6 +17,7 @@ object Dependency {
 
     object AntiBytes {
         val test = "tech.antibytes.test-utils-kmp:test-utils:${Version.antibytes.test}"
+        val annotation = "tech.antibytes.test-utils-kmp:test-utils-annotation:${Version.antibytes.test}"
         val fixture = "tech.antibytes.test-utils-kmp:test-utils-fixture:${Version.antibytes.test}"
     }
 }
