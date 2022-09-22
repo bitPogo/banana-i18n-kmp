@@ -10,7 +10,7 @@ import tech.antibytes.banana.interpreter.DefaultLinkFormatter
 import tech.antibytes.banana.interpreter.DefaultTextInterceptor
 
 class BananaBuilder(
-    private var locale: Locale
+    private var locale: Locale,
 ) : PublicApi.BananaBuilder {
     private var logger: PublicApi.Logger = DefaultLogger()
     private var textInterceptor: PublicApi.TextInterceptor = DefaultTextInterceptor()
@@ -75,7 +75,7 @@ class BananaBuilder(
             collectParserPlugins(),
             textInterceptor,
             linkFormatter,
-            initializeInterpreterPlugins()
+            initializeInterpreterPlugins(),
         )
 
         return BananaI18n(koin)

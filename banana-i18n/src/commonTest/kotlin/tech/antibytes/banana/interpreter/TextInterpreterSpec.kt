@@ -1,18 +1,18 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class TextInterpreterSpec {
     private val interceptor = TextInterceptorSpy()
@@ -46,7 +46,7 @@ class TextInterpreterSpec {
         val mapping = mapOf(
             "A" to "D",
             "B" to "E",
-            "C" to "F"
+            "C" to "F",
         )
         interceptor.intercept = { chunk -> mapping.getOrElse(chunk) { " " } }
 

@@ -12,12 +12,12 @@ object Dependency {
     val antibytes = AntiBytes
 
     object Jvm {
-        val icu = "com.ibm.icu:icu4j:${Version.jvm.icu}"
+        const val icu = "com.ibm.icu:icu4j:${Version.jvm.icu}"
     }
 
     object AntiBytes {
-        val test = "tech.antibytes.test-utils-kmp:test-utils:${Version.antibytes.test}"
-        val annotation = "tech.antibytes.test-utils-kmp:test-utils-annotations:${Version.antibytes.test}"
-        val fixture = "tech.antibytes.test-utils-kmp:test-utils-fixture:${Version.antibytes.test}"
+        const val test = "tech.antibytes.test-utils-kmp:test-utils:${Version.antibytes.test}"
+        const val annotation = "tech.antibytes.test-utils-kmp:test-utils-annotations:${Version.antibytes.test}"
+        const val fixture = "tech.antibytes.kfixture:core:${Version.antibytes.kfixture}"
     }
 }

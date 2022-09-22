@@ -1,24 +1,24 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class BananaParserTextSpec {
     private val fixture = kotlinFixture()
@@ -40,7 +40,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.DOUBLE to double,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -63,7 +63,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.INTEGER to integer,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -86,7 +86,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.ESCAPED to escaped,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -109,7 +109,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.ASCII_STRING to ascii,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -132,7 +132,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.NON_ASCII_STRING to nonAscii,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -155,7 +155,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.LITERAL to literal,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -178,7 +178,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.WHITESPACE to space,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -201,7 +201,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.DELIMITER to delimiter,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -224,7 +224,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.FUNCTION_START to start,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -247,7 +247,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.FUNCTION_END to end,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -270,7 +270,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.LINK_START to start,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -293,7 +293,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.LINK_END to end,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -316,7 +316,7 @@ class BananaParserTextSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.URL to url,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -343,7 +343,7 @@ class BananaParserTextSpec {
                 PublicApi.TokenTypes.ASCII_STRING to ascii,
                 PublicApi.TokenTypes.WHITESPACE to space,
                 PublicApi.TokenTypes.NON_ASCII_STRING to nonAscii,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()

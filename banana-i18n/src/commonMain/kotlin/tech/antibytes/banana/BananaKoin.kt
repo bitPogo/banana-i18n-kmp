@@ -18,7 +18,7 @@ internal fun initKoin(
     parsersPlugins: ParserPluginMap,
     textInterceptor: PublicApi.TextInterceptor,
     linkFormatter: PublicApi.LinkFormatter,
-    interpreterPlugins: RegisteredInterpreterPlugins
+    interpreterPlugins: RegisteredInterpreterPlugins,
 ): KoinApplication {
     return koinApplication {
         modules(
@@ -31,7 +31,7 @@ internal fun initKoin(
                 parsersPlugins,
                 textInterceptor,
                 linkFormatter,
-                interpreterPlugins
+                interpreterPlugins,
             ),
         )
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -11,7 +11,7 @@ import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
 internal class ParserPluginStub(
-    private val parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null
+    private val parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null,
 ) : PublicApi.ParserPlugin {
     override fun parse(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         return parse?.invoke(tokenizer)
@@ -20,7 +20,7 @@ internal class ParserPluginStub(
 }
 
 internal class ParserPluginFactoryStub(
-    var parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null
+    var parse: ((tokenizer: PublicApi.TokenStore) -> PublicApi.Node)? = null,
 ) : PublicApi.ParserPluginFactory, MockContract.Mock {
     val lastInstances: List<PublicApi.ParserPlugin>
         get() = capturedInstance
@@ -28,7 +28,7 @@ internal class ParserPluginFactoryStub(
 
     override fun createPlugin(
         logger: PublicApi.Logger,
-        controller: PublicApi.ParserPluginController
+        controller: PublicApi.ParserPluginController,
     ): PublicApi.ParserPlugin = ParserPluginStub(parse).also { capturedInstance.add(it) }
 
     override fun clear() {

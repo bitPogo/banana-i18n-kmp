@@ -6,19 +6,19 @@
 
 package tech.antibytes.banana
 
+import kotlin.test.Test
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
+import tech.antibytes.kfixture.listFixture
+import tech.antibytes.kfixture.mapFixture
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.parser.BananaParserStub
 import tech.antibytes.mock.parser.TokenStoreFake
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
-import tech.antibytes.util.test.fixture.listFixture
-import tech.antibytes.util.test.fixture.mapFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
 
 class BananaI18nSpec {
     private val fixture = kotlinFixture()
@@ -54,7 +54,7 @@ class BananaI18nSpec {
                         capturedVariables = parameter.get()
                         InterpreterControllerStub { "" }
                     }
-                }
+                },
             )
         }
 
@@ -95,7 +95,7 @@ class BananaI18nSpec {
                         capturedVariables = parameter.get()
                         InterpreterControllerStub { "" }
                     }
-                }
+                },
             )
         }
 
@@ -142,7 +142,7 @@ class BananaI18nSpec {
                         capturedVariables = parameter.get()
                         InterpreterControllerStub { "" }
                     }
-                }
+                },
             )
         }
 
@@ -188,7 +188,7 @@ class BananaI18nSpec {
                             expected
                         }
                     }
-                }
+                },
             )
         }
 

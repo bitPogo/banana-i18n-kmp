@@ -1,24 +1,24 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
+import tech.antibytes.kfixture.listFixture
 import tech.antibytes.mock.LoggerStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
-import tech.antibytes.util.test.fixture.listFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class DefaultFunctionInterpreterSpec {
     private val fixture = kotlinFixture()
@@ -47,7 +47,7 @@ class DefaultFunctionInterpreterSpec {
         result mustBe "{{$functionName}}"
         logger.error[0] mustBe Pair(
             PublicApi.Tag.INTERPRETER,
-            "Error: Unknown function $functionName in use."
+            "Error: Unknown function $functionName in use.",
         )
     }
 
@@ -60,10 +60,10 @@ class DefaultFunctionInterpreterSpec {
             CompoundNode(
                 listOf(
                     TextNode(
-                        fixture.listFixture()
-                    )
-                )
-            )
+                        fixture.listFixture(),
+                    ),
+                ),
+            ),
         )
 
         // When

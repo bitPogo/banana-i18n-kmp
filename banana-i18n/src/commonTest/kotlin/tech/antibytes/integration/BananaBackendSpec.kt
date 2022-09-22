@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.integration
 
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.banana.interpreter.BananaInterpreter
@@ -21,7 +22,6 @@ import tech.antibytes.banana.interpreter.VariableInterpreter
 import tech.antibytes.banana.interpreter.XMLInterceptor
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
 
 class BananaBackendSpec {
     private val logger = LoggerStub()
@@ -32,9 +32,9 @@ class BananaBackendSpec {
             CoreNode.CompoundNode(
                 listOf(
                     CoreNode.TextNode(
-                        listOf("A", " ", "Client", " ", "for", " ", "the", " ", "Wikibase", " ", "extension")
-                    )
-                )
+                        listOf("A", " ", "Client", " ", "for", " ", "the", " ", "Wikibase", " ", "extension"),
+                    ),
+                ),
             ) to Pair("A Client for the Wikibase extension", emptyList()),
             CoreNode.CompoundNode(
                 children = listOf(
@@ -73,12 +73,12 @@ class BananaBackendSpec {
                             "Seite",
                             " ",
                             "ist",
-                            " "
-                        )
+                            " ",
+                        ),
                     ),
                     CoreNode.LinkNode(
                         target = listOf(CoreNode.TextNode(chunks = listOf("Project", ":", "Transclusion"))),
-                        display = listOf(CoreNode.TextNode(chunks = listOf("eingebunden")))
+                        display = listOf(CoreNode.TextNode(chunks = listOf("eingebunden"))),
                     ),
                     CoreNode.TextNode(chunks = listOf(" ", "in", " ", "die", " ")),
                     CoreNode.FunctionNode(
@@ -100,15 +100,15 @@ class BananaBackendSpec {
                                                 "[[",
                                                 "Project",
                                                 ":",
-                                                "Cascade"
-                                            )
-                                        )
-                                    )
+                                                "Cascade",
+                                            ),
+                                        ),
+                                    ),
                                 ),
                                 CoreNode.CompoundNode(
                                     children = listOf(
-                                        CoreNode.TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "ist"))
-                                    )
+                                        CoreNode.TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "ist")),
+                                    ),
                                 ),
                                 CoreNode.CompoundNode(
                                     children = listOf(
@@ -124,25 +124,25 @@ class BananaBackendSpec {
                                                 "[[",
                                                 "Project",
                                                 ":",
-                                                "Cascade"
-                                            )
-                                        )
-                                    )
+                                                "Cascade",
+                                            ),
+                                        ),
+                                    ),
                                 ),
                                 CoreNode.CompoundNode(
                                     children = listOf(
-                                        CoreNode.TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "sind"))
-                                    )
-                                )
-                            )
-                        )
+                                        CoreNode.TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "sind")),
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
                     CoreNode.TextNode(chunks = listOf(":", "<", "/", "p", ">", "\n")),
-                    CoreNode.VariableNode(id = "2")
-                )
+                    CoreNode.VariableNode(id = "2"),
+                ),
             ) to Pair(
                 "&lt;p&gt;&lt;strong&gt;Warum ist diese Seite geschützt?&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;Diese Seite ist eingebunden in die {{PLURAL}}:&lt;/p&gt;\nanything",
-                listOf(Pair(PublicApi.Tag.INTERPRETER, "Error: Unknown function PLURAL in use."))
+                listOf(Pair(PublicApi.Tag.INTERPRETER, "Error: Unknown function PLURAL in use.")),
             ),
             CoreNode.CompoundNode(
                 children = listOf(
@@ -161,16 +161,16 @@ class BananaBackendSpec {
                             "sollte",
                             " ",
                             "von",
-                            " "
-                        )
+                            " ",
+                        ),
                     ),
                     CoreNode.FreeLinkNode(
                         url = CoreNode.VariableNode(id = "1"),
                         display = listOf(
                             CoreNode.TextNode(chunks = listOf("dem", " ", "dazugehörigen", " ")),
                             CoreNode.FunctionNode(id = "WBREPONAME"),
-                            CoreNode.TextNode(chunks = listOf("-", "Objekt"))
-                        )
+                            CoreNode.TextNode(chunks = listOf("-", "Objekt")),
+                        ),
                     ),
                     CoreNode.TextNode(
                         chunks = listOf(
@@ -198,14 +198,14 @@ class BananaBackendSpec {
                             " ",
                             "geschehen",
                             " ",
-                            "ist", "."
-                        )
-                    )
-                )
+                            "ist", ".",
+                        ),
+                    ),
+                ),
             ) to Pair(
                 "Der Link auf diese Seite sollte von dem dazugehörigen {{WBREPONAME}}-Objekt entfernt worden sein. Wir bitten dich zu prüfen, ob dies geschehen ist.",
-                listOf(Pair(PublicApi.Tag.INTERPRETER, "Error: Unknown function WBREPONAME in use."))
-            )
+                listOf(Pair(PublicApi.Tag.INTERPRETER, "Error: Unknown function WBREPONAME in use.")),
+            ),
         )
         val concatenator = NodeConcatenator()
         val interpreter = BananaInterpreter(

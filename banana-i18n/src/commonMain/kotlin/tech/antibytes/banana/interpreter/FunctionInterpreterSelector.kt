@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -13,7 +13,7 @@ import tech.antibytes.banana.ast.CoreNode.FunctionNode
 
 internal class FunctionInterpreterSelector(
     private val defaultInterpreter: BananaContract.InterpreterPlugin<FunctionNode>,
-    private val registeredPlugins: RegisteredInterpreterPlugins
+    private val registeredPlugins: RegisteredInterpreterPlugins,
 ) : PublicApi.ParameterizedInterpreterPlugin<FunctionNode> {
     override fun interpret(node: FunctionNode, controller: PublicApi.InterpreterController): String {
         return if (registeredPlugins.containsKey(node.id)) {

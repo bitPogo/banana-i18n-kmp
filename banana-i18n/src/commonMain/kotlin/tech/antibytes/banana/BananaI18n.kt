@@ -10,7 +10,7 @@ import org.koin.core.KoinApplication
 import org.koin.core.parameter.parametersOf
 
 internal class BananaI18n(
-    private val di: KoinApplication
+    private val di: KoinApplication,
 ) : PublicApi.BananaI18n {
     private val parser: BananaContract.TopLevelParser by di.koin.inject()
 
@@ -23,7 +23,7 @@ internal class BananaI18n(
     override fun i18n(message: String, vararg parameter: String): String {
         return i18n(
             message,
-            mapVarArgs(parameter)
+            mapVarArgs(parameter),
         )
     }
 
@@ -31,17 +31,17 @@ internal class BananaI18n(
         val tokenizer: PublicApi.TokenStore = di.koin.get(
             parameters = {
                 parametersOf(message)
-            }
+            },
         )
 
         val interpreter: PublicApi.InterpreterController = di.koin.get(
             parameters = {
                 parametersOf(parameter)
-            }
+            },
         )
 
         return interpreter.interpret(
-            parser.parse(tokenizer)
+            parser.parse(tokenizer),
         )
     }
 }

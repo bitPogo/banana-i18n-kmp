@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -14,7 +14,7 @@ import tech.antibytes.util.test.MockError
 
 internal class TokenizerStub(
     var setReader: ((reader: Reader) -> Unit)? = null,
-    var next: (() -> PublicApi.Token)? = null
+    var next: (() -> PublicApi.Token)? = null,
 ) : BananaContract.Tokenizer, MockContract.Mock {
     override fun next(): PublicApi.Token {
         return next?.invoke()

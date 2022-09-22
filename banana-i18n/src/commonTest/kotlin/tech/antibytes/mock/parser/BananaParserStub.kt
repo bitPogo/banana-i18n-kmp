@@ -11,10 +11,10 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.util.test.MockError
 
 internal class BananaParserStub(
-    var parse: ((PublicApi.TokenStore) -> PublicApi.Node)? = null
+    var parse: ((PublicApi.TokenStore) -> PublicApi.Node)? = null,
 ) : BananaContract.TopLevelParser {
     override fun parse(
-        tokenizer: PublicApi.TokenStore
+        tokenizer: PublicApi.TokenStore,
     ): PublicApi.Node {
         return parse?.invoke(tokenizer) ?: throw MockError.MissingStub("Missing sideeffect for parse!")
     }

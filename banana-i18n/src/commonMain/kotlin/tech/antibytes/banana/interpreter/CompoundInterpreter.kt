@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -16,6 +16,6 @@ internal class CompoundInterpreter(
 ) : PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode> {
     override fun interpret(
         node: CoreNode.CompoundNode,
-        controller: InterpreterController
+        controller: InterpreterController,
     ): String = concatenator.concatenate(node.children, controller)
 }

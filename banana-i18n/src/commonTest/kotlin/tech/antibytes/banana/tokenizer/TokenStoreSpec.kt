@@ -6,15 +6,15 @@
 
 package tech.antibytes.banana.tokenizer
 
-import tech.antibytes.banana.BananaContract.Companion.EOF
-import tech.antibytes.banana.PublicApi
-import tech.antibytes.mock.tokenizer.TokenizerStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
-import tech.antibytes.util.test.fulfils
-import tech.antibytes.util.test.mustBe
 import kotlin.test.AfterTest
 import kotlin.test.Test
+import tech.antibytes.banana.BananaContract.Companion.EOF
+import tech.antibytes.banana.PublicApi
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
+import tech.antibytes.mock.tokenizer.TokenizerStub
+import tech.antibytes.util.test.fulfils
+import tech.antibytes.util.test.mustBe
 
 class TokenStoreSpec {
     private val fixture = kotlinFixture()
@@ -52,7 +52,7 @@ class TokenStoreSpec {
                 fixture.fixture<Int>().toString(),
                 -1,
                 -1,
-            )
+            ),
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -85,7 +85,7 @@ class TokenStoreSpec {
                 fixture.fixture<Int>().toString(),
                 -1,
                 -1,
-            )
+            ),
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -123,7 +123,7 @@ class TokenStoreSpec {
                 fixture.fixture<Int>().toString(),
                 -1,
                 -1,
-            )
+            ),
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -176,7 +176,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -228,7 +228,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -272,7 +272,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -309,7 +309,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -358,7 +358,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -408,7 +408,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -434,7 +434,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -459,7 +459,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -484,7 +484,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -533,7 +533,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 
@@ -590,7 +590,7 @@ class TokenStoreSpec {
                 -1,
                 -1,
             ),
-            EOF
+            EOF,
         )
         val consumableTokens = tokens.toMutableList()
 

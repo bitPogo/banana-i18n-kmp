@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -15,19 +15,19 @@ internal fun resolveTokenizerModule(): Module {
     return module {
         factory<TokenizerContract.Reader> { parameter ->
             StringReader(
-                parameter.get()
+                parameter.get(),
             )
         }
 
         factory<BananaContract.Tokenizer> { parameter ->
             BananaTokenizer(
-                get(parameters = { parameter })
+                get(parameters = { parameter }),
             )
         }
 
         factory<PublicApi.TokenStore> { parameter ->
             TokenStore(
-                get(parameters = { parameter })
+                get(parameters = { parameter }),
             )
         }
     }

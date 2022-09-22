@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.tokenizer
 
+import kotlin.test.Test
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
@@ -15,7 +16,6 @@ import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.tokenizer.TokenizerStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
 
 class TokenizerKoinSpec {
     @Test
@@ -29,7 +29,7 @@ class TokenizerKoinSpec {
         val tokenizer: TokenizerContract.Reader = koin.koin.get(
             parameters = {
                 parametersOf("something")
-            }
+            },
         )
 
         // Then
@@ -51,7 +51,7 @@ class TokenizerKoinSpec {
                         capturedParameter = parameter.get()
                         StringReader(parameter.get())
                     }
-                }
+                },
             )
         }
 
@@ -59,7 +59,7 @@ class TokenizerKoinSpec {
         val tokenizer: BananaContract.Tokenizer = koin.koin.get(
             parameters = {
                 parametersOf(message)
-            }
+            },
         )
 
         // Then
@@ -81,7 +81,7 @@ class TokenizerKoinSpec {
                         capturedParameter = parameter.get()
                         TokenizerStub { EOF }
                     }
-                }
+                },
             )
         }
 
@@ -89,7 +89,7 @@ class TokenizerKoinSpec {
         val store: PublicApi.TokenStore = koin.koin.get(
             parameters = {
                 parametersOf(message)
-            }
+            },
         )
 
         // Then

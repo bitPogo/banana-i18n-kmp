@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -13,7 +13,7 @@ import tech.antibytes.util.test.MockContract
 
 internal class TokenStoreFake(
     private var _tokens: MutableList<PublicApi.Token> = mutableListOf(EOF, EOF),
-    var tokenizerStub: BananaContract.Tokenizer? = null
+    var tokenizerStub: BananaContract.Tokenizer? = null,
 ) : PublicApi.TokenStore, MockContract.Mock {
     val capturedShiftedTokens = mutableListOf<PublicApi.Token>()
     private val stringBuffer: MutableList<String> = mutableListOf()

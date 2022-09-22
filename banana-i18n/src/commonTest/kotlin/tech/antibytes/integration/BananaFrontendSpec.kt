@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.integration
 
+import kotlin.test.Test
 import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -20,7 +21,6 @@ import tech.antibytes.banana.tokenizer.StringReader
 import tech.antibytes.banana.tokenizer.TokenStore
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
 
 class BananaFrontendSpec {
     private val logger = LoggerStub()
@@ -32,9 +32,9 @@ class BananaFrontendSpec {
                 CompoundNode(
                     listOf(
                         TextNode(
-                            listOf("A", " ", "Client", " ", "for", " ", "the", " ", "Wikibase", " ", "extension")
-                        )
-                    )
+                            listOf("A", " ", "Client", " ", "for", " ", "the", " ", "Wikibase", " ", "extension"),
+                        ),
+                    ),
                 ),
             "<p><strong>Warum ist diese Seite geschützt?</strong></p>\n<p>Diese Seite ist [[Project:Transclusion|eingebunden]] in die {{PLURAL:$1|folgende Seite, welche [[Project:Cascade|kaskadengeschützt]] ist|folgenden Seiten, welche [[Project:Cascade|kaskadengeschützt]] sind}}:</p>\n$2" to
                 CompoundNode(
@@ -74,12 +74,12 @@ class BananaFrontendSpec {
                                 "Seite",
                                 " ",
                                 "ist",
-                                " "
-                            )
+                                " ",
+                            ),
                         ),
                         LinkNode(
                             target = listOf(TextNode(chunks = listOf("Project", ":", "Transclusion"))),
-                            display = listOf(TextNode(chunks = listOf("eingebunden")))
+                            display = listOf(TextNode(chunks = listOf("eingebunden"))),
                         ),
                         TextNode(chunks = listOf(" ", "in", " ", "die", " ")),
                         FunctionNode(
@@ -101,15 +101,15 @@ class BananaFrontendSpec {
                                                     "[[",
                                                     "Project",
                                                     ":",
-                                                    "Cascade"
-                                                )
-                                            )
-                                        )
+                                                    "Cascade",
+                                                ),
+                                            ),
+                                        ),
                                     ),
                                     CompoundNode(
                                         children = listOf(
-                                            TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "ist"))
-                                        )
+                                            TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "ist")),
+                                        ),
                                     ),
                                     CompoundNode(
                                         children = listOf(
@@ -125,22 +125,22 @@ class BananaFrontendSpec {
                                                     "[[",
                                                     "Project",
                                                     ":",
-                                                    "Cascade"
-                                                )
-                                            )
-                                        )
+                                                    "Cascade",
+                                                ),
+                                            ),
+                                        ),
                                     ),
                                     CompoundNode(
                                         children = listOf(
-                                            TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "sind"))
-                                        )
-                                    )
-                                )
-                            )
+                                            TextNode(chunks = listOf("kaskadengeschützt", "]]", " ", "sind")),
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
                         TextNode(chunks = listOf(":", "<", "/", "p", ">", "\n")),
-                        VariableNode(id = "2")
-                    )
+                        VariableNode(id = "2"),
+                    ),
                 ),
             "Der Link auf diese Seite sollte von [$1 dem dazugehörigen {{WBREPONAME}}-Objekt] entfernt worden sein. Wir bitten dich zu prüfen, ob dies geschehen ist." to
                 CompoundNode(
@@ -160,16 +160,16 @@ class BananaFrontendSpec {
                                 "sollte",
                                 " ",
                                 "von",
-                                " "
-                            )
+                                " ",
+                            ),
                         ),
                         CoreNode.FreeLinkNode(
                             url = VariableNode(id = "1"),
                             display = listOf(
                                 TextNode(chunks = listOf("dem", " ", "dazugehörigen", " ")),
                                 FunctionNode(id = "WBREPONAME"),
-                                TextNode(chunks = listOf("-", "Objekt"))
-                            )
+                                TextNode(chunks = listOf("-", "Objekt")),
+                            ),
                         ),
                         TextNode(
                             chunks = listOf(
@@ -197,11 +197,11 @@ class BananaFrontendSpec {
                                 " ",
                                 "geschehen",
                                 " ",
-                                "ist", "."
-                            )
-                        )
-                    )
-                )
+                                "ist", ".",
+                            ),
+                        ),
+                    ),
+                ),
         )
 
         val parser = BananaParser(
@@ -210,16 +210,16 @@ class BananaFrontendSpec {
                 logger,
                 defaultPlugin = Pair(
                     DefaultArgumentsParser,
-                    CompoundNode
-                )
-            )
+                    CompoundNode,
+                ),
+            ),
         )
 
         for (mappedMessage in messages) {
             val tokens = TokenStore(
                 BananaTokenizer(
-                    StringReader(mappedMessage.key)
-                )
+                    StringReader(mappedMessage.key),
+                ),
             )
 
             val message = parser.parse(tokens)

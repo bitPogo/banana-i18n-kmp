@@ -54,7 +54,7 @@ kotlin {
                 kotlin.srcDirs("${projectDir.absolutePath.trimEnd('/')}/src-gen/commonMain/kotlin")
 
                 implementation(Dependency.multiplatform.kotlin.common)
-                implementation(Dependency.multiplatform.koin.core) {
+                implementation(Dependency.multiplatform.koin.core.replace("3.2.0", "3.1.6")) {
                     exclude(
                         "org.jetbrains.kotlin",
                         "kotlin-stdlib-jdk8"
@@ -78,10 +78,25 @@ kotlin {
                implementation(Dependency.multiplatform.kotlin.android)
             }
         }
+        if (!tech.antibytes.gradle.configuration.isIdea()) {
+            val androidAndroidTestRelease by getting
+            val androidAndroidTest by getting {
+                dependsOn(androidAndroidTestRelease)
+            }
+            val androidTestFixturesDebug by getting
+            val androidTestFixturesRelease by getting
+
+            val androidTestFixtures by getting {
+                dependsOn(androidTestFixturesDebug)
+                dependsOn(androidTestFixturesRelease)
+            }
+
+            val androidTest by getting {
+                dependsOn(androidTestFixtures)
+            }
+        }
         val androidTest by getting {
             dependencies {
-                dependsOn(commonTest)
-
                 implementation(Dependency.multiplatform.test.jvm)
                 implementation(Dependency.multiplatform.test.junit)
                 implementation(Dependency.android.test.robolectric)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -12,11 +12,11 @@ import tech.antibytes.banana.PublicApi.Node
 import tech.antibytes.util.test.MockContract
 
 internal class NodeConcatenatorStub(
-    var concatenate: (List<Node>, InterpreterController) -> String = { _, _ -> "" }
+    var concatenate: (List<Node>, InterpreterController) -> String = { _, _ -> "" },
 ) : BananaContract.NodeConcatenator, MockContract.Mock {
     override fun concatenate(
         nodes: List<Node>,
-        controller: InterpreterController
+        controller: InterpreterController,
     ): String = concatenate.invoke(nodes, controller)
 
     override fun clear() {

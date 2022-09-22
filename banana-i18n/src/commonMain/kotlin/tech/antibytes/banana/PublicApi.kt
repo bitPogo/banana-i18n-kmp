@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -24,14 +24,14 @@ interface PublicApi {
         LINK_START,
         LINK_END,
         URL,
-        EOF
+        EOF,
     }
 
     data class Token(
         val type: TokenTypes,
         val value: String,
         val column: Int,
-        val line: Int
+        val line: Int,
     )
 
     interface TokenStore {
@@ -96,7 +96,7 @@ interface PublicApi {
 
     enum class Tag {
         PARSER,
-        INTERPRETER
+        INTERPRETER,
     }
 
     data class Plugin(

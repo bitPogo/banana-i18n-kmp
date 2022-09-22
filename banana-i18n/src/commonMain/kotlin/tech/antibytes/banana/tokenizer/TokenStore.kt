@@ -11,7 +11,7 @@ import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
 
 internal class TokenStore(
-    private val tokenizer: BananaContract.Tokenizer
+    private val tokenizer: BananaContract.Tokenizer,
 ) : PublicApi.TokenStore {
     override val currentToken: PublicApi.Token
         get() = _currentToken

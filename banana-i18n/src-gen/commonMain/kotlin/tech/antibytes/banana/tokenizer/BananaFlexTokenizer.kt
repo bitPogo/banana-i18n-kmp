@@ -8,7 +8,7 @@ import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState
 
 // See https://github.com/jflex-de/jflex/issues/222
 internal abstract class BananaFlexTokenizer(
-    private var zzReader: TokenizerContract.Reader
+    private var zzReader: TokenizerContract.Reader,
 ) {
     /** Current state of the DFA.  */
     private var zzState = 0
@@ -71,7 +71,7 @@ internal abstract class BananaFlexTokenizer(
             tokenType,
             yytext(),
             yycolumn,
-            yyline
+            yyline,
         ).also { offset += yylength() }
     }
 
@@ -80,7 +80,7 @@ internal abstract class BananaFlexTokenizer(
             tokenType,
             yytext().drop(1),
             yycolumn,
-            yyline
+            yyline,
         ).also { offset += yylength() }
     }
 
@@ -95,7 +95,7 @@ internal abstract class BananaFlexTokenizer(
                 tokenType,
                 yytext(),
                 yycolumn,
-                yyline
+                yyline,
             ).also { offset += 2 }
         }
     }
@@ -108,7 +108,6 @@ internal abstract class BananaFlexTokenizer(
      */
     @Throws(BananaRuntimeError::class)
     private fun zzRefill(): Boolean {
-
         /* first: make room (if you can) */
         if (zzStartRead > 0) {
             zzEndRead += zzFinalHighSurrogate
@@ -117,7 +116,7 @@ internal abstract class BananaFlexTokenizer(
                 destination = zzBuffer,
                 destinationOffset = 0,
                 startIndex = zzStartRead,
-                endIndex = zzEndRead
+                endIndex = zzEndRead,
             )
 
             /* translate stored positions */zzEndRead -= zzStartRead
@@ -141,7 +140,7 @@ internal abstract class BananaFlexTokenizer(
 
         /* not supposed to occur according to specification of TokenizerContract.Reader */if (numRead == 0) {
             throw BananaRuntimeError(
-                "Reader returned 0 characters. See JFlex examples/zero-reader for a workaround."
+                "Reader returned 0 characters. See JFlex examples/zero-reader for a workaround.",
             )
         }
         if (numRead > 0) {
@@ -331,7 +330,9 @@ internal abstract class BananaFlexTokenizer(
                         yycolumn = 0
                         zzR = true
                     }
-                    '\n' -> if (zzR) zzR = false else {
+                    '\n' -> if (zzR) {
+                        zzR = false
+                    } else {
                         yyline++
                         yycolumn = 0
                     }
@@ -346,8 +347,12 @@ internal abstract class BananaFlexTokenizer(
                 // peek one character ahead if it is
                 // (if we have counted one line too much)
                 var zzPeek: Boolean
-                if (zzMarkedPosL < zzEndReadL) zzPeek = zzBufferL[zzMarkedPosL] == '\n' else if (zzAtEOF) zzPeek =
-                    false else {
+                if (zzMarkedPosL < zzEndReadL) {
+                    zzPeek = zzBufferL[zzMarkedPosL] == '\n'
+                } else if (zzAtEOF) {
+                    zzPeek =
+                        false
+                } else {
                     val eof = zzRefill()
                     zzEndReadL = zzEndRead
                     zzMarkedPosL = zzMarkedPos
@@ -493,7 +498,8 @@ internal abstract class BananaFlexTokenizer(
          * l is of the form l = 2*k, k a non negative integer
          */
         private val ZZ_LEXSTATE = intArrayOf(
-            0, 0
+            0,
+            0,
         )
 
         /**
@@ -862,7 +868,7 @@ internal abstract class BananaFlexTokenizer(
         private val ZZ_ERROR_MSG = arrayOf(
             "Unknown internal scanner error",
             "Error: could not match input",
-            "Error: pushback value was too large"
+            "Error: pushback value was too large",
         )
 
         /**

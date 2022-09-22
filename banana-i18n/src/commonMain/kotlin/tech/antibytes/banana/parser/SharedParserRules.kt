@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -15,14 +15,14 @@ import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 abstract class SharedParserRules(
     protected val logger: PublicApi.Logger,
-    private val controller: PublicApi.ParserPluginController
+    private val controller: PublicApi.ParserPluginController,
 ) {
     protected fun logOrConsume(rule: String, tokenizer: PublicApi.TokenStore, condition: () -> Boolean) {
         when {
             condition() -> tokenizer.consume()
             tokenizer.currentToken == BananaContract.EOF -> logger.warning(
                 PublicApi.Tag.PARSER,
-                "Warning: $rule had not been closed!"
+                "Warning: $rule had not been closed!",
             )
             else -> logger.error(PublicApi.Tag.PARSER, "Error: Unexpected Token (${tokenizer.currentToken})!")
         }
@@ -145,7 +145,7 @@ abstract class SharedParserRules(
 
     protected fun variable(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         return VariableNode(
-            tokenizer.currentToken.value
+            tokenizer.currentToken.value,
         ).also { tokenizer.consume() }
     }
 
@@ -264,7 +264,7 @@ abstract class SharedParserRules(
             variable(tokenizer)
         } else {
             TextNode(
-                listOf(tokenizer.currentToken.value)
+                listOf(tokenizer.currentToken.value),
             ).also { tokenizer.consume() }
         }
     }
@@ -314,7 +314,7 @@ abstract class SharedParserRules(
 
     private fun arguments(
         functionId: String,
-        tokenizer: PublicApi.TokenStore
+        tokenizer: PublicApi.TokenStore,
     ): PublicApi.Node {
         tokenizer.consume()
         space(tokenizer)
@@ -329,7 +329,7 @@ abstract class SharedParserRules(
             space(tokenizer)
 
             arguments.add(
-                argument.parse(tokenizer)
+                argument.parse(tokenizer),
             )
         }
 
@@ -348,7 +348,7 @@ abstract class SharedParserRules(
         val function = if (tokenizer.currentToken.isFunctionArgumentIndicator()) {
             FunctionNode(
                 functionId,
-                arguments(functionId, tokenizer)
+                arguments(functionId, tokenizer),
             )
         } else {
             FunctionNode(functionId)

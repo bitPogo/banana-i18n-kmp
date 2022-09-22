@@ -15,7 +15,7 @@ internal fun resolveBananaParameterModule(
     parsersPlugins: ParserPluginMap,
     textInterceptor: PublicApi.TextInterceptor,
     linkFormatter: PublicApi.LinkFormatter,
-    interpreterPlugins: RegisteredInterpreterPlugins
+    interpreterPlugins: RegisteredInterpreterPlugins,
 ): Module {
     return module {
         single { logger }

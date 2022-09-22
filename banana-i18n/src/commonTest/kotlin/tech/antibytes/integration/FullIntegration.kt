@@ -6,6 +6,7 @@
 
 package tech.antibytes.integration
 
+import kotlin.test.Test
 import tech.antibytes.banana.BananaBuilder
 import tech.antibytes.banana.Locale
 import tech.antibytes.banana.PublicApi
@@ -17,7 +18,6 @@ import tech.antibytes.mock.createLocale
 import tech.antibytes.util.test.annotations.RobolectricTestRunner
 import tech.antibytes.util.test.annotations.RunWithRobolectricTestRunner
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
 
 @RunWithRobolectricTestRunner(RobolectricTestRunner::class)
 class FullIntegration {
@@ -27,7 +27,7 @@ class FullIntegration {
         "<p><strong>Warum ist diese Seite geschützt?</strong></p>\n<p>Diese Seite ist [[Project:Transclusion|eingebunden]] in die {{PLURAL:$1|folgende Seite, welche [[Project:Cascade|kaskadengeschützt]] ist|folgenden Seiten, welche [[Project:Cascade|kaskadengeschützt]] sind}}:</p>\n$2",
         "Die Seite, die du verlinken willst, ist bereits einem [https://en.wikipedia.org/wiki/GLR_parser Objekt] in unserem zentralen Datenrepositorium zugeordnet, das auf [[GLR parser]] auf dieser Website verlinkt. Es kann nur eine Seite pro Website einem Objekt zugeordnet werden. Bitte wähle eine andere Seite, die verlinkt werden soll.",
         "Das {{WBREPONAME}}-Objekt wurde geändert",
-        "{{CAP: links}} bearbeiten"
+        "{{CAP: links}} bearbeiten",
     )
 
     val i18nBuilder = BananaBuilder(createLocale("de-DE"))
@@ -134,8 +134,8 @@ class FullIntegration {
             .registerPlugin(
                 PublicApi.Plugin(
                     "wbreponame",
-                    RepoNameInterpreter
-                )
+                    RepoNameInterpreter,
+                ),
             ).build()
 
         // When
@@ -153,8 +153,8 @@ class FullIntegration {
                 PublicApi.Plugin(
                     "cap",
                     CapitalizeInterpreter,
-                    Pair(CapitalizeParser, CoreNode.CompoundNode)
-                )
+                    Pair(CapitalizeParser, CoreNode.CompoundNode),
+                ),
             ).build()
 
         // When
@@ -180,19 +180,19 @@ private object TestLinkFormatter : PublicApi.LinkFormatter {
 private class RepoNameInterpreter : PublicApi.CustomInterpreter {
     override fun interpret(
         node: CoreNode.FunctionNode,
-        controller: PublicApi.InterpreterController
+        controller: PublicApi.InterpreterController,
     ): String = "BananaI18n"
 
     companion object : PublicApi.InterpreterFactory {
         override fun getInstance(
             logger: PublicApi.Logger,
-            locale: Locale
+            locale: Locale,
         ): PublicApi.CustomInterpreter = RepoNameInterpreter()
     }
 }
 
 private data class CapitalizeNode(
-    val word: String
+    val word: String,
 ) : PublicApi.Node
 
 private class CapitalizeParser(
@@ -207,7 +207,7 @@ private class CapitalizeParser(
     companion object : PublicApi.ParserPluginFactory {
         override fun createPlugin(
             logger: PublicApi.Logger,
-            controller: PublicApi.ParserPluginController
+            controller: PublicApi.ParserPluginController,
         ): PublicApi.ParserPlugin = CapitalizeParser(logger, controller)
     }
 }
@@ -215,7 +215,7 @@ private class CapitalizeParser(
 private class CapitalizeInterpreter : PublicApi.CustomInterpreter {
     override fun interpret(
         node: CoreNode.FunctionNode,
-        controller: PublicApi.InterpreterController
+        controller: PublicApi.InterpreterController,
     ): String {
         val arguments = node.arguments as CoreNode.CompoundNode
         val word = (arguments.children.first() as CapitalizeNode).word
@@ -232,7 +232,7 @@ private class CapitalizeInterpreter : PublicApi.CustomInterpreter {
     companion object : PublicApi.InterpreterFactory {
         override fun getInstance(
             logger: PublicApi.Logger,
-            locale: Locale
+            locale: Locale,
         ): PublicApi.CustomInterpreter = CapitalizeInterpreter()
     }
 }

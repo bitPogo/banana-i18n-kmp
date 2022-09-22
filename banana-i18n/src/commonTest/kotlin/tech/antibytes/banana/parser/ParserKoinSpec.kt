@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.Test
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
@@ -16,7 +17,6 @@ import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.fulfils
-import kotlin.test.Test
 
 class ParserKoinSpec {
     @Test
@@ -29,13 +29,13 @@ class ParserKoinSpec {
                     single<PublicApi.NodeFactory>(named(BananaContract.KoinLabels.COMPOUND_FACTORY)) {
                         NodeFactoryStub()
                     }
-                }
+                },
             )
         }
 
         // When
         val default: Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory> = koin.koin.get(
-            named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)
+            named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER),
         )
 
         // Then
@@ -62,10 +62,10 @@ class ParserKoinSpec {
                     single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)) {
                         Pair(
                             ParserPluginFactoryStub(),
-                            NodeFactoryStub()
+                            NodeFactoryStub(),
                         )
                     }
-                }
+                },
             )
         }
 
@@ -91,7 +91,7 @@ class ParserKoinSpec {
                     single<PublicApi.ParserPluginController> {
                         ParserPluginControllerStub()
                     }
-                }
+                },
             )
         }
 

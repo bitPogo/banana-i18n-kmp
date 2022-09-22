@@ -6,6 +6,7 @@
 
 package tech.antibytes.integration
 
+import kotlin.test.Test
 import org.koin.core.parameter.parametersOf
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
@@ -17,17 +18,16 @@ import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.fulfils
-import kotlin.test.Test
 
 class DIIntregation {
     private val logger = LoggerStub()
     private val parserPlugins = mapOf(
-        "name" to Pair(ParserPluginFactoryStub(), NodeFactoryStub())
+        "name" to Pair(ParserPluginFactoryStub(), NodeFactoryStub()),
     )
     private val textInterceptor = TextInterceptorSpy()
     private val linkFormatter = LinkFormatterStub()
     private val interpreterPlugins = mapOf(
-        "name" to CustomFunctionInterpreterStub()
+        "name" to CustomFunctionInterpreterStub(),
     )
     private val variables = mapOf("1" to "1")
     private val message = "simple message string"
@@ -40,11 +40,11 @@ class DIIntregation {
             parserPlugins,
             textInterceptor,
             linkFormatter,
-            interpreterPlugins
+            interpreterPlugins,
         )
 
         val actual: PublicApi.TokenStore = koin.koin.get(
-            parameters = { parametersOf(message) }
+            parameters = { parametersOf(message) },
         )
 
         // Then
@@ -59,7 +59,7 @@ class DIIntregation {
             parserPlugins,
             textInterceptor,
             linkFormatter,
-            interpreterPlugins
+            interpreterPlugins,
         )
 
         val actual: BananaContract.TopLevelParser = koin.koin.get()
@@ -76,13 +76,13 @@ class DIIntregation {
             parserPlugins,
             textInterceptor,
             linkFormatter,
-            interpreterPlugins
+            interpreterPlugins,
         )
 
         val actual: PublicApi.InterpreterController = koin.koin.get(
             parameters = {
                 parametersOf(variables)
-            }
+            },
         )
 
         // Then

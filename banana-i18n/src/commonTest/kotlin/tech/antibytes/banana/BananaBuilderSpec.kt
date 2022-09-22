@@ -6,6 +6,7 @@
 
 package tech.antibytes.banana
 
+import kotlin.test.Test
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.createLocale
 import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
@@ -17,7 +18,6 @@ import tech.antibytes.util.test.annotations.RunWithRobolectricTestRunner
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import tech.antibytes.util.test.sameAs
-import kotlin.test.Test
 
 @RunWithRobolectricTestRunner(RobolectricTestRunner::class)
 class BananaBuilderSpec {
@@ -85,7 +85,7 @@ class BananaBuilderSpec {
         // Given
         val plugin = PublicApi.Plugin(
             name = "test",
-            interpreter = InterpreterFactoryStub()
+            interpreter = InterpreterFactoryStub(),
         )
         val builder = BananaBuilder(locale)
 
@@ -116,7 +116,7 @@ class BananaBuilderSpec {
         val logger = LoggerStub()
         val plugin = PublicApi.Plugin(
             name = "test",
-            interpreter = factory
+            interpreter = factory,
         )
 
         val builder = BananaBuilder(locale)
@@ -151,7 +151,7 @@ class BananaBuilderSpec {
         val logger = LoggerStub()
         val plugin = PublicApi.Plugin(
             name = "test",
-            interpreter = factory
+            interpreter = factory,
         )
 
         val builder = BananaBuilder(locale)
