@@ -54,7 +54,7 @@ kotlin {
                 kotlin.srcDirs("${projectDir.absolutePath.trimEnd('/')}/src-gen/commonMain/kotlin")
 
                 implementation(Dependency.multiplatform.kotlin.common)
-                implementation(Dependency.multiplatform.koin.core) {
+                implementation(Dependency.multiplatform.koin.core.replace("3.2.0", "3.1.6")) {
                     exclude(
                         "org.jetbrains.kotlin",
                         "kotlin-stdlib-jdk8"
