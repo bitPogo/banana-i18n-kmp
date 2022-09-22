@@ -1,23 +1,23 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
+import tech.antibytes.kfixture.listFixture
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
 import tech.antibytes.mock.interpreter.LinkFormatterStub
 import tech.antibytes.mock.interpreter.NodeConcatenatorStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
-import tech.antibytes.util.test.fixture.listFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class FreeLinkInterpreterSpec {
     private val fixture = kotlinFixture()
@@ -41,7 +41,7 @@ class FreeLinkInterpreterSpec {
     fun `Given interprete is called with a FreeLinkNode and a InterpreterController, it delegates its wraped Url to the Controller`() {
         // Given
         val node = CoreNode.FreeLinkNode(
-            url = CoreNode.TextNode(fixture.listFixture())
+            url = CoreNode.TextNode(fixture.listFixture()),
         )
 
         var capturedNode: PublicApi.Node? = null
@@ -66,8 +66,8 @@ class FreeLinkInterpreterSpec {
             display = listOf(
                 CoreNode.TextNode(fixture.listFixture()),
                 CoreNode.VariableNode(fixture.fixture()),
-                CoreNode.FunctionNode(fixture.fixture())
-            )
+                CoreNode.FunctionNode(fixture.fixture()),
+            ),
         )
 
         var capturedNodes: List<PublicApi.Node> = emptyList()

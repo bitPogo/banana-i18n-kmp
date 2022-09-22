@@ -1,21 +1,21 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.VariableNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
 import tech.antibytes.mock.LoggerStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class VariableInterpreterSpec {
     private val fixture = kotlinFixture()
@@ -65,7 +65,7 @@ class VariableInterpreterSpec {
         logger.error.isEmpty() mustBe false
         logger.error[0] mustBe Pair(
             PublicApi.Tag.INTERPRETER,
-            "Error: Unknown variable ($id)."
+            "Error: Unknown variable ($id).",
         )
     }
 }

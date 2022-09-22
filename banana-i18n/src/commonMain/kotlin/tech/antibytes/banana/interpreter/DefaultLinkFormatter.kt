@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -19,11 +19,11 @@ internal class DefaultLinkFormatter : PublicApi.LinkFormatter {
 
     override fun formatLink(
         target: String,
-        displayText: String
+        displayText: String,
     ): String = format(target, displayText)
 
     override fun formatFreeLink(
         url: String,
-        displayText: String
+        displayText: String,
     ): String = format(url, displayText)
 }

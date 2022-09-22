@@ -1,11 +1,13 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
@@ -19,8 +21,6 @@ import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class BananaParserFunctionSpec {
     private val tokenStore = TokenStoreFake()
@@ -44,7 +44,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.FUNCTION_START to "{{",
                 PublicApi.TokenTypes.ASCII_STRING to functionName,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -75,7 +75,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.LITERAL to "_",
                 PublicApi.TokenTypes.ASCII_STRING to functionNamePart2,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -105,7 +105,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.ASCII_STRING to functionName,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -147,7 +147,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.LITERAL to ":",
                 PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -159,7 +159,7 @@ class BananaParserFunctionSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FunctionNode(
             functionName.uppercase(),
-            TestArgumentsNode.lastInstance
+            TestArgumentsNode.lastInstance,
         )
         TestArgumentsNode.lastChildren mustBe listOf(nestedArgument)
         tokenStore.tokens.isEmpty() mustBe true
@@ -197,7 +197,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId2,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -209,7 +209,7 @@ class BananaParserFunctionSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FunctionNode(
             functionName.uppercase(),
-            TestArgumentsNode.lastInstance
+            TestArgumentsNode.lastInstance,
         )
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
@@ -252,7 +252,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId2,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -264,7 +264,7 @@ class BananaParserFunctionSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe FunctionNode(
             functionName.uppercase(),
-            TestArgumentsNode.lastInstance
+            TestArgumentsNode.lastInstance,
         )
         TestArgumentsNode.lastChildren mustBe nestedArguments
         tokenStore.tokens.isEmpty() mustBe true
@@ -285,7 +285,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.NON_ASCII_STRING to word,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -296,7 +296,7 @@ class BananaParserFunctionSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(
-            listOf(tokens[0].value, tokens[1].value, tokens[2].value, tokens[3].value, tokens[4].value)
+            listOf(tokens[0].value, tokens[1].value, tokens[2].value, tokens[3].value, tokens[4].value),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
         tokenStore.tokens.isEmpty() mustBe true
@@ -316,7 +316,7 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.ASCII_STRING to word,
                 PublicApi.TokenTypes.WHITESPACE to " ",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -331,7 +331,7 @@ class BananaParserFunctionSpec {
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             PublicApi.Tag.PARSER,
-            "Warning: Function had not been closed!"
+            "Warning: Function had not been closed!",
         )
     }
 
@@ -348,8 +348,8 @@ class BananaParserFunctionSpec {
                 PublicApi.TokenTypes.ASCII_STRING to word,
                 PublicApi.TokenTypes.ESCAPED to ":",
                 PublicApi.TokenTypes.WHITESPACE to " ",
-                PublicApi.TokenTypes.ASCII_STRING to word
-            )
+                PublicApi.TokenTypes.ASCII_STRING to word,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -365,7 +365,7 @@ class BananaParserFunctionSpec {
         logger.warning mustBe emptyList()
         logger.error[0] mustBe Pair(
             PublicApi.Tag.PARSER,
-            "Error: Unexpected Token (${tokens[3]})!"
+            "Error: Unexpected Token (${tokens[3]})!",
         )
     }
 }

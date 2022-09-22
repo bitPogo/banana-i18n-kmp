@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -7,7 +7,7 @@
 package tech.antibytes.banana.tokenizer
 
 internal actual class StringReader actual constructor(
-    value: String
+    value: String,
 ) : TokenizerContract.Reader {
     private val reader = value.reader()
 

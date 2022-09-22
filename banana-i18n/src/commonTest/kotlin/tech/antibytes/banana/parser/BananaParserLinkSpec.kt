@@ -1,27 +1,27 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.LinkNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class BananaParserLinkSpec {
     private val fixture = kotlinFixture()
@@ -46,7 +46,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.LINK_START to "[[",
                 PublicApi.TokenTypes.ASCII_STRING to target,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -57,7 +57,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1])
         tokenStore.tokens.isEmpty() mustBe true
@@ -79,7 +79,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.LITERAL to "_",
                 PublicApi.TokenTypes.ASCII_STRING to target2,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -90,7 +90,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target1, "_", target2)))
+            listOf(TextNode(listOf(target1, "_", target2))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[1], tokens[2], tokens[3])
         tokenStore.tokens.isEmpty() mustBe true
@@ -111,7 +111,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.ASCII_STRING to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -122,7 +122,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
@@ -143,7 +143,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DOUBLE to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -154,7 +154,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
@@ -175,7 +175,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.INTEGER to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -186,7 +186,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
@@ -207,7 +207,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.NON_ASCII_STRING to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -218,7 +218,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
@@ -239,7 +239,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.LITERAL to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -250,7 +250,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
@@ -271,7 +271,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.ESCAPED to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -282,7 +282,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
@@ -301,7 +301,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.LINK_START to "[[",
                 PublicApi.TokenTypes.VARIABLE to target,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -312,7 +312,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(VariableNode(target))
+            listOf(VariableNode(target)),
         )
         tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
@@ -333,7 +333,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.VARIABLE to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -344,7 +344,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(VariableNode(target))
+            listOf(VariableNode(target)),
         )
         tokenStore.capturedShiftedTokens mustBe emptyList<PublicApi.Token>()
         tokenStore.tokens.isEmpty() mustBe true
@@ -365,7 +365,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.ASCII_STRING to target,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -376,7 +376,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target.uppercase()))
+            listOf(FunctionNode(target.uppercase())),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -398,7 +398,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -409,7 +409,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target.uppercase()))
+            listOf(FunctionNode(target.uppercase())),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -431,7 +431,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -443,8 +443,14 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(
             listOf(
-                "[[", "{{", " ", target, " ", "}}", "]]"
-            )
+                "[[",
+                "{{",
+                " ",
+                target,
+                " ",
+                "}}",
+                "]]",
+            ),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -467,7 +473,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -479,8 +485,15 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(
             listOf(
-                "[[", " ", "{{", target, " ", "}}", " ", "]]"
-            )
+                "[[",
+                " ",
+                "{{",
+                target,
+                " ",
+                "}}",
+                " ",
+                "]]",
+            ),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -502,7 +515,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -513,7 +526,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target.uppercase()))
+            listOf(FunctionNode(target.uppercase())),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -537,7 +550,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -549,8 +562,8 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(
             listOf(
-                "[[", " ", "{", " ", target, " ", "}}", " ", "]]"
-            )
+                "[[", " ", "{", " ", target, " ", "}}", " ", "]]",
+            ),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -573,7 +586,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -584,7 +597,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(FunctionNode(target.uppercase()))
+            listOf(FunctionNode(target.uppercase())),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -614,7 +627,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.VARIABLE to target3,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -629,8 +642,8 @@ class BananaParserLinkSpec {
                 TextNode(listOf(target1, " ")),
                 FunctionNode(target2.uppercase()),
                 TextNode(listOf(" ")),
-                VariableNode(target3)
-            )
+                VariableNode(target3),
+            ),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -652,7 +665,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.ASCII_STRING to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -664,9 +677,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -688,7 +701,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.NON_ASCII_STRING to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -700,9 +713,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -724,7 +737,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.DOUBLE to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -736,9 +749,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -760,7 +773,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.INTEGER to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -772,9 +785,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -796,7 +809,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.ESCAPED to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -808,9 +821,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -832,7 +845,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.LITERAL to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -844,9 +857,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -868,7 +881,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.DELIMITER to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -880,9 +893,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -904,7 +917,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.FUNCTION_START to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -916,9 +929,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -940,7 +953,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.FUNCTION_END to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -952,9 +965,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -976,7 +989,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.LINK_START to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -988,9 +1001,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1014,7 +1027,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.ASCII_STRING to display,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1026,9 +1039,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1053,7 +1066,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.ASCII_STRING to displayPart2,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1065,9 +1078,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(displayPart1, " ", displayPart2)))
+            listOf(TextNode(listOf(displayPart1, " ", displayPart2))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1089,7 +1102,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.LITERAL to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1101,9 +1114,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(TextNode(listOf(display)))
+            listOf(TextNode(listOf(display))),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1125,7 +1138,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.VARIABLE to display,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1137,9 +1150,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(VariableNode(display))
+            listOf(VariableNode(display)),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1163,7 +1176,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.ASCII_STRING to display,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1175,9 +1188,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(FunctionNode(display.uppercase()))
+            listOf(FunctionNode(display.uppercase())),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1203,7 +1216,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1215,9 +1228,9 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
-            listOf(FunctionNode(display.uppercase()))
+            listOf(FunctionNode(display.uppercase())),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1252,7 +1265,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.ASCII_STRING to displayPart4,
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1264,7 +1277,7 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
             listOf(
                 TextNode(listOf(displayPart1, " ")),
@@ -1272,7 +1285,7 @@ class BananaParserLinkSpec {
                 TextNode(listOf(" ")),
                 VariableNode(displayPart3),
                 TextNode(listOf(" ", displayPart4)),
-            )
+            ),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1291,7 +1304,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.ASCII_STRING to target,
                 PublicApi.TokenTypes.WHITESPACE to " ",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1302,13 +1315,13 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
-            listOf(TextNode(listOf(target)))
+            listOf(TextNode(listOf(target))),
         )
         tokenStore.capturedShiftedTokens mustBe listOf(tokens[2])
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning[0] mustBe Pair(
             PublicApi.Tag.PARSER,
-            "Warning: Link had not been closed!"
+            "Warning: Link had not been closed!",
         )
     }
 
@@ -1328,7 +1341,7 @@ class BananaParserLinkSpec {
                     PublicApi.TokenTypes.LITERAL to invalidLiteral,
                     PublicApi.TokenTypes.ASCII_STRING to "not important",
                     PublicApi.TokenTypes.LINK_END to "]]",
-                )
+                ),
             )
 
             tokenStore.tokens = tokens.toMutableList()
@@ -1340,13 +1353,13 @@ class BananaParserLinkSpec {
             message fulfils CompoundNode::class
             message as CompoundNode
             message.children[0] mustBe LinkNode(
-                listOf(TextNode(listOf(target, " ")))
+                listOf(TextNode(listOf(target, " "))),
             )
             message.children[1] fulfils TextNode::class
             tokenStore.tokens.isEmpty() mustBe true
             logger.error[0] mustBe Pair(
                 PublicApi.Tag.PARSER,
-                "Error: Unexpected Token (${tokens[4]})!"
+                "Error: Unexpected Token (${tokens[4]})!",
             )
 
             logger.clear()
@@ -1369,7 +1382,7 @@ class BananaParserLinkSpec {
                     PublicApi.TokenTypes.ESCAPED to illegal,
                     PublicApi.TokenTypes.ASCII_STRING to "not important",
                     PublicApi.TokenTypes.LINK_END to "]]",
-                )
+                ),
             )
 
             tokenStore.tokens = tokens.toMutableList()
@@ -1381,7 +1394,7 @@ class BananaParserLinkSpec {
             message fulfils CompoundNode::class
             message as CompoundNode
             message.children[0] mustBe LinkNode(
-                listOf(TextNode(listOf(target, " ", illegal, "not important")))
+                listOf(TextNode(listOf(target, " ", illegal, "not important"))),
             )
             tokenStore.tokens.isEmpty() mustBe true
             logger.error.isEmpty() mustBe true
@@ -1408,7 +1421,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.LINK_END to "]]",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1419,7 +1432,7 @@ class BananaParserLinkSpec {
         // Then
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe TextNode(
-            listOf("[[", " ", "{{", " ", "{{", " ", target, "}}", " ", "]]")
+            listOf("[[", " ", "{{", " ", "{{", " ", target, "}}", " ", "]]"),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.warning mustBe emptyList()
@@ -1441,7 +1454,7 @@ class BananaParserLinkSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.ASCII_STRING to display,
                 PublicApi.TokenTypes.WHITESPACE to " ",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -1453,17 +1466,17 @@ class BananaParserLinkSpec {
         message fulfils CompoundNode::class
         (message as CompoundNode).children[0] mustBe LinkNode(
             listOf(
-                TextNode(listOf(target))
+                TextNode(listOf(target)),
             ),
             listOf(
                 TextNode(listOf(display)),
-            )
+            ),
         )
         tokenStore.tokens.isEmpty() mustBe true
         logger.error mustBe emptyList()
         logger.warning[0] mustBe Pair(
             PublicApi.Tag.PARSER,
-            "Warning: Link had not been closed!"
+            "Warning: Link had not been closed!",
         )
     }
 }

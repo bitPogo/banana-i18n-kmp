@@ -6,9 +6,9 @@
 
 package tech.antibytes.banana
 
+import kotlin.test.Test
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.sameAs
-import kotlin.test.Test
 
 class DefaultLoggerSpec {
     @Test

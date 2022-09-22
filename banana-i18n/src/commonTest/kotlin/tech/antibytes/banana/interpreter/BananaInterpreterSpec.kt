@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.Variables
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
+import tech.antibytes.kfixture.listFixture
+import tech.antibytes.kfixture.mapFixture
 import tech.antibytes.mock.interpreter.InterpreterPluginStub
 import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
 import tech.antibytes.mock.interpreter.VariableInterpreterStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
-import tech.antibytes.util.test.fixture.listFixture
-import tech.antibytes.util.test.fixture.mapFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 class BananaInterpreterSpec {
     private val fixture = kotlinFixture()
@@ -33,7 +33,7 @@ class BananaInterpreterSpec {
             ParameterizedInterpreterPluginStub(),
             ParameterizedInterpreterPluginStub(),
             ParameterizedInterpreterPluginStub(),
-            ParameterizedInterpreterPluginStub()
+            ParameterizedInterpreterPluginStub(),
         ) fulfils PublicApi.InterpreterController::class
     }
 
@@ -51,7 +51,7 @@ class BananaInterpreterSpec {
                 functionSelector = ParameterizedInterpreterPluginStub(),
                 compoundInterpreter = ParameterizedInterpreterPluginStub(),
                 linkInterpreter = ParameterizedInterpreterPluginStub(),
-                freeLinkInterpreter = ParameterizedInterpreterPluginStub()
+                freeLinkInterpreter = ParameterizedInterpreterPluginStub(),
             ).interpret(node)
         }
 
@@ -80,7 +80,7 @@ class BananaInterpreterSpec {
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
             linkInterpreter = ParameterizedInterpreterPluginStub(),
-            freeLinkInterpreter = ParameterizedInterpreterPluginStub()
+            freeLinkInterpreter = ParameterizedInterpreterPluginStub(),
         ).interpret(node)
 
         // Then
@@ -112,7 +112,7 @@ class BananaInterpreterSpec {
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
             linkInterpreter = ParameterizedInterpreterPluginStub(),
-            freeLinkInterpreter = ParameterizedInterpreterPluginStub()
+            freeLinkInterpreter = ParameterizedInterpreterPluginStub(),
         ).interpret(node)
 
         // Then
@@ -132,7 +132,7 @@ class BananaInterpreterSpec {
             functionSelector = nestedInterpreter,
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
             linkInterpreter = ParameterizedInterpreterPluginStub(),
-            freeLinkInterpreter = ParameterizedInterpreterPluginStub()
+            freeLinkInterpreter = ParameterizedInterpreterPluginStub(),
         )
 
         val expected: String = fixture.fixture()
@@ -166,7 +166,7 @@ class BananaInterpreterSpec {
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = nestedInterpreter,
             linkInterpreter = ParameterizedInterpreterPluginStub(),
-            freeLinkInterpreter = ParameterizedInterpreterPluginStub()
+            freeLinkInterpreter = ParameterizedInterpreterPluginStub(),
         )
 
         val expected: String = fixture.fixture()
@@ -200,7 +200,7 @@ class BananaInterpreterSpec {
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
             linkInterpreter = nestedInterpreter,
-            freeLinkInterpreter = ParameterizedInterpreterPluginStub()
+            freeLinkInterpreter = ParameterizedInterpreterPluginStub(),
         )
 
         val expected: String = fixture.fixture()
@@ -234,7 +234,7 @@ class BananaInterpreterSpec {
             functionSelector = ParameterizedInterpreterPluginStub(),
             compoundInterpreter = ParameterizedInterpreterPluginStub(),
             linkInterpreter = ParameterizedInterpreterPluginStub(),
-            freeLinkInterpreter = nestedInterpreter
+            freeLinkInterpreter = nestedInterpreter,
         )
 
         val expected: String = fixture.fixture()

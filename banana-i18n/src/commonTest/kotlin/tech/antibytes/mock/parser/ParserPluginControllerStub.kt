@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -13,7 +13,7 @@ import tech.antibytes.util.test.MockContract
 import tech.antibytes.util.test.MockError
 
 internal class ParserPluginControllerStub(
-    var resolvePlugin: ((String) -> Pair<ParserPlugin, NodeFactory>)? = null
+    var resolvePlugin: ((String) -> Pair<ParserPlugin, NodeFactory>)? = null,
 ) : PublicApi.ParserPluginController, MockContract.Mock {
     override fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory> {
         return resolvePlugin?.invoke(name)

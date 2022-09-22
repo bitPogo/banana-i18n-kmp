@@ -1,21 +1,21 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.Test
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
+import tech.antibytes.kfixture.listFixture
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
-import tech.antibytes.util.test.fixture.listFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.Test
 
 class NodeConcatenatorSpec {
     private val fixture = kotlinFixture()
@@ -32,7 +32,7 @@ class NodeConcatenatorSpec {
         val nodes = listOf(
             CoreNode.TextNode(fixture.listFixture()),
             CoreNode.VariableNode(fixture.fixture()),
-            CoreNode.FunctionNode(fixture.fixture())
+            CoreNode.FunctionNode(fixture.fixture()),
         )
 
         val capturedNodes: MutableList<PublicApi.Node> = mutableListOf()
@@ -56,13 +56,13 @@ class NodeConcatenatorSpec {
         val nodes = listOf(
             CoreNode.TextNode(fixture.listFixture()),
             CoreNode.VariableNode(fixture.fixture()),
-            CoreNode.FunctionNode(fixture.fixture())
+            CoreNode.FunctionNode(fixture.fixture()),
         )
 
         val output: MutableList<String> = mutableListOf(
             fixture.fixture(),
             fixture.fixture(),
-            fixture.fixture()
+            fixture.fixture(),
         )
 
         println(output)

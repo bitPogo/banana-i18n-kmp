@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.Test
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
@@ -22,7 +23,6 @@ import tech.antibytes.mock.interpreter.ParameterizedInterpreterPluginStub
 import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.mock.interpreter.VariableInterpreterStub
 import tech.antibytes.util.test.fulfils
-import kotlin.test.Test
 
 class InterpreterKoinSpec {
     @Test
@@ -31,7 +31,7 @@ class InterpreterKoinSpec {
         val koin = koinApplication {
             allowOverride(true)
             modules(
-                resolveInterpreterModule()
+                resolveInterpreterModule(),
             )
         }
 
@@ -53,13 +53,13 @@ class InterpreterKoinSpec {
                     single<PublicApi.TextInterceptor> {
                         TextInterceptorSpy()
                     }
-                }
+                },
             )
         }
 
         // When
         val interpreter: BananaContract.InterpreterPlugin<CoreNode.TextNode> = koin.koin.get(
-            named(BananaContract.KoinLabels.TEXT_INTERPRETER)
+            named(BananaContract.KoinLabels.TEXT_INTERPRETER),
         )
 
         // Then
@@ -77,13 +77,13 @@ class InterpreterKoinSpec {
                     single<PublicApi.Logger> {
                         LoggerStub()
                     }
-                }
+                },
             )
         }
 
         // When
         val interpreter: BananaContract.VariableInterpreter<CoreNode.VariableNode> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.VARIABLE_INTERPRETER)
+            qualifier = named(BananaContract.KoinLabels.VARIABLE_INTERPRETER),
         )
 
         // Then
@@ -101,13 +101,13 @@ class InterpreterKoinSpec {
                     single<PublicApi.Logger> {
                         LoggerStub()
                     }
-                }
+                },
             )
         }
 
         // When
         val interpreter: BananaContract.InterpreterPlugin<CoreNode.FunctionNode> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)
+            qualifier = named(BananaContract.KoinLabels.FUNCTION_INTERPRETER),
         )
 
         // Then
@@ -129,13 +129,13 @@ class InterpreterKoinSpec {
                     single<RegisteredInterpreterPlugins>(named(BananaContract.KoinLabels.INTERPRETER_PLUGINS)) {
                         emptyMap()
                     }
-                }
+                },
             )
         }
 
         // When
         val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.FUNCTION_SELECTOR)
+            qualifier = named(BananaContract.KoinLabels.FUNCTION_SELECTOR),
         )
 
         // Then
@@ -148,13 +148,13 @@ class InterpreterKoinSpec {
         val koin = koinApplication {
             allowOverride(true)
             modules(
-                resolveInterpreterModule()
+                resolveInterpreterModule(),
             )
         }
 
         // When
         val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.COMPOUND_INTERPRETER)
+            qualifier = named(BananaContract.KoinLabels.COMPOUND_INTERPRETER),
         )
 
         // Then
@@ -172,13 +172,13 @@ class InterpreterKoinSpec {
                     single<PublicApi.LinkFormatter> {
                         LinkFormatterStub()
                     }
-                }
+                },
             )
         }
 
         // When
         val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.LINK_INTERPRETER)
+            qualifier = named(BananaContract.KoinLabels.LINK_INTERPRETER),
         )
 
         // Then
@@ -196,13 +196,13 @@ class InterpreterKoinSpec {
                     single<PublicApi.LinkFormatter> {
                         LinkFormatterStub()
                     }
-                }
+                },
             )
         }
 
         // When
         val interpreter: PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode> = koin.koin.get(
-            qualifier = named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)
+            qualifier = named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER),
         )
 
         // Then
@@ -244,7 +244,7 @@ class InterpreterKoinSpec {
                     single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode>>(named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)) {
                         ParameterizedInterpreterPluginStub()
                     }
-                }
+                },
             )
         }
 
@@ -254,7 +254,7 @@ class InterpreterKoinSpec {
                 parametersOf(
                     mapOf("1" to "1"),
                 )
-            }
+            },
         )
 
         // Then

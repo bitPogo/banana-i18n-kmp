@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -12,7 +12,7 @@ import tech.antibytes.banana.Variables
 import tech.antibytes.banana.ast.CoreNode.VariableNode
 
 internal class VariableInterpreter(
-    private val logger: PublicApi.Logger
+    private val logger: PublicApi.Logger,
 ) : BananaContract.VariableInterpreter<VariableNode> {
     override fun interpret(node: VariableNode, variables: Variables): String {
         return variables.getOrElse(node.id) {

@@ -6,6 +6,7 @@
 
 package tech.antibytes.banana
 
+import kotlin.test.Test
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import tech.antibytes.mock.LoggerStub
@@ -15,7 +16,6 @@ import tech.antibytes.mock.interpreter.TextInterceptorSpy
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.sameAs
-import kotlin.test.Test
 
 class BananaParameterKoinSpec {
     @Test
@@ -30,7 +30,7 @@ class BananaParameterKoinSpec {
                     TextInterceptorSpy(),
                     LinkFormatterStub(),
                     emptyMap(),
-                )
+                ),
             )
         }
 
@@ -47,7 +47,7 @@ class BananaParameterKoinSpec {
         val pluginId = "name"
         val customPlugin = Pair(ParserPluginFactoryStub(), NodeFactoryStub())
         val plugins = mapOf(
-            pluginId to customPlugin
+            pluginId to customPlugin,
         )
 
         val koin = koinApplication {
@@ -58,7 +58,7 @@ class BananaParameterKoinSpec {
                     TextInterceptorSpy(),
                     LinkFormatterStub(),
                     emptyMap(),
-                )
+                ),
             )
         }
 
@@ -81,7 +81,7 @@ class BananaParameterKoinSpec {
                     interceptor,
                     LinkFormatterStub(),
                     emptyMap(),
-                )
+                ),
             )
         }
 
@@ -104,7 +104,7 @@ class BananaParameterKoinSpec {
                     TextInterceptorSpy(),
                     formatter,
                     emptyMap(),
-                )
+                ),
             )
         }
 
@@ -121,7 +121,7 @@ class BananaParameterKoinSpec {
         val plugin = CustomFunctionInterpreterStub()
         val functionName = "name"
         val plugins = mapOf(
-            functionName to plugin
+            functionName to plugin,
         )
 
         val koin = koinApplication {
@@ -131,8 +131,8 @@ class BananaParameterKoinSpec {
                     emptyMap(),
                     TextInterceptorSpy(),
                     LinkFormatterStub(),
-                    plugins
-                )
+                    plugins,
+                ),
             )
         }
 

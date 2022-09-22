@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -14,7 +14,7 @@ import tech.antibytes.banana.ast.CoreNode.TextNode
 
 internal class BananaParser(
     logger: PublicApi.Logger,
-    parserPluginController: PublicApi.ParserPluginController
+    parserPluginController: PublicApi.ParserPluginController,
 ) : BananaContract.TopLevelParser, SharedParserRules(logger, parserPluginController) {
     private fun text(tokenizer: PublicApi.TokenStore): Node {
         shiftUntil(tokenizer) {

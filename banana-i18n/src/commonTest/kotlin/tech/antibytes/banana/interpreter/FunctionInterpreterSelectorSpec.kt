@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.interpreter
 
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
 import tech.antibytes.mock.interpreter.CustomFunctionInterpreterStub
 import tech.antibytes.mock.interpreter.FunctionInterpreterStub
 import tech.antibytes.mock.interpreter.InterpreterControllerStub
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
 import tech.antibytes.util.test.sameAs
-import kotlin.test.Test
 
 class FunctionInterpreterSelectorSpec {
     private val fixture = kotlinFixture()
@@ -25,7 +25,7 @@ class FunctionInterpreterSelectorSpec {
     fun `It fulfils ParameterizedInterpreterPlugin`() {
         FunctionInterpreterSelector(
             FunctionInterpreterStub(),
-            emptyMap()
+            emptyMap(),
         ) fulfils PublicApi.ParameterizedInterpreterPlugin::class
     }
 
@@ -63,13 +63,13 @@ class FunctionInterpreterSelectorSpec {
         val node = FunctionNode(functionName)
 
         val plugins = mapOf(
-            functionName to plugin
+            functionName to plugin,
         )
 
         // When
         val actual = FunctionInterpreterSelector(
             FunctionInterpreterStub(),
-            plugins
+            plugins,
         ).interpret(node, controller)
 
         // Then

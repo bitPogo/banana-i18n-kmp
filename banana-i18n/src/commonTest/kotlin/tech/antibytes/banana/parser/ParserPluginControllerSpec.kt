@@ -1,18 +1,18 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.NodeFactoryStub
 import tech.antibytes.mock.parser.ParserPluginFactoryStub
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.sameAs
-import kotlin.test.Test
 
 class ParserPluginControllerSpec {
     private val logger = LoggerStub()
@@ -23,8 +23,8 @@ class ParserPluginControllerSpec {
             logger,
             Pair(
                 ParserPluginFactoryStub(),
-                NodeFactoryStub()
-            )
+                NodeFactoryStub(),
+            ),
         ) fulfils PublicApi.ParserPluginController::class
     }
 
@@ -35,7 +35,7 @@ class ParserPluginControllerSpec {
         val parserPluginFactory = ParserPluginFactoryStub()
         val default = Pair(
             parserPluginFactory,
-            nodeFactory
+            nodeFactory,
         )
         val controller = ParserPluginController(logger, default)
 
@@ -53,16 +53,16 @@ class ParserPluginControllerSpec {
         val pluginId = "name"
         val customPlugin = Pair(ParserPluginFactoryStub(), NodeFactoryStub())
         val customPlugins = mapOf(
-            pluginId to customPlugin
+            pluginId to customPlugin,
         )
 
         val controller = ParserPluginController(
             logger,
             defaultPlugin = Pair(
                 ParserPluginFactoryStub(),
-                NodeFactoryStub()
+                NodeFactoryStub(),
             ),
-            registeredPlugins = customPlugins
+            registeredPlugins = customPlugins,
         )
 
         // When

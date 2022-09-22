@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -15,13 +15,13 @@ import tech.antibytes.banana.PublicApi.ParserPluginFactory
 internal class ParserPluginController(
     logger: PublicApi.Logger,
     defaultPlugin: Pair<ParserPluginFactory, NodeFactory>,
-    registeredPlugins: ParserPluginMap = emptyMap()
+    registeredPlugins: ParserPluginMap = emptyMap(),
 ) : PublicApi.ParserPluginController {
     private val plugins: Map<String, Pair<ParserPlugin, NodeFactory>> = initializePlugins(
         logger,
         defaultPlugin,
         registeredPlugins,
-        this
+        this,
     )
 
     override fun resolvePlugin(name: String): Pair<ParserPlugin, NodeFactory> = plugins.getValue(name)
@@ -30,11 +30,11 @@ internal class ParserPluginController(
         fun initializePlugin(
             logger: PublicApi.Logger,
             plugin: Pair<ParserPluginFactory, NodeFactory>,
-            controller: PublicApi.ParserPluginController
+            controller: PublicApi.ParserPluginController,
         ): Pair<ParserPlugin, NodeFactory> {
             return Pair(
                 plugin.first.createPlugin(logger, controller),
-                plugin.second
+                plugin.second,
             )
         }
 
@@ -42,7 +42,7 @@ internal class ParserPluginController(
             logger: PublicApi.Logger,
             defaultPlugin: Pair<ParserPluginFactory, NodeFactory>,
             registeredPlugins: ParserPluginMap,
-            controller: PublicApi.ParserPluginController
+            controller: PublicApi.ParserPluginController,
         ): Map<String, Pair<ParserPlugin, NodeFactory>> {
             val initializedPlugins: MutableMap<String, Pair<ParserPlugin, NodeFactory>> = mutableMapOf()
             val default = initializePlugin(logger, defaultPlugin, controller)

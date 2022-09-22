@@ -12,11 +12,11 @@ import tech.antibytes.banana.ast.CoreNode
 import tech.antibytes.util.test.MockContract
 
 internal class VariableInterpreterStub(
-    var interpret: (CoreNode.VariableNode, Variables) -> String = { _, _ -> "" }
+    var interpret: (CoreNode.VariableNode, Variables) -> String = { _, _ -> "" },
 ) : BananaContract.VariableInterpreter<CoreNode.VariableNode>, MockContract.Mock {
     override fun interpret(
         node: CoreNode.VariableNode,
-        variables: Variables
+        variables: Variables,
     ): String = interpret.invoke(node, variables)
 
     override fun clear() {

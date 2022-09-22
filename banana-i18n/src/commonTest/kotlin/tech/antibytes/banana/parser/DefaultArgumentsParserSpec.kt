@@ -1,16 +1,20 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.PublicApi
 import tech.antibytes.banana.ast.CoreNode.CompoundNode
 import tech.antibytes.banana.ast.CoreNode.FunctionNode
 import tech.antibytes.banana.ast.CoreNode.TextNode
 import tech.antibytes.banana.ast.CoreNode.VariableNode
+import tech.antibytes.kfixture.fixture
+import tech.antibytes.kfixture.kotlinFixture
 import tech.antibytes.mock.LoggerStub
 import tech.antibytes.mock.parser.ParserPluginControllerStub
 import tech.antibytes.mock.parser.ParserPluginStub
@@ -18,12 +22,8 @@ import tech.antibytes.mock.parser.TestArgumentNode
 import tech.antibytes.mock.parser.TestArgumentsNode
 import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
-import tech.antibytes.util.test.fixture.fixture
-import tech.antibytes.util.test.fixture.kotlinFixture
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class DefaultArgumentsParserSpec {
     private val fixture = kotlinFixture()
@@ -57,7 +57,7 @@ class DefaultArgumentsParserSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.VARIABLE to variable,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -82,7 +82,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.FUNCTION_START to "{{",
                 PublicApi.TokenTypes.ASCII_STRING to functionName,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -110,7 +110,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.LITERAL to "_",
                 PublicApi.TokenTypes.ASCII_STRING to functionNamePart2,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -139,7 +139,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.ASCII_STRING to functionName,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -181,7 +181,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.LITERAL to ":",
                 PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -229,7 +229,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.DELIMITER to "|",
                 PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId2,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -282,7 +282,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.ASCII_STRING to nestedArgumentId2,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -308,8 +308,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.ASCII_STRING to value
-            )
+                PublicApi.TokenTypes.ASCII_STRING to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -334,8 +334,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.NON_ASCII_STRING to value
-            )
+                PublicApi.TokenTypes.NON_ASCII_STRING to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -360,8 +360,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.URL to value
-            )
+                PublicApi.TokenTypes.URL to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -386,8 +386,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.INTEGER to value
-            )
+                PublicApi.TokenTypes.INTEGER to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -412,8 +412,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.DOUBLE to value
-            )
+                PublicApi.TokenTypes.DOUBLE to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -438,8 +438,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.ESCAPED to value
-            )
+                PublicApi.TokenTypes.ESCAPED to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -464,8 +464,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.FUNCTION_START to value
-            )
+                PublicApi.TokenTypes.FUNCTION_START to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -490,8 +490,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.LINK_START to value
-            )
+                PublicApi.TokenTypes.LINK_START to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -516,8 +516,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.LINK_END to value
-            )
+                PublicApi.TokenTypes.LINK_END to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -542,8 +542,8 @@ class DefaultArgumentsParserSpec {
 
         val tokens = createTokens(
             listOf(
-                PublicApi.TokenTypes.LITERAL to value
-            )
+                PublicApi.TokenTypes.LITERAL to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -570,8 +570,8 @@ class DefaultArgumentsParserSpec {
             listOf(
                 PublicApi.TokenTypes.ASCII_STRING to value,
                 PublicApi.TokenTypes.WHITESPACE to " ",
-                PublicApi.TokenTypes.ASCII_STRING to value
-            )
+                PublicApi.TokenTypes.ASCII_STRING to value,
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -598,7 +598,7 @@ class DefaultArgumentsParserSpec {
             listOf(
                 PublicApi.TokenTypes.ASCII_STRING to value,
                 PublicApi.TokenTypes.WHITESPACE to " ",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -625,7 +625,7 @@ class DefaultArgumentsParserSpec {
             listOf(
                 PublicApi.TokenTypes.ASCII_STRING to value,
                 PublicApi.TokenTypes.DELIMITER to "|",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -653,7 +653,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.ASCII_STRING to value,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.DELIMITER to "|",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -680,7 +680,7 @@ class DefaultArgumentsParserSpec {
             listOf(
                 PublicApi.TokenTypes.ASCII_STRING to value,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -708,7 +708,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.ASCII_STRING to value,
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -741,7 +741,7 @@ class DefaultArgumentsParserSpec {
                 PublicApi.TokenTypes.FUNCTION_START to "{{",
                 PublicApi.TokenTypes.ASCII_STRING to functionName,
                 PublicApi.TokenTypes.FUNCTION_END to "}}",
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()

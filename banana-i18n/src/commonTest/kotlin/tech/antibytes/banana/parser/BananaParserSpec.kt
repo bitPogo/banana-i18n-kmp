@@ -1,11 +1,13 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
 
 package tech.antibytes.banana.parser
 
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import tech.antibytes.banana.BananaContract
 import tech.antibytes.banana.BananaContract.Companion.EOF
 import tech.antibytes.banana.PublicApi
@@ -21,8 +23,6 @@ import tech.antibytes.mock.parser.TokenStoreFake
 import tech.antibytes.util.createTokens
 import tech.antibytes.util.test.fulfils
 import tech.antibytes.util.test.mustBe
-import kotlin.test.AfterTest
-import kotlin.test.Test
 
 class BananaParserSpec {
     private val tokenStore = TokenStoreFake()
@@ -64,7 +64,7 @@ class BananaParserSpec {
         val tokens = createTokens(
             listOf(
                 PublicApi.TokenTypes.VARIABLE to variable,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -113,7 +113,7 @@ class BananaParserSpec {
                 PublicApi.TokenTypes.WHITESPACE to " ",
                 PublicApi.TokenTypes.ASCII_STRING to word5,
                 PublicApi.TokenTypes.VARIABLE to word6,
-            )
+            ),
         )
 
         tokenStore.tokens = tokens.toMutableList()
@@ -129,10 +129,10 @@ class BananaParserSpec {
         message.children[2] mustBe TextNode(listOf(" "))
         message.children[3] mustBe FreeLinkNode(TextNode(listOf(word3)))
         message.children[4] mustBe TextNode(
-            listOf(" ", "{{", " ", "{{", "}}",)
+            listOf(" ", "{{", " ", "{{", "}}"),
         )
         message.children[5] mustBe LinkNode(
-            listOf(VariableNode(word4))
+            listOf(VariableNode(word4)),
         )
         message.children[6] mustBe TextNode(listOf(" ", word5))
         message.children[7] mustBe VariableNode(word6)

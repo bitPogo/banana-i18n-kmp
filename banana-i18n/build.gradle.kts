@@ -78,10 +78,25 @@ kotlin {
                implementation(Dependency.multiplatform.kotlin.android)
             }
         }
+        if (!tech.antibytes.gradle.configuration.isIdea()) {
+            val androidAndroidTestRelease by getting
+            val androidAndroidTest by getting {
+                dependsOn(androidAndroidTestRelease)
+            }
+            val androidTestFixturesDebug by getting
+            val androidTestFixturesRelease by getting
+
+            val androidTestFixtures by getting {
+                dependsOn(androidTestFixturesDebug)
+                dependsOn(androidTestFixturesRelease)
+            }
+
+            val androidTest by getting {
+                dependsOn(androidTestFixtures)
+            }
+        }
         val androidTest by getting {
             dependencies {
-                dependsOn(commonTest)
-
                 implementation(Dependency.multiplatform.test.jvm)
                 implementation(Dependency.multiplatform.test.junit)
                 implementation(Dependency.android.test.robolectric)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -11,7 +11,7 @@ import tech.antibytes.banana.ast.CoreNode.CompoundNode
 
 internal class DefaultArgumentsParser private constructor(
     logger: PublicApi.Logger,
-    parserPluginController: PublicApi.ParserPluginController
+    parserPluginController: PublicApi.ParserPluginController,
 ) : PublicApi.ParserPlugin, SharedParserRules(logger, parserPluginController) {
     private fun argument(tokenizer: PublicApi.TokenStore): PublicApi.Node {
         val argument = mutableListOf<PublicApi.Node>()
@@ -34,7 +34,7 @@ internal class DefaultArgumentsParser private constructor(
     companion object : PublicApi.ParserPluginFactory {
         override fun createPlugin(
             logger: PublicApi.Logger,
-            controller: PublicApi.ParserPluginController
+            controller: PublicApi.ParserPluginController,
         ): PublicApi.ParserPlugin = DefaultArgumentsParser(logger, controller)
     }
 }

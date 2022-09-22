@@ -1,9 +1,9 @@
+/* ktlint-disable filename */
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
-
 package tech.antibytes.banana.ast
 
 import tech.antibytes.banana.PublicApi
@@ -13,30 +13,30 @@ private val voidFunctionArguments = CoreNode.CompoundNode(emptyList())
 
 sealed class CoreNode : Node {
     data class TextNode(
-        val chunks: List<String>
+        val chunks: List<String>,
     ) : CoreNode()
 
     data class VariableNode(
-        val id: String
+        val id: String,
     ) : CoreNode()
 
     data class FunctionNode(
         val id: String,
-        val arguments: Node = voidFunctionArguments
+        val arguments: Node = voidFunctionArguments,
     ) : CoreNode()
 
     data class LinkNode(
         val target: List<Node>,
-        val display: List<Node> = emptyList()
+        val display: List<Node> = emptyList(),
     ) : CoreNode()
 
     data class FreeLinkNode(
         val url: Node,
-        val display: List<Node> = emptyList()
+        val display: List<Node> = emptyList(),
     ) : CoreNode()
 
     data class CompoundNode(
-        val children: List<Node>
+        val children: List<Node>,
     ) : CoreNode() {
         companion object : PublicApi.NodeFactory {
             override fun createNode(children: List<Node>): Node = CompoundNode(children)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -17,7 +17,7 @@ internal fun resolveParserModule(): Module {
         single<Pair<PublicApi.ParserPluginFactory, PublicApi.NodeFactory>>(named(BananaContract.KoinLabels.DEFAULT_ARGUMENT_PARSER)) {
             Pair(
                 DefaultArgumentsParser,
-                get(named(BananaContract.KoinLabels.COMPOUND_FACTORY))
+                get(named(BananaContract.KoinLabels.COMPOUND_FACTORY)),
             )
         }
 

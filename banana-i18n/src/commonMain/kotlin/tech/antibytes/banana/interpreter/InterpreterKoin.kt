@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Matthias Geisler (bitPogo) / All rights reserved.
+ * Copyright (c) 2022 Matthias Geisler (bitPogo) / All rights reserved.
  *
  * Use of this source code is governed by LGPL v2.1
  */
@@ -34,27 +34,27 @@ internal fun resolveInterpreterModule(): Module {
         single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FunctionNode>>(named(BananaContract.KoinLabels.FUNCTION_SELECTOR)) {
             FunctionInterpreterSelector(
                 get(named(BananaContract.KoinLabels.FUNCTION_INTERPRETER)),
-                get(named(BananaContract.KoinLabels.INTERPRETER_PLUGINS))
+                get(named(BananaContract.KoinLabels.INTERPRETER_PLUGINS)),
             )
         }
 
         single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.CompoundNode>>(named(BananaContract.KoinLabels.COMPOUND_INTERPRETER)) {
             CompoundInterpreter(
-                get()
+                get(),
             )
         }
 
         single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.LinkNode>>(named(BananaContract.KoinLabels.LINK_INTERPRETER)) {
             LinkInterpreter(
                 get(),
-                get()
+                get(),
             )
         }
 
         single<PublicApi.ParameterizedInterpreterPlugin<CoreNode.FreeLinkNode>>(named(BananaContract.KoinLabels.FREE_LINK_INTERPRETER)) {
             FreeLinkInterpreter(
                 get(),
-                get()
+                get(),
             )
         }
 
