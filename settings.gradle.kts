@@ -32,7 +32,6 @@ plugins {
     id("tech.antibytes.gradle.dependency.settings") version "022f831"
 }
 
-includeBuild("gradlePlugin/banana-dependency")
 includeBuild("setup")
 
 include(

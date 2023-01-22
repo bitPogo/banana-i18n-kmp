@@ -4,7 +4,7 @@
  * Use of this source code is governed by Apache v2.0
  */
 
-package tech.antibytes.gradle.kmock.config.quality
+package tech.antibytes.gradle.banana.config.quality
 
 import tech.antibytes.gradle.quality.api.StableApiConfiguration
 

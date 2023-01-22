@@ -36,7 +36,6 @@ dependencies {
     implementation(antibytesCatalog.gradle.antibytes.publishingConfiguration)
     implementation(antibytesCatalog.gradle.antibytes.quality)
     implementation(antibytesCatalog.gradle.agp)
-    implementation(antibytesCatalog.gradle.antibytes.grammarTools)
     implementation(antibytesCatalog.gradle.kotlinx.atomicfu)
     api(antibytesCatalog.gradle.antibytes.runtimeConfig)
 }

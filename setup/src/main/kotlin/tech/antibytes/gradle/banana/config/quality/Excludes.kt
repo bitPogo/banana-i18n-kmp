@@ -4,11 +4,6 @@
  * Use of this source code is governed by Apache v2.0
  */
 
-package tech.antibytes.gradle.kmock.config.quality
+package tech.antibytes.gradle.banana.config.quality
 
-val excludes = setOf(
-    "playground",
-    "integration-kmp",
-    // "integration-android-application", ignored until 1.8
-    "docs",
-)
+val excludes = setOf<String>()
