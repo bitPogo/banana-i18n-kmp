@@ -13,7 +13,9 @@ plugins {
 
     id("tech.antibytes.gradle.dependency")
 
-    id("tech.antibytes.gradle.publishing") version "022f831"
+    alias(antibytesCatalog.plugins.gradle.antibytes.dependencyHelper)
+    alias(antibytesCatalog.plugins.gradle.antibytes.publishing)
+    alias(antibytesCatalog.plugins.gradle.antibytes.quality)
 }
 
 val publishing = BananaPublishingConfiguration(project)

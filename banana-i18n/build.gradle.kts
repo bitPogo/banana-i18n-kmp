@@ -13,15 +13,10 @@ import tech.antibytes.gradle.coverage.api.JvmJacocoConfiguration
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
-
-    // Android
-    id("com.android.library")
-
-    id("tech.antibytes.gradle.configuration")
-    id("tech.antibytes.gradle.publishing") version "022f831"
-    id("tech.antibytes.gradle.coverage") version "022f831"
-    id("tech.antibytes.gradle.grammar")// version "022f831"
+    alias(antibytesCatalog.plugins.gradle.antibytes.kmpConfiguration)
+    alias(antibytesCatalog.plugins.gradle.antibytes.androidLibraryConfiguration)
+    alias(antibytesCatalog.plugins.gradle.antibytes.publishing)
+    alias(antibytesCatalog.plugins.gradle.antibytes.coverage)
 }
 
 val publishingConfiguration = BananaCoreConfiguration(project)
@@ -45,6 +40,10 @@ antibytesCoverage {
             additionalSources = generatedCommonSources
         )
     )
+}
+
+android {
+    namespace = "tech.antibytes.banana"
 }
 
 kotlin {
