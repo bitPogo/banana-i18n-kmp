@@ -3,23 +3,24 @@
  *
  * Use of this source code is governed by LGPL v2.1
  */
-
-import tech.antibytes.gradle.banana.config.BananaPublishingConfiguration
+import tech.antibytes.gradle.banana.config.publishing.BananaPublishingConfiguration
 import tech.antibytes.gradle.banana.dependency.addCustomRepositories
 
 plugins {
+    id("tech.antibytes.gradle.setup")
+
     id("tech.antibytes.gradle.banana.dependency")
 
     id("tech.antibytes.gradle.dependency")
 
-    id("tech.antibytes.gradle.banana.script.quality-spotless")
-
-    id("tech.antibytes.gradle.publishing")
+    id("tech.antibytes.gradle.publishing") version "022f831"
 }
 
-antiBytesPublishing {
-    versioning = BananaPublishingConfiguration.versioning
-    repositoryConfiguration = BananaPublishingConfiguration.repositories
+val publishing = BananaPublishingConfiguration(project)
+
+antibytesPublishing {
+    versioning.set(publishing.versioning)
+    repositories.set(publishing.repositories)
 }
 
 allprojects {

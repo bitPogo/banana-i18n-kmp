@@ -6,7 +6,7 @@
 
 import tech.antibytes.gradle.dependency.Dependency
 import tech.antibytes.gradle.banana.dependency.Dependency as LocalDependency
-import tech.antibytes.gradle.banana.config.BananaCoreConfiguration
+import tech.antibytes.gradle.banana.config.publishing.BananaCoreConfiguration
 import tech.antibytes.gradle.grammar.jflex.JFlexTask
 import tech.antibytes.gradle.grammar.PostConverterTask
 import tech.antibytes.gradle.coverage.api.JvmJacocoConfiguration
@@ -19,28 +19,32 @@ plugins {
     id("com.android.library")
 
     id("tech.antibytes.gradle.configuration")
-    id("tech.antibytes.gradle.publishing")
-    id("tech.antibytes.gradle.coverage")
-    id("tech.antibytes.gradle.grammar")
+    id("tech.antibytes.gradle.publishing") version "022f831"
+    id("tech.antibytes.gradle.coverage") version "022f831"
+    id("tech.antibytes.gradle.grammar")// version "022f831"
 }
 
-group = BananaCoreConfiguration.group
+val publishingConfiguration = BananaCoreConfiguration(project)
+group = publishingConfiguration.group
 
-antiBytesCoverage {
+antibytesPublishing {
+    packaging.set(publishingConfiguration.publishing.packageConfiguration)
+    repositories.set(publishingConfiguration.publishing.repositories)
+    versioning.set(publishingConfiguration.publishing.versioning)
+}
+
+antibytesCoverage {
     val generatedCommonSources = File(
         "${projectDir.absolutePath}/src-gen"
     ).walkBottomUp().toSet()
 
     val jvmConfig = JvmJacocoConfiguration.createJvmKmpConfiguration(project)
-    configurations["jvm"] = jvmConfig.copy(
-        additionalSources = generatedCommonSources
+    configurations.put(
+        "jvm",
+        jvmConfig.copy(
+            additionalSources = generatedCommonSources
+        )
     )
-}
-
-antiBytesPublishing{
-    packageConfiguration = BananaCoreConfiguration.publishing.packageConfiguration
-    repositoryConfiguration = BananaCoreConfiguration.publishing.repositories
-    versioning = BananaCoreConfiguration.publishing.versioning
 }
 
 kotlin {

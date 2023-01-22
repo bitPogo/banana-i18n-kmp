@@ -4,23 +4,22 @@
  * Use of this source code is governed by LGPL v2.1
  */
 
-package tech.antibytes.gradle.banana.config
+package tech.antibytes.gradle.banana.config.publishing
 
+import org.gradle.api.Project
 import tech.antibytes.gradle.publishing.api.PackageConfiguration
 import tech.antibytes.gradle.publishing.api.PomConfiguration
 
-object BananaCoreConfiguration {
-    const val group = "tech.antibytes.banana-i18n-kmp"
+class BananaCoreConfiguration(project: Project) : PublishingBase() {
+    val publishing = Publishing(project)
 
-    val publishing = Publishing
-
-    object Publishing : BananaPublishingConfiguration() {
+    class Publishing(project: Project) : BananaPublishingConfiguration(project) {
         val packageConfiguration = PackageConfiguration(
             pom = PomConfiguration(
                 name = "banana-i18n",
-                description = "A implementation of MediaWikis banana for Kotlin Multiplatform.",
-                year = 2022,
-                url = "https://$gitHubRepositoryPath",
+                description = "A spin-off of MediaWikis banana for Kotlin Multiplatform.",
+                year = year,
+                url = url,
             ),
             developers = listOf(developer),
             license = license,
