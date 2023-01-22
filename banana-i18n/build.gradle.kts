@@ -3,20 +3,19 @@
  *
  * Use of this source code is governed by LGPL v2.1
  */
-
-import tech.antibytes.gradle.dependency.Dependency
-import tech.antibytes.gradle.banana.dependency.Dependency as LocalDependency
 import tech.antibytes.gradle.banana.config.publishing.BananaCoreConfiguration
 import tech.antibytes.gradle.grammar.jflex.JFlexTask
 import tech.antibytes.gradle.grammar.PostConverterTask
 import tech.antibytes.gradle.coverage.api.JvmJacocoConfiguration
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+import tech.antibytes.gradle.configuration.sourcesets.setupAndroidTest
 
 plugins {
     alias(antibytesCatalog.plugins.gradle.antibytes.kmpConfiguration)
     alias(antibytesCatalog.plugins.gradle.antibytes.androidLibraryConfiguration)
     alias(antibytesCatalog.plugins.gradle.antibytes.publishing)
     alias(antibytesCatalog.plugins.gradle.antibytes.coverage)
+    alias(antibytesCatalog.plugins.gradle.antibytes.grammarTools)
 }
 
 val publishingConfiguration = BananaCoreConfiguration(project)
@@ -33,13 +32,11 @@ antibytesCoverage {
         "${projectDir.absolutePath}/src-gen"
     ).walkBottomUp().toSet()
 
-    val jvmConfig = JvmJacocoConfiguration.createJvmKmpConfiguration(project)
-    configurations.put(
-        "jvm",
-        jvmConfig.copy(
-            additionalSources = generatedCommonSources
-        )
+    val jvmConfig = JvmJacocoConfiguration.createJvmKmpConfiguration(
+        project,
+        additionalSources = generatedCommonSources
     )
+    configurations.put("jvm", jvmConfig)
 }
 
 android {
@@ -56,68 +53,44 @@ kotlin {
             dependencies {
                 kotlin.srcDirs("${projectDir.absolutePath.trimEnd('/')}/src-gen/commonMain/kotlin")
 
-                implementation(Dependency.multiplatform.kotlin.common)
-                implementation(Dependency.multiplatform.koin.core.replace("3.2.0", "3.1.6")) {
-                    exclude(
-                        "org.jetbrains.kotlin",
-                        "kotlin-stdlib-jdk8"
-                    )
-                }
+                implementation(antibytesCatalog.common.kotlin.stdlib)
+                implementation(antibytesCatalog.common.koin.core)
             }
         }
         val commonTest by getting {
             dependencies {
-                implementation(Dependency.multiplatform.test.common)
-                implementation(Dependency.multiplatform.test.annotations)
-
-                implementation(LocalDependency.antibytes.annotation)
-                implementation(LocalDependency.antibytes.fixture)
-                implementation(LocalDependency.antibytes.test)
+                implementation(antibytesCatalog.common.test.kotlin.core)
+                implementation(libs.testUtils.core)
+                implementation(libs.testUtils.annotations)
+                implementation(libs.kfixture)
             }
         }
 
         val androidMain by getting {
             dependencies {
-               implementation(Dependency.multiplatform.kotlin.android)
+                implementation(antibytesCatalog.jvm.kotlin.stdlib.jdk8)
             }
         }
-        if (!tech.antibytes.gradle.configuration.isIdea()) {
-            val androidAndroidTestRelease by getting
-            val androidAndroidTest by getting {
-                dependsOn(androidAndroidTestRelease)
-            }
-            val androidTestFixturesDebug by getting
-            val androidTestFixturesRelease by getting
 
-            val androidTestFixtures by getting {
-                dependsOn(androidTestFixturesDebug)
-                dependsOn(androidTestFixturesRelease)
-            }
-
-            val androidTest by getting {
-                dependsOn(androidTestFixtures)
-            }
-        }
+        setupAndroidTest()
         val androidTest by getting {
             dependencies {
-                implementation(Dependency.multiplatform.test.jvm)
-                implementation(Dependency.multiplatform.test.junit)
-                implementation(Dependency.android.test.robolectric)
+                implementation(antibytesCatalog.android.test.junit.core)
+                implementation(antibytesCatalog.jvm.test.kotlin.junit4)
+                implementation(antibytesCatalog.android.test.robolectric)
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                implementation(Dependency.multiplatform.kotlin.jdk8)
-                implementation(LocalDependency.jvm.icu)
+                implementation(antibytesCatalog.jvm.kotlin.stdlib.jdk)
+                implementation(libs.icu)
             }
         }
         val jvmTest by getting {
             dependencies {
-                dependsOn(commonTest)
-
-                implementation(Dependency.multiplatform.test.jvm)
-                implementation(Dependency.multiplatform.test.junit)
+                implementation(antibytesCatalog.jvm.test.kotlin.core)
+                implementation(antibytesCatalog.jvm.test.junit.junit4)
             }
         }
     }
@@ -153,7 +126,7 @@ val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
                 "import java.io.Reader\n" +
                 "import java.lang.Character\n" +
                 "import java.lang.Error"
-            to "import tech.antibytes.banana.BananaContract\n" +
+                to "import tech.antibytes.banana.BananaContract\n" +
                 "import tech.antibytes.banana.tokenizer.TokenizerError.UnknownState\n" +
                 "import tech.antibytes.banana.BananaRuntimeError",
             "IOException" to "BananaRuntimeError",
@@ -184,7 +157,7 @@ val postProcessJFlex by tasks.creating(PostConverterTask::class.java) {
             "val message: String[ \t\n]+message =".toRegex() to "val message =",
             "var offset = 0([ \t\n]+)offset = ".toRegex() to "val offset = 0$1",
             "System.arraycopy\\(([ \t\n]+)zzBuffer, zzStartRead,[ \t\n]+zzBuffer, 0,[ \t\n]+zzEndRead - zzStartRead\n([ \t\n]+)\\)".toRegex()
-            to "zzBuffer.copyInto($1destination = zzBuffer,$1destinationOffset = 0,$1startIndex = zzStartRead,$1endIndex = zzEndRead$2)",
+                to "zzBuffer.copyInto($1destination = zzBuffer,$1destinationOffset = 0,$1startIndex = zzStartRead,$1endIndex = zzEndRead$2)",
             "return[ \t\n]+if \\(tokenValue.length > 2\\) \\{".toRegex() to "return if (tokenValue.length > 2) {",
             "internal abstract class BananaFlexTokenizer([\n\t ]+[^\n]+){6}".toRegex() to "internal abstract class BananaFlexTokenizer(",
             "if \\(zzReader != null\\) \\{[ \t\n]+zzReader.close\\(\\)[ \t\n]+\\}".toRegex() to "zzReader.close()",
