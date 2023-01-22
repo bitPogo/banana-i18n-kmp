@@ -1,0 +1,16 @@
+[versions]
+## Libs
+## [KFixture](https://github.com/bitPogo/kfixture)
+kfixture =  "0.4.0-SNAPSHOT"
+## [Test-Utils](https://github.com/bitPogo/test-utils-kmp)
+testUtils =  "f384302"
+## [ICU4J](https://unicode-org.github.io/icu/userguide/icu4j/)
+icu = "72.1"
+
+
+[libraries]
+kfixture = { module = "tech.antibytes.kfixture:core", version.ref = "kfixture" }
+testUtils-core = { module = "tech.antibytes.test-utils-kmp:test-utils", version.ref = "testUtils" }
+testUtils-annotations = { module = "tech.antibytes.test-utils-kmp:test-utils-annotations-junit4", version.ref = "testUtils" }
+testUtils-coroutine = { module = "tech.antibytes.test-utils-kmp:test-utils-coroutine", version.ref = "testUtils" }
+icu = { module =  "com.ibm.icu:icu4j", version.ref = "icu" }

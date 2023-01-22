@@ -3,34 +3,55 @@
  *
  * Use of this source code is governed by LGPL v2.1
  */
-
-import tech.antibytes.gradle.banana.config.BananaPublishingConfiguration
-import tech.antibytes.gradle.banana.dependency.addCustomRepositories
+import tech.antibytes.gradle.banana.config.publishing.BananaPublishingConfiguration
+import tech.antibytes.gradle.banana.config.repositories.Repositories.bananaRepositories
+import tech.antibytes.gradle.dependency.helper.addCustomRepositories
+import tech.antibytes.gradle.dependency.helper.ensureKotlinVersion
+import tech.antibytes.gradle.quality.api.LinterConfiguration
+import tech.antibytes.gradle.quality.api.PartialLinterConfiguration
 
 plugins {
-    id("tech.antibytes.gradle.banana.dependency")
+    id("tech.antibytes.gradle.setup")
 
-    id("tech.antibytes.gradle.dependency")
-
-    id("tech.antibytes.gradle.banana.script.quality-spotless")
-
-    id("tech.antibytes.gradle.publishing")
+    alias(antibytesCatalog.plugins.gradle.antibytes.dependencyHelper)
+    alias(antibytesCatalog.plugins.gradle.antibytes.publishing)
+    alias(antibytesCatalog.plugins.gradle.antibytes.quality)
 }
 
-antiBytesPublishing {
-    versioning = BananaPublishingConfiguration.versioning
-    repositoryConfiguration = BananaPublishingConfiguration.repositories
+val publishing = BananaPublishingConfiguration(project)
+
+antibytesPublishing {
+    versioning.set(publishing.versioning)
+    repositories.set(publishing.repositories)
+}
+
+val codeConfiguration = LinterConfiguration().code as PartialLinterConfiguration
+
+antibytesQuality {
+    this.linter.set(
+        LinterConfiguration(
+            code = codeConfiguration.copy(
+                exclude = listOf(
+                    codeConfiguration.exclude,
+                    setOf("banana-i18n/src/commonMain/kotlin/tech/antibytes/banana/tokenizer/Character.kt")
+                ).flatten().toSet()
+            )
+        )
+    )
 }
 
 allprojects {
     repositories {
-        addCustomRepositories()
+        addCustomRepositories(bananaRepositories)
         mavenCentral()
         google()
+        jcenter()
     }
+
+    ensureKotlinVersion()
 }
 
 tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "7.4"
+    gradleVersion = "7.5.1"
     distributionType = Wrapper.DistributionType.ALL
 }
