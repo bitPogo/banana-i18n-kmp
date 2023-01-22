@@ -38,6 +38,14 @@ include(
     ":banana-i18n"
 )
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        getByName("antibytesCatalog") {
+            version("koin-core", "3.1.6")
+        }
+    }
+}
+
 buildCache {
     localGithub()
 }

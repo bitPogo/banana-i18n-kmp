@@ -20,7 +20,7 @@ interface TokenizerContract {
 
     interface Character {
         @Throws(Exception::class)
-        fun codePointAt(array: CharArray, index: Int, limit: Int): Int
+        fun codePointAt(chars: CharArray, index: Int, limit: Int): Int
         fun charCount(codePoint: Int): Int
     }
 }

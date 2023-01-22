@@ -7,6 +7,8 @@ import tech.antibytes.gradle.banana.config.publishing.BananaPublishingConfigurat
 import tech.antibytes.gradle.banana.config.repositories.Repositories.bananaRepositories
 import tech.antibytes.gradle.dependency.helper.addCustomRepositories
 import tech.antibytes.gradle.dependency.helper.ensureKotlinVersion
+import tech.antibytes.gradle.quality.api.LinterConfiguration
+import tech.antibytes.gradle.quality.api.PartialLinterConfiguration
 
 plugins {
     id("tech.antibytes.gradle.setup")
@@ -23,11 +25,27 @@ antibytesPublishing {
     repositories.set(publishing.repositories)
 }
 
+val codeConfiguration = LinterConfiguration().code as PartialLinterConfiguration
+
+antibytesQuality {
+    this.linter.set(
+        LinterConfiguration(
+            code = codeConfiguration.copy(
+                exclude = listOf(
+                    codeConfiguration.exclude,
+                    setOf("banana-i18n/src/commonMain/kotlin/tech/antibytes/banana/tokenizer/Character.kt")
+                ).flatten().toSet()
+            )
+        )
+    )
+}
+
 allprojects {
     repositories {
         addCustomRepositories(bananaRepositories)
         mavenCentral()
         google()
+        jcenter()
     }
 
     ensureKotlinVersion()
